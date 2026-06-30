@@ -1,5 +1,5 @@
 "use client"
-import { CoreGraspLogo } from "@/components/ui/logo";
+import { CoreGraspLogo } from "../components/ui/logo";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter } from "next/navigation";
