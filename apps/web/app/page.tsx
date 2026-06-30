@@ -693,7 +693,7 @@ export default function Home() {
       {/* ── FOOTER ── */}
       <footer className="border-t border-white/10 px-8 py-8 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#09090b]">
         <span className="serif text-[20px] tracking-wide text-white">CoreGrasp</span>
-        <span className="text-[13px] font-medium text-[#71717a]">Next.js · PostgreSQL · Claude API · Resend · Docker</span>
+        <span className="text-[13px] font-medium text-[#71717a]">Next.js · PostgreSQL · Gimini  · Resend · Docker</span>
       </footer>
     </div>
   )
