@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "elysia-on-cloudflare",
+	"name": "api",
 	"main": "index.ts",
 	"compatibility_date": "2026-06-20",
 	"observability": {
@@ -26,15 +26,6 @@
       {
         "binding": "PDF_QUEUE",
         "queue": "pdf-processing-queue"
-      }
-    ],
-    "consumers": [
-      {
-        "queue": "pdf-processing-queue",
-        "max_batch_size": 5,
-        "max_batch_timeout": 30,
-        "max_retries": 3,
-        "dead_letter_queue": "pdf-dlq"
       }
     ]
   }
