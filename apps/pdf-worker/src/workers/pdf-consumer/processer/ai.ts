@@ -1,62 +1,41 @@
 import { GeiminmiResult, } from "../../../shared/types";
+import { extractText, getDocumentProxy } from "unpdf";
 
-export async function reuGemini(base64: string,
-    apiKey: string
+const TEXT_MODEL = "@cf/zai-org/glm-4.7-flash";
+
+export async function reuGemini(
+    buffer: ArrayBuffer,
+    env: { AI: Ai }
 ): Promise<GeiminmiResult> {
+    const pdf = await getDocumentProxy(new Uint8Array(buffer));
+    const { text } = await extractText(pdf, { mergePages: true });
 
-    const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                contents: [
-                    {
-                        parts: [
-                            {
-                                inline_data: {
-                                    mime_type: "application/pdf",
-                                    data: base64,
-                                },
-                            },
-                            {
-                                text: `Analyze this PDF document and return ONLY a JSON object with no markdown, no backticks, just raw JSON:
+    const prompt = `Analyze this document and return ONLY a JSON object with no markdown, no backticks, just raw JSON:
 {
   "summary": "2-3 sentence summary of the document",
   "topics": ["main topic 1", "topic 2"],
   "entities": ["person/org/place mentioned"]
-}`,
-                            },
-                        ],
-                    },
-                ],
-            }),
-        }
-    );
-    if (!response.ok) {
-    const errorBody = await response.text();
-    console.error("Gemini error body:", errorBody);
-    throw new Error(`Gemini API error ${response.status}: ${errorBody}`);
 }
+Document:
+${text.slice(0, 20000)}`;
 
+    const response = await env.AI.run(TEXT_MODEL, {
+        messages: [{ role: "user", content: prompt }],
+    });
 
-    const data = await response.json() as {
-        candidates: { content: { parts: { text: string }[] } }[];
-    };
-
-
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    const raw = (response as { response?: string }).response ?? "";
 
     try {
         const parsed = JSON.parse(raw);
         return { ...parsed, raw };
-    }
-    catch {
+    } catch {
         return {
             summery: raw,
             topics: [],
             entities: [],
-            raw
-        }
+            raw,
+        };
     }
+
+
 }

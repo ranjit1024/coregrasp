@@ -3,24 +3,24 @@ import { processMessage } from "./processer/r2";
 
 type Env = {
   PDF_BUCKET: R2Bucket;
-  GEMINI_API_KEY: string;
+  AI: Ai;
 };
 
 export default {
-    async queue(batch:MessageBatch<PdfJob>, env:Env):Promise<void>{
-        console.log(`Processing batach of ${batch.messages.length} message`)
+    async queue(batch: MessageBatch<PdfJob>, env: Env): Promise<void> {
+        console.log(`Processing batch of ${batch.messages.length} messages`);
         await Promise.allSettled(
-            batch.messages.map(async (message)=>{
-                const {key, uploadedAt} = message.body;
+            batch.messages.map(async (message) => {
+                const { key, uploadedAt } = message.body;
                 console.log(`Processing Job ${key} uploaded ${uploadedAt}`);
-                try{
+                try {
                     await processMessage(message.body, env);
                     message.ack();
-                } catch (err){
+                } catch (err) {
                     console.error(`Failed job ${key}`, err);
                     message.retry();
                 }
-            })   
-        )
+            })
+        );
     }
-}  
+};

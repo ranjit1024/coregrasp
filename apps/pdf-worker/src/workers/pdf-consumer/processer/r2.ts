@@ -3,7 +3,7 @@ import { PdfJob, type GeiminmiResult } from "../../../shared/types";
 
 type Env = {
   PDF_BUCKET: R2Bucket;
-  GEMINI_API_KEY: string;
+  AI: Ai;
 };
 
 export async function processMessage(job: PdfJob, env: Env) {
@@ -18,8 +18,8 @@ export async function processMessage(job: PdfJob, env: Env) {
   }
 
   const buffer = await object.arrayBuffer();
-  const base64 = toBase64(buffer)
-  const result: GeiminmiResult = await reuGemini(base64, env.GEMINI_API_KEY);
+  
+  const result: GeiminmiResult = await reuGemini(buffer, env);
 
   await env.PDF_BUCKET.put(
     `${key}.result.json`,

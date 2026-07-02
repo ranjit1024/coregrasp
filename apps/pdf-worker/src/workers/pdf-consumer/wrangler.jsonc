@@ -14,6 +14,9 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
+	"ai": {
+       "binding": "AI"
+   },
 	"r2_buckets": [
 		{
 			"binding": "PDF_BUCKET",
