@@ -118,7 +118,7 @@ const DesktopPdfUpload: React.FC = () => {
         setProgress(0)
         reject();
       })
-      xhr.open("POST","https://elysia-on-cloudflare.ranjitdas2048.workers.dev/uplaod-pdf" );
+      xhr.open("POST","https://api.ranjitdas2048.workers.dev/uplaod-pdf" );
       xhr.send(formData)
     });
 

@@ -7,7 +7,9 @@
     "dev:web": "cd apps/web && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy:worker" : "cd apps/pdf-worker/src/workers/pdf-consumer && npx wrangler deploy",
+    "deploy:api" : "cd apps/pdf-worker/src/workers/api && npx wrangler deploy"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

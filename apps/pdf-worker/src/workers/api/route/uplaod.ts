@@ -13,7 +13,7 @@ export const uplaod_Route = async (c:Context) => {
 
   const key = `${crypto.randomUUID()}-${file.name}`;
 
-  await c.env.PDF_BUCKET.put(file.name, await file.arrayBuffer(), {
+  await c.env.PDF_BUCKET.put(key, await file.arrayBuffer(), {
     httpMetadata: {contentType: 'application/pdf'}
   });
 

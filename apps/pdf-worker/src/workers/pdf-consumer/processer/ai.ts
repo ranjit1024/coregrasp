@@ -34,8 +34,10 @@ export async function reuGemini(base64: string,
         }
     );
     if (!response.ok) {
-        throw new Error(`Gemini API error ${response.status} ${response.statusText}`);
-    }
+    const errorBody = await response.text();
+    console.error("Gemini error body:", errorBody);
+    throw new Error(`Gemini API error ${response.status}: ${errorBody}`);
+}
 
 
     const data = await response.json() as {
