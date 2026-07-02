@@ -22,6 +22,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  policies      Policy[]  
 
   @@unique([email])
   @@map("user")
@@ -37,7 +38,6 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   @@unique([token])
   @@index([userId])
   @@map("session")
@@ -61,6 +61,20 @@ model Account {
 
   @@index([userId])
   @@map("account")
+}
+
+model Policy {
+  id        String   @id @default(cuid())
+  key       String   @unique   
+  url       String?            
+  name      String             
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("policy")
 }
 
 model Verification {
