@@ -63,16 +63,24 @@ model Account {
   @@map("account")
 }
 
+
+enum PolicyStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+}
+
 model Policy {
-  id        String   @id @default(cuid())
-  key       String   @unique   
-  url       String?            
-  name      String             
-  createdAt DateTime @default(now())
-
+  id        String       @id @default(cuid())
+  key       String       @unique
+  url       String?
+  name      String
+  status    PolicyStatus @default(PENDING)
+  error     String?
+  createdAt DateTime     @default(now())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@index([userId])
   @@map("policy")
 }
