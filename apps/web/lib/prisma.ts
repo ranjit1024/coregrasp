@@ -1,4 +1,4 @@
-import { PrismaClient } from "../src/generated/prisma/client";
+import { PrismaClient } from "@revisly/db"
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({

@@ -8,5 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
+  },
+  
+  "dependencies": {
+    "@revisly/db": "*"
   }
+
 }
