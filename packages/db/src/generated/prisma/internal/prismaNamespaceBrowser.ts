@@ -125,6 +125,8 @@ export const PolicyScalarFieldEnum = {
   key: 'key',
   url: 'url',
   name: 'name',
+  status: 'status',
+  error: 'error',
   createdAt: 'createdAt',
   userId: 'userId'
 } as const

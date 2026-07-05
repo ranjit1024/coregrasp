@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
     "workspaces": [
-    "apps/web",
-    "apps/pdf-worker/src/workers/*",
-    "packages/*"
-  ],
+  "apps/web",
+  "apps/pdf-worker",
+  "apps/pdf-worker/src/workers/*",
+  "packages/*"
+],
   "scripts": {
     "dev:web": "cd apps/web && next dev",
     "build": "next build",

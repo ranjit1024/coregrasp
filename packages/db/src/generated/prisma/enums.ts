@@ -9,7 +9,11 @@
 * 🟢 You can import this file directly.
 */
 
+export const PolicyStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type PolicyStatus = (typeof PolicyStatus)[keyof typeof PolicyStatus]
