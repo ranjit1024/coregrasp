@@ -1,5 +1,5 @@
 {
-  "name": "elysia-on-cloudflare",
+  "name": "api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,15 +12,12 @@
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.12.4",
     "@cloudflare/workers-types": "^4.20260620.1",
-    "@revisly/db": "*",
-    "prisma": "^7.8.0",
     "typescript": "^5.5.2",
     "vitest": "~3.2.0",
     "wrangler": "^4.103.0"
   },
   "dependencies": {
     "@elysia/cors": "^1.4.2",
-    "@prisma/extension-accelerate": "^3.0.1",
     "elysia": "^1.4.29",
     "hono": "^4.12.27"
   }

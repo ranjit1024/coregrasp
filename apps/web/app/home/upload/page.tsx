@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useCallback, useEffect, DragEvent, ChangeEvent } from "react";
+import { useSession } from "../../../lib/auth-client"; // adjust import to wherever your better-auth client is exported
 
 interface SelectedFile {
   file: File;
@@ -19,6 +20,8 @@ function formatBytes(bytes: number): string {
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 
 const DesktopPdfUpload: React.FC = () => {
+  const { data: session, isPending } = useSession();
+  
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
   const [uploadState, setUploadState] = useState<UploadState>("idle");
@@ -58,10 +61,9 @@ const DesktopPdfUpload: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
 
     if (uploadState === "uploading" || uploadState === "done") return;
-    
+
     const file = e.dataTransfer.files?.[0];
     if (file) validateAndSet(file);
   };
@@ -81,48 +83,58 @@ const DesktopPdfUpload: React.FC = () => {
   };
 
   const handleUpload = async () => {
-   if(!selectedFile || uploadState !== "selected") return;
-   setUploadState("uploading");
-   setProgress(0);
+    if (!selectedFile || uploadState !== "selected") return;
 
-   const formData = new FormData();;
-    formData.append('file', selectedFile.file);
-    await new Promise<void>((resolve,reject)=>{
+    if (!session?.user?.id) {
+      setErrorMsg("You must be signed in to upload.");
+      setUploadState("error");
+      return;
+    }
+
+    setUploadState("uploading");
+    setProgress(0);
+
+    const formData = new FormData();
+    formData.append("file", selectedFile.file);
+    formData.append("userId", session.user.id);
+
+    await new Promise<void>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.upload.addEventListener("progress", (e)=>{
-        if(e.lengthComputable){
-          const pct = Math.round((e.loaded / e.total)* 100);
-          setProgress(pct)
+      
+      xhr.upload.addEventListener("progress", (e) => {
+        if (e.lengthComputable) {
+          const pct = Math.round((e.loaded / e.total) * 100);
+          setProgress(pct);
         }
       });
 
-      xhr.addEventListener("load",()=>{
-        if(xhr.status >= 200 && xhr.status < 300){
+      xhr.addEventListener("load", () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
           setProgress(100);
           setUploadState("done");
           resolve();
-        }else{
-          setErrorMsg(`upload failed with ${xhr.status} ${xhr.statusText}`);
+        } else {
+          setErrorMsg(`Upload failed with ${xhr.status} ${xhr.statusText}`);
           setUploadState("error");
           reject();
         }
       });
 
-      xhr.addEventListener('error', ()=>{
-        setErrorMsg("Network Error - Uplaod failed");
+      xhr.addEventListener("error", () => {
+        setErrorMsg("Network Error - Upload failed");
         setUploadState("error");
         reject();
       });
-      xhr.addEventListener("abort", ()=>{
+
+      xhr.addEventListener("abort", () => {
         setUploadState("selected");
-        setProgress(0)
+        setProgress(0);
         reject();
-      })
-      xhr.open("POST","https://api.ranjitdas2048.workers.dev/uplaod-pdf" );
-      xhr.send(formData)
+      });
+
+      xhr.open("POST", "https://api.ranjitdas2048.workers.dev/uplaod-pdf");
+      xhr.send(formData);
     });
-
-
   };
 
   const isSelected = uploadState === "selected";
@@ -139,17 +151,14 @@ const DesktopPdfUpload: React.FC = () => {
           <h1 className="text-2xl font-bold text-white tracking-tight">Upload Policy Document</h1>
         </div>
 
-        
         <div className="bg-[#141416] border border-neutral-800/80 rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
           <div className="flex divide-x divide-neutral-800/80 min-h-[380px]">
-
             <div className="flex-1 p-8 flex flex-col justify-between gap-8">
               <div>
                 <p className="text-sm text-neutral-400 leading-relaxed">
                   Attach your updated company documentation below. The file contents will instantly version change logs, sync with active workflows, and issue alerts across integrated systems.
                 </p>
 
-             
                 <ul className="mt-6 space-y-3">
                   {[
                     { label: "Strictly PDF format configuration", path: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
@@ -185,7 +194,6 @@ const DesktopPdfUpload: React.FC = () => {
                         </p>
                       </div>
 
-      
                       <div className="mt-3 h-1.5 bg-neutral-800 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-300 ease-out ${
@@ -194,7 +202,7 @@ const DesktopPdfUpload: React.FC = () => {
                           style={{ width: `${progress}%`, boxShadow: isUploading ? '0 0 8px #00E676' : 'none' }}
                         />
                       </div>
-                      
+
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs font-medium text-neutral-400">
                           {isDone ? "Document synced successfully" : isUploading ? "Streaming blocks to server..." : "Staged payload ready"}
@@ -205,7 +213,6 @@ const DesktopPdfUpload: React.FC = () => {
                       </div>
                     </div>
 
-         
                     {!isUploading && !isDone && (
                       <button
                         onClick={handleClear}
@@ -221,7 +228,6 @@ const DesktopPdfUpload: React.FC = () => {
                 </div>
               )}
 
- 
               {errorMsg && (
                 <div className="flex items-center gap-2.5 text-xs font-medium text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 animate-headShake">
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -230,7 +236,6 @@ const DesktopPdfUpload: React.FC = () => {
                   {errorMsg}
                 </div>
               )}
-
 
               <div className="flex gap-3 mt-auto">
                 <button
@@ -242,11 +247,11 @@ const DesktopPdfUpload: React.FC = () => {
                 </button>
                 <button
                   onClick={handleUpload}
-                  disabled={!isSelected || isUploading || isDone}
+                  disabled={!isSelected || isUploading || isDone || isPending}
                   className={`flex-[2] py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg ${
                     isDone
                       ? "bg-[#00E676]/10 text-[#00E676] border border-[#00E676]/20 shadow-none cursor-default"
-                      : isSelected
+                      : isSelected && !isPending
                       ? "bg-[#00E676] text-black hover:bg-[#15ffa0] hover:shadow-[#00E676]/10"
                       : "bg-neutral-800/40 text-neutral-600 border border-neutral-800/20 cursor-not-allowed shadow-none"
                   }`}
@@ -278,7 +283,6 @@ const DesktopPdfUpload: React.FC = () => {
               </div>
             </div>
 
-       
             <div className="w-90 flex-shrink-0 p-8 flex flex-col items-stretch justify-center bg-[#18181B]/40">
               <input
                 ref={inputRef}
@@ -370,7 +374,6 @@ const DesktopPdfUpload: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

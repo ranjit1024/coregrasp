@@ -7,6 +7,7 @@
 	"name": "api",
 	"main": "index.ts",
 	"compatibility_date": "2026-06-20",
+
 	"observability": {
 		"enabled": true
 	},
@@ -14,6 +15,9 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
+	"hyperdrive": [
+    { "binding": "HYPERDRIVE", "id": "<your-hyperdrive-id>" }
+  ],
 	"r2_buckets": [
 		{
 			"binding": "PDF_BUCKET",
@@ -28,7 +32,8 @@
         "queue": "pdf-processing-queue"
       }
     ]
-  }
+  },
+  
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
