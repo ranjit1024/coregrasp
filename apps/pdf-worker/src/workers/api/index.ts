@@ -2,25 +2,11 @@ import {Hono} from "hono";
 import {cors} from "hono/cors"
 import { uplaod_Route } from "./route/uplaod";
 import { result_Route } from "./route/result";
-import { PrismaClient } from "@revisly/db/index";
-import { PrismaPg } from "@prisma/adapter-pg";
-
-type Env = {
-  Bindings: {
-    DATABASE_URL: string;
-    PDF_BUCKET: R2Bucket;
-    PDF_QUEUE: Queue;
-  };
-};
-
-export function createPrismaClient(databaseUrl: string) {
-  const adapter = new PrismaPg({ connectionString: databaseUrl });
-  return new PrismaClient({ adapter });
-}
+import { Bindings } from "hono/types";
 
 
 
-const app = new Hono<{ Bindings: Env["Bindings"] }>();
+const app = new Hono<{ Bindings: Bindings}>();
 
 
 app.use('*', cors());
