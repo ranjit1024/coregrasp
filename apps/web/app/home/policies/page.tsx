@@ -94,7 +94,7 @@ export default function PolicyStatusPage() {
 
   return (
     <div className="min-h-screen bg-[#090A0C] text-neutral-200 antialiased font-sans p-6 md:p-12">
-      <div className="max-w-7xl mx-auto w-full">
+      <div className="w-full mx-auto ">
         
         {/* Breadcrumb Context */}
         <div className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase mb-2">
