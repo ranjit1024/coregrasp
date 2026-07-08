@@ -1,9 +1,9 @@
 export type Bindings = {
   HYPERDRIVE: Hyperdrive;
-
   PDF_BUCKET: R2Bucket;
   PDF_QUEUE: Queue;
-  AI_API_Key: string;
+  AI: Ai;
+
 };
 
 export type PdfJob = {

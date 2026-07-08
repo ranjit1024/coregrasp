@@ -24,6 +24,12 @@
 		},
 	
 	],
+	"hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "74472c8e2bae47c3ab9b6fdaddab56c9",
+    }
+  ],
 	"queues": {
     "producers": [
       {

@@ -1,10 +1,11 @@
-import { GeiminmiResult } from "../../../shared/types";
+import { Context } from "hono";
+import { Bindings, GeiminmiResult } from "../../../shared/types";
 import { extractText, getDocumentProxy } from "unpdf";
 
 const TEXT_MODEL = "@cf/meta/llama-3.2-3b-instruct";
 
 async function runWithRetry(
-    env: { AI: Ai },
+    c: Context<{Bindings:Bindings}>,
     prompt: string,
     attempts = 1
 ): Promise<any> {
@@ -12,7 +13,7 @@ async function runWithRetry(
     for (let i = 0; i < attempts; i++) {
         try {
             const t0 = Date.now();
-            const result = await env.AI.run(TEXT_MODEL, {
+            const result = await c.env.AI.run(TEXT_MODEL, {
                 messages: [{ role: "user", content: prompt }],
                 max_tokens: 600,
             });
@@ -29,7 +30,7 @@ async function runWithRetry(
 
 export async function reuGemini(
     buffer: ArrayBuffer,
-    env: { AI: Ai }
+    c: Context<{Bindings:Bindings}>
 ): Promise<GeiminmiResult> {
     const t0 = Date.now();
     const pdf = await getDocumentProxy(new Uint8Array(buffer));
@@ -45,7 +46,7 @@ export async function reuGemini(
 Document:
 ${text.slice(0, 5000)}`;
 
-    const response = await runWithRetry(env, prompt);
+    const response = await runWithRetry(c, prompt);
 
     const raw = response?.response ?? "";
 
