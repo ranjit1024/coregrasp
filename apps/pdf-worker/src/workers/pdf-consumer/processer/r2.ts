@@ -2,15 +2,12 @@ import { reuGemini } from "./ai";
 import { PdfJob, type GeiminmiResult } from "../../../shared/types";
 import { Context } from "hono";
 import { Bindings } from "../../../shared/types";
-type Env = {
-  PDF_BUCKET: R2Bucket;
-  AI: Ai;
-};
 
-export async function processMessage(job: PdfJob, c: Context<{Bindings:Bindings}>) {
+
+export async function processMessage(job: PdfJob, env:Bindings) {
   const { key } = job;
 
-  const object = await c.env.PDF_BUCKET.get(key);
+  const object = await env.PDF_BUCKET.get(key);
 
   if (!object) {
     console.error("R2 Object not found", { key });
@@ -20,9 +17,9 @@ export async function processMessage(job: PdfJob, c: Context<{Bindings:Bindings}
 
   const buffer = await object.arrayBuffer();
   
-  const result: GeiminmiResult = await reuGemini(buffer, c);
+  const result: GeiminmiResult = await reuGemini(buffer, env);
 
-  await c.env.PDF_BUCKET.put(
+  await env.PDF_BUCKET.put(
     `${key}.result.json`,
     JSON.stringify({
       statu: "done",
