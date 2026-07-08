@@ -91,7 +91,7 @@ export default function Dashboard() {
         </header>
 
         {/* Dashboard Scrollable Area */}
-        <main className="flex-1 overflow-y-auto p-8 w-3rem">
+        <main className="flex-1 p-8 w-3rem">
           <div className="max-w-[11000px] mx-auto flex flex-col gap-6">
             
             {/* ── KPI Grid ── */}
