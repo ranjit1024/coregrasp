@@ -1,7 +1,7 @@
-// app/policies/status/page.tsx
-import React from 'react';
+"use client"
+import React, { useEffect } from 'react';
 
-// 1. Core Policy Status Types
+
 type PolicyStatus = 'PENDING' | 'PROCESSING' | 'READY' | 'FAILED';
 
 interface PolicyDocument {
@@ -12,7 +12,7 @@ interface PolicyDocument {
   status: PolicyStatus;
 }
 
-// 2. Mock Raw Policy Registry Array
+
 const rawPoliciesList: PolicyDocument[] = [
   { id: 'POL-201', title: 'Global Information Security Framework', scope: 'All Employees • Security', updatedAt: '2 mins ago', status: 'READY' },
   { id: 'POL-202', title: 'Acceptable Use & Device Infrastructure Policy', scope: 'Contractors & Full-time • IT', updatedAt: 'Just now', status: 'PROCESSING' },
@@ -28,6 +28,10 @@ const rawPoliciesList: PolicyDocument[] = [
   { id: 'POL-212', title: 'Corporate Whistleblower Protection Mandate', scope: 'Executive Board • Legal & Risk', updatedAt: '30 mins ago', status: 'PENDING' },
   { id: 'POL-213', title: 'Corporate Whistleblower Protection Mandate', scope: 'Executive Board • Legal & Risk', updatedAt: '30 mins ago', status: 'PENDING' },
 ];
+async function getResult(){
+  const res = await fetch("https://api.ranjitdas2048.workers.dev/result");
+  console.log(res)
+} 
 
 export default function PolicyStatusPage() {
   // 3. Dynamically count policies for each state
@@ -41,7 +45,7 @@ export default function PolicyStatusPage() {
 
   const totalPolicies = rawPoliciesList.length;
 
-  // 4. UI Metric Cards Layout Configuration
+
   const metricCards = [
     {
       id: 'PENDING',
@@ -91,7 +95,9 @@ export default function PolicyStatusPage() {
       case 'FAILED': return 'bg-rose-500/10 text-rose-500 border-rose-500/20';
     }
   };
-
+  useEffect(()=>{
+    getResult()
+  }, [])
   return (
     <div className="min-h-screen bg-[#090A0C] text-neutral-200 antialiased font-sans p-6 md:p-12">
       <div className="w-full mx-auto ">
