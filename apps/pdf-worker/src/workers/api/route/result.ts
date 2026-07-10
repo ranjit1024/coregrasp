@@ -10,15 +10,15 @@ export const result_Route = async (c: Context) => {
 
   const prisma = createPrismaClient(c.env.HYPERDRIVE.connectionString);
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
+  const policy = await prisma.policy.findMany({
+    where: { userId:userId},
   });
 
-  if (!user) {
-    return c.json({ error: "User not found" }, 404);
+  if (!policy) {
+    return c.json({ error: "No policy found" }, 404);
   }
 
   return c.json({
-    userName: user.name,
+    userName: policy
   });
 };
