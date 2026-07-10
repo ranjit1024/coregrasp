@@ -20,6 +20,5 @@ export const result_Route = async (c: Context) => {
 
   return c.json({
     userName: user.name,
-   
   });
 };

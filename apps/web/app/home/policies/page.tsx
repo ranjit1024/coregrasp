@@ -1,4 +1,6 @@
 "use client"
+import { ConsoleIcon } from "@hugeicons/core-free-icons";
+import { useSession } from "../../../lib/auth-client";
 import React, { useEffect } from 'react';
 
 
@@ -28,13 +30,25 @@ const rawPoliciesList: PolicyDocument[] = [
   { id: 'POL-212', title: 'Corporate Whistleblower Protection Mandate', scope: 'Executive Board • Legal & Risk', updatedAt: '30 mins ago', status: 'PENDING' },
   { id: 'POL-213', title: 'Corporate Whistleblower Protection Mandate', scope: 'Executive Board • Legal & Risk', updatedAt: '30 mins ago', status: 'PENDING' },
 ];
-async function getResult(){
-  const res = await fetch("https://api.ranjitdas2048.workers.dev/result");
-  console.log(res)
-} 
 
 export default function PolicyStatusPage() {
+  const { data: session, isPending } = useSession();
+
   // 3. Dynamically count policies for each state
+  async function getResult() {
+  if (!session?.user.id) return;
+
+  const res = await fetch(
+    `https://api.ranjitdas2048.workers.dev/result?userId=${session.user.id}`
+  );
+
+  if (!res.ok) {
+    throw new Error(`Request failed: ${res.status}`);
+  }
+
+  const data = await res.json();
+  return data; // <-- this was missing
+}
   const statusCounts = rawPoliciesList.reduce(
     (acc, policy) => {
       acc[policy.status] = (acc[policy.status] || 0) + 1;
@@ -96,8 +110,8 @@ export default function PolicyStatusPage() {
     }
   };
   useEffect(()=>{
-    getResult()
-  }, [])
+    getResult().then(data=>console.log(data)).catch(err => console.log(err))
+  }, [session?.user.id])
   return (
     <div className="min-h-screen bg-[#090A0C] text-neutral-200 antialiased font-sans p-6 md:p-12">
       <div className="w-full mx-auto ">
