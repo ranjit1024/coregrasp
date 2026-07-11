@@ -14,6 +14,9 @@ export default {
                     await prisma.policy.update({ where: { key }, data: { status: "PROCESSING" } });
                     await processMessage(message.body, env); // pass env/bindings, not a Hono context
                     await prisma.policy.update({ where: { key }, data: { status: "READY" } });
+                    await prisma.policy.update({where: {key}, data: {
+                        url:`${key}.result.json`
+                    }})
                     message.ack();
                 } catch (err) {
                     console.error(`Failed job ${key}`, err);

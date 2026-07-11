@@ -5,7 +5,7 @@ import { extractText, getDocumentProxy } from "unpdf";
 const TEXT_MODEL = "@cf/meta/llama-3.2-3b-instruct";
 
 async function runWithRetry(
-    env:Bindings,
+    env: Bindings,
     prompt: string,
     attempts = 1
 ): Promise<any> {
@@ -30,7 +30,7 @@ async function runWithRetry(
 
 export async function reuGemini(
     buffer: ArrayBuffer,
-    env:Bindings
+    env: Bindings
 ): Promise<GeiminmiResult> {
     const t0 = Date.now();
     const pdf = await getDocumentProxy(new Uint8Array(buffer));

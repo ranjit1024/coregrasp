@@ -3,9 +3,11 @@ import {cors} from "hono/cors"
 import { uplaod_Route } from "./route/uplaod";
 import { result_Route } from "./route/result";
 import { Bindings } from "hono/types";
+import { get_url } from "./route/answer";
 const app = new Hono<{ Bindings: Bindings}>();
 app.use('*', cors());
 app.get("/", (c) => c.text('Working...'));
 app.post('/uplaod-pdf',  uplaod_Route );
-app.get('/result', result_Route)
+app.get('/result', result_Route);
+app.get("/ans/:id", get_url);
 export default app;
