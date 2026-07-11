@@ -2,6 +2,7 @@
 import { ConsoleIcon } from "@hugeicons/core-free-icons";
 import { useSession } from "../../../lib/auth-client";
 import React, { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
 
 type PolicyStatus = 'PENDING' | 'PROCESSING' | 'READY' | 'FAILED';
 
@@ -31,7 +32,7 @@ export default function PolicyStatusPage() {
   const [policies, setPolicies] = useState<PolicyDocument[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const router = useRouter();
   useEffect(() => {
     let isMounted = true;
 
@@ -226,7 +227,10 @@ export default function PolicyStatusPage() {
               policies.map((policy) => (
                 <article 
                   key={policy.id} 
-                  className="group flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-[#121316] border border-[#1B1D22] hover:border-[#2C3039] rounded-xl gap-4 transition-all duration-200"
+                  onClick={()=>{
+                    router.push(`/home/policies/${policy.id}`)
+                  }}
+                  className="group hover:cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-[#121316] border border-[#1B1D22] hover:border-[#2C3039] rounded-xl gap-4 transition-all duration-200"
                 >
                   {/* Left Block: Icon Indicator + Core Description */}
                   <div className="flex items-start gap-4">
@@ -255,7 +259,7 @@ export default function PolicyStatusPage() {
                           {policy.id}
                         </span>
                       </div>
-                      <p className="text-xs text-neutral-400 mt-0.5">{policy.scope}</p>
+                      <p className="text-xs text-neutral-400 mt-0.5">{"Onbording"}</p>
                     </div>
                   </div>
 
