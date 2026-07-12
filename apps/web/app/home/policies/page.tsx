@@ -12,6 +12,7 @@ interface PolicyDocument {
   scope: string;
   createdAt: string;
   status: PolicyStatus;
+  url:string
 }
 
 // Helper to format dates professionally
@@ -228,7 +229,7 @@ export default function PolicyStatusPage() {
                 <article 
                   key={policy.id} 
                   onClick={()=>{
-                    router.push(`/home/policies/${policy.id}`)
+                    router.push(`/home/policies/${policy.url}`)
                   }}
                   className="group hover:cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-[#121316] border border-[#1B1D22] hover:border-[#2C3039] rounded-xl gap-4 transition-all duration-200"
                 >
