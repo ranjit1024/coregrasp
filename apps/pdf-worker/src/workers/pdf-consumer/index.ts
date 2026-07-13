@@ -12,7 +12,7 @@ export default {
                 console.log(`Processing Job ${key} uploaded ${uploadedAt}`);
                 try {
                     await prisma.policy.update({ where: { key }, data: { status: "PROCESSING" } });
-                    await processMessage(message.body, env); // pass env/bindings, not a Hono context
+                    await processMessage(message.body, env); 
                     await prisma.policy.update({ where: { key }, data: { status: "READY" } });
                     await prisma.policy.update({where: {key}, data: {
                         url:`${key}.result.json`
