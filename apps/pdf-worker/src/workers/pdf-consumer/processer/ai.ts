@@ -1,10 +1,9 @@
-import { Context } from "hono";
 import { Bindings, MCQ, MCQResult } from "../../../shared/types";
 import { extractText, getDocumentProxy } from "unpdf";
 
 const TEXT_MODEL = "@cf/meta/llama-3.2-3b-instruct";
-
-
+const numQuestions = 5;
+const estimatedTokens = Math.min(4096, 300 * numQuestions + 200);
 
 async function runWithRetry(
     env: Bindings,
@@ -17,7 +16,7 @@ async function runWithRetry(
             const t0 = Date.now();
             const result = await env.AI.run(TEXT_MODEL, {
                 messages: [{ role: "user", content: prompt }],
-                max_tokens: 1200, // MCQs need more tokens than a summary
+                max_tokens: estimatedTokens, // MCQs need more tokens than a summary
             });
             console.log(`AI call took ${Date.now() - t0}ms`);
             console.log("AI raw response object:", JSON.stringify(result));
@@ -43,13 +42,13 @@ function stripFences(raw: string): string {
 export async function generateMcqs(
     buffer: ArrayBuffer,
     env: Bindings,
-    numQuestions = 5
 ): Promise<MCQResult> {
     const t0 = Date.now();
     const pdf = await getDocumentProxy(new Uint8Array(buffer));
     const { text } = await extractText(pdf, { mergePages: true });
     console.log(`Extraction took ${Date.now() - t0}ms, length: ${text.length}`);
-
+    
+    const estimatedTokens = Math.min(4096, 300 * numQuestions + 200);
     const prompt = `You are a quiz generator. Read the document below and create exactly ${numQuestions} multiple-choice questions that test understanding of its key facts and concepts.
 
 Rules:
