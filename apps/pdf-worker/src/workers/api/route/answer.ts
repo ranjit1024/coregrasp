@@ -10,21 +10,21 @@ export async function get_url(c: Context<{ Bindings: Bindings }>) {
     const ans = await prisma.policy.findFirst({
         where: { url: url }
     });
-    console.log(ans);
+
     if (!ans) {
         return c.json({ error: "Not found" }, 404);
     }
 
-    const object = await c.env.PDF_BUCKET.get(ans.key);
+    const object = await c.env.PDF_BUCKET.get(`${ans.key}.result.json`);
 
     if (!object) {
         return c.json({ error: "File not found in R2" }, 404);
     }
 
-    const body = await object.arrayBuffer(); 
+    const resultData = await object.json(); 
 
     return c.json({
         answer: ans,
-        file: Array.from(new Uint8Array(body))
+        result: resultData,
     });
 }
