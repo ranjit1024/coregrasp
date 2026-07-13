@@ -1,6 +1,5 @@
-import { reuGemini } from "./ai";
-import { PdfJob, type GeiminmiResult } from "../../../shared/types";
-import { Context } from "hono";
+import { generateMcqs,  } from "./ai";
+import { PdfJob, type MCQResult } from "../../../shared/types";
 import { Bindings } from "../../../shared/types";
 
 
@@ -17,7 +16,7 @@ export async function processMessage(job: PdfJob, env:Bindings) {
 
   const buffer = await object.arrayBuffer();
   
-  const result: GeiminmiResult = await reuGemini(buffer, env);
+  const result : MCQResult = await generateMcqs(buffer, env);
 
   await env.PDF_BUCKET.put(
     `${key}.result.json`,

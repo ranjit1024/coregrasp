@@ -1,20 +1,10 @@
 import { Context } from "hono";
-import { Bindings } from "../../../shared/types";
+import { Bindings, MCQ, MCQResult } from "../../../shared/types";
 import { extractText, getDocumentProxy } from "unpdf";
 
 const TEXT_MODEL = "@cf/meta/llama-3.2-3b-instruct";
 
-export interface MCQ {
-    question: string;
-    options: string[]; // 4 options
-    correctIndex: number; // 0-3
-    explanation?: string;
-}
 
-export interface MCQResult {
-    questions: MCQ[];
-    raw: string;
-}
 
 async function runWithRetry(
     env: Bindings,
@@ -40,7 +30,7 @@ async function runWithRetry(
     throw lastErr;
 }
 
-// Strips accidental markdown fences some models add despite instructions
+
 function stripFences(raw: string): string {
     return raw
         .trim()

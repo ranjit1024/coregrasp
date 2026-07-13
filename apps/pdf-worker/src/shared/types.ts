@@ -10,9 +10,15 @@ export type PdfJob = {
   key: string;
   uploadedAt: string;
 };
-export type GeiminmiResult = {
-  summery: string,
-  topics: string[],
-  entities: string[],
-  raw: string
+
+export interface MCQ {
+    question: string;
+    options: string[]; 
+    correctIndex: number; 
+    explanation?: string;
+}
+
+export interface MCQResult {
+    questions: MCQ[];
+    raw: string;
 }
