@@ -9,7 +9,7 @@ interface MCQListProps {
     questions: MCQ[];
 }
 
-export default function MCQList({ questions }: MCQListProps) {
+export default function MCQList({ questions }: {questions:any}) {
     if (!questions?.length) {
         return <p className="text-gray-500">No questions generated.</p>;
     }

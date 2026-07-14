@@ -1,7 +1,7 @@
 import { Bindings, MCQ, MCQResult } from "../../../shared/types";
 import { extractText, getDocumentProxy } from "unpdf";
 
-const TEXT_MODEL = "@cf/meta/llama-3.2-3b-instruct";
+const TEXT_MODEL = "@cf/openai/gpt-oss-20b";
 const numQuestions = 5;
 const estimatedTokens = Math.min(4096, 300 * numQuestions + 200);
 
@@ -16,7 +16,7 @@ async function runWithRetry(
             const t0 = Date.now();
             const result = await env.AI.run(TEXT_MODEL, {
                 messages: [{ role: "user", content: prompt }],
-                max_tokens: estimatedTokens, // MCQs need more tokens than a summary
+                max_tokens: estimatedTokens,
             });
             console.log(`AI call took ${Date.now() - t0}ms`);
             console.log("AI raw response object:", JSON.stringify(result));
@@ -29,7 +29,6 @@ async function runWithRetry(
     throw lastErr;
 }
 
-
 function stripFences(raw: string): string {
     return raw
         .trim()
@@ -37,6 +36,43 @@ function stripFences(raw: string): string {
         .replace(/^```\s*/i, "")
         .replace(/```$/i, "")
         .trim();
+}
+
+
+function closeUnmatchedBrackets(str: string): string {
+    let fixed = str.trim().replace(/,\s*$/, "");
+    const stack: string[] = [];
+    let inString = false;
+    let escapeNext = false;
+
+    for (let i = 0; i < fixed.length; i++) {
+        const ch = fixed[i];
+        if (escapeNext) { escapeNext = false; continue; }
+        if (ch === "\\") { escapeNext = true; continue; }
+        if (ch === '"') { inString = !inString; continue; }
+        if (inString) continue;
+        if (ch === "{" || ch === "[") stack.push(ch);
+        else if (ch === "}" || ch === "]") stack.pop();
+    }
+
+    let closing = "";
+    while (stack.length) closing += stack.pop() === "{" ? "}" : "]";
+    return fixed + closing;
+}
+
+function safeParseJson(cleaned: string): any | null {
+    try {
+        return JSON.parse(cleaned);
+    } catch {
+        try {
+            const repaired = closeUnmatchedBrackets(cleaned);
+            console.warn("Plain parse failed, used bracket repair");
+            return JSON.parse(repaired);
+        } catch (err) {
+            console.error("Repair also failed. Raw:", cleaned);
+            return null;
+        }
+    }
 }
 
 export async function generateMcqs(
@@ -47,8 +83,7 @@ export async function generateMcqs(
     const pdf = await getDocumentProxy(new Uint8Array(buffer));
     const { text } = await extractText(pdf, { mergePages: true });
     console.log(`Extraction took ${Date.now() - t0}ms, length: ${text.length}`);
-    
-    const estimatedTokens = Math.min(4096, 300 * numQuestions + 200);
+
     const prompt = `You are a quiz generator. Read the document below and create exactly ${numQuestions} multiple-choice questions that test understanding of its key facts and concepts.
 
 Rules:
@@ -74,16 +109,11 @@ ${text.slice(0, 6000)}`;
 
     const response = await runWithRetry(env, prompt);
     const raw = response?.response ?? "";
-    const cleaned = stripFences(raw);
+    const rawString = typeof raw === "string" ? raw : JSON.stringify(raw);
+    const cleaned = stripFences(rawString);
 
-    try {
-        const parsed = JSON.parse(cleaned);
-        const questions: MCQ[] = Array.isArray(parsed?.questions)
-            ? parsed.questions
-            : [];
-        return { questions, raw };
-    } catch (err) {
-        console.warn("Failed to parse MCQ JSON:", err);
-        return { questions: [], raw };
-    }
+    const parsed = safeParseJson(cleaned);
+    const questions: MCQ[] = Array.isArray(parsed?.questions) ? parsed.questions : [];
+
+    return { questions, raw: rawString };
 }
