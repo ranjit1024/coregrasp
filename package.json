@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "workspaces": [
+    "apps/*",
     "apps/web",
     "apps/pdf-worker",
     "apps/pdf-worker/src/workers/*",
