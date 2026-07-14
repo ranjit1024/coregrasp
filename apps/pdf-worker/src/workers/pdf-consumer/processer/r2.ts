@@ -13,17 +13,21 @@ export async function processMessage(job: PdfJob, env:Bindings) {
     throw new Error(`R2 Object not found: ${key}`);
     return;
   }
-
   const buffer = await object.arrayBuffer();
-  
   const result : MCQResult = await generateMcqs(buffer, env);
+
+  const finalResult = {
+  
+    mcq: result, 
+};
+
 
   await env.PDF_BUCKET.put(
     `${key}.result.json`,
     JSON.stringify({
-      statu: "done",
+      
       processedAt: new Date().toISOString(),
-      result
+      finalResult
     }),
     { httpMetadata: { contentType: "application/json" } }
   )
