@@ -4,8 +4,7 @@
 
 ## Overview
 
-CoreGrasp is designed to help developers gain a deeper understanding of software projects by providing intelligent analysis, structured insights, and an intuitive development workflow. It aims to reduce the time required to navigate unfamiliar codebases and improve developer productivity.
-
+CoreGrasp is designed to help developers gain a deeper understanding of software projects by providing intelligent analysis, structured insights, and an intuitive development workflow. It aims to reduce the time required to navigate unfamiliar codebases and improve developer productivity .
 
 ## Tech Stack
 
