@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "dev:web": "cd apps/web && next dev",
-    "build": "next build",
+    "build:web": "cd apps/web &&  next build",
     "start": "next start",
     "lint": "eslint",
     "deploy:worker": "cd apps/pdf-worker/src/workers/pdf-consumer && npx wrangler deploy",
