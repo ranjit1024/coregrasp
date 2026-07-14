@@ -1,7 +1,7 @@
 import { Bindings, MCQ, MCQResult } from "../../../shared/types";
 import { extractText, getDocumentProxy } from "unpdf";
 
-const TEXT_MODEL = "@cf/openai/gpt-oss-20b";
+const TEXT_MODEL = "@cf/meta/llama-3.2-3b-instruct";
 const numQuestions = 5;
 const estimatedTokens = Math.min(4096, 300 * numQuestions + 200);
 
@@ -38,7 +38,7 @@ function stripFences(raw: string): string {
         .trim();
 }
 
-
+// --- NEW: repairs truncated JSON by closing unmatched brackets/braces ---
 function closeUnmatchedBrackets(str: string): string {
     let fixed = str.trim().replace(/,\s*$/, "");
     const stack: string[] = [];
@@ -60,6 +60,7 @@ function closeUnmatchedBrackets(str: string): string {
     return fixed + closing;
 }
 
+// --- NEW: tries plain parse, then falls back to bracket repair ---
 function safeParseJson(cleaned: string): any | null {
     try {
         return JSON.parse(cleaned);

@@ -35,18 +35,12 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
                 const json = await response.json();
 
                 // Safely navigate the nested API structure
-                const rawData: string = json?.result?.finalResult?.mcq.raw;
-                console.log(rawData)
+                const mcqData: string = json?.result?.finalResult?.mcq.questions;
+                console.log(mcqData)
                
-                // console.log(mcqData)
-                const cleaned = rawData
-                    .trim()
-                    .replace(/^```json\s*/i, "")
-                    .replace(/^```\s*/i, "")
-                    .replace(/```$/i, "")
-                    .trim();
+           
 
-                const mcqData = JSON.parse(cleaned)
+           
                 console.log(mcqData)
                 if (mcqData) {
                     setData(mcqData);
@@ -69,7 +63,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
 
     return (
         <div className="p-4">
-            {/* {data ? <MCQList questions={data} /> : <p>No questions found.</p>} */}
+            {data ? <MCQList questions={data} /> : <p>No questions found.</p>}
         </div>
     );
 }
