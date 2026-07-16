@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "dev:web": "cd apps/web && next dev",
-    "build:web": "prisma generate && next build ",
+    "build:web": "prisma generate && npm run build --workspace=@revisly/web",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate --schema=./packages/db/prisma/schema.prisma",
