@@ -3,7 +3,7 @@ export type Bindings = {
   PDF_BUCKET: R2Bucket;
   PDF_QUEUE: Queue;
   AI: Ai;
-
+  RESEND_API_KEY: string;
 };
 
 export type PdfJob = {
