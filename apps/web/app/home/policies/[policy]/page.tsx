@@ -1,17 +1,18 @@
 "use client";
 
+import { SendQuizForm } from "@/app/components/ui/ sendQuiz";
 import MCQList from "@/app/components/ui/mcq";
 import { raw } from "@prisma/client/runtime/client";
 import { use, useEffect, useState } from "react";
 
 interface PolicyDetailsProps {
-    params: Promise<{ policy: string }>;
+    params: Promise<{ policy: string, url:string }>;
+    
 }
 
 export default function PolicyDetails({ params }: PolicyDetailsProps) {
-    // Unwrapping params safely using Next.js 15 `use()` hook
     const { policy } = use(params);
-
+     const { url } = use(params);
     // States for data, loading, and errors
     const [data, setData] = useState<any>(null); // Replace 'any' with your specific MCQ array type if known
     const [loading, setLoading] = useState<boolean>(true);
@@ -64,6 +65,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
     return (
         <div className="p-4">
             {data ? <MCQList questions={data} /> : <p>No questions found.</p>}
+            {/* <SendQuizForm policyUrl={url}></SendQuizForm> */}
         </div>
     );
 }

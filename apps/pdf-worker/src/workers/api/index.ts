@@ -9,6 +9,7 @@ const app = new Hono<{ Bindings: Bindings}>();
 app.use('*', cors());
 app.get("/", (c) => c.text('Working...'));
 app.post('/uplaod-pdf',  uplaod_Route );
+app.post('/ans/:id', get_url)
 app.get('/result', result_Route);
-app.get("send", send_quiz);
+app.post("/send", send_quiz);
 export default app;
