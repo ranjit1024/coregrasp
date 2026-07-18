@@ -23,7 +23,13 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
         return c.json({ error: "Quiz not generated yet for this policy" }, 404);
     }
 
-    await sendQuizEmail(c.env, recipientEmail, policyUrl, policy.name ?? policyUrl);
+    try {
+        await sendQuizEmail(c.env, recipientEmail, policyUrl, policy.name ?? policyUrl);
+    } catch (e) {
+        console.error("sendQuizEmail failed:", e);
+        return c.json({ error: "Failed to send email", detail: `${e}` }, 502);
+    }
+
 
     return c.json({
         sent: true,
