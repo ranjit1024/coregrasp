@@ -18,7 +18,7 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
     if (!policy) return c.json({ error: "Policy not found" }, 404);
 
 
-    const quizObject = await c.env.PDF_BUCKET.head(`${policy.key}.quiz.json`);
+    const quizObject = await c.env.PDF_BUCKET.head(`${policy.key}.result.json`);
     if (!quizObject) {
         return c.json({ error: "Quiz not generated yet for this policy" }, 404);
     }

@@ -65,7 +65,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
     return (
         <div className="p-4">
             {data ? <MCQList questions={data} /> : <p>No questions found.</p>}
-            {/* <SendQuizForm policyUrl={url}></SendQuizForm> */}
+            <SendQuizForm policyUrl={policy}></SendQuizForm>
         </div>
     );
 }

@@ -42,7 +42,7 @@ export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
                     placeholder="ranjitdas2048@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="flex-1 border border-gray-300 px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                    className="flex-1 text-black border border-gray-300 px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black"
                     disabled={status === "sending"}
                 />
                 <button
