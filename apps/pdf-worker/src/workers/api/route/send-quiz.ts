@@ -33,6 +33,6 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
 
     return c.json({
         sent: true,
-        quizUrl: `https://coregrasp.app/quiz/${encodeURIComponent(policyUrl)}`,
+        quizUrl: `http://localhost:3000/quiz/${encodeURIComponent(policyUrl)}`,
     });
 }
