@@ -34,21 +34,40 @@ export async function sendQuizEmail(
     title: string
 ) {
     const link = `https://coregrasp.app/quiz/${encodeURIComponent(quizUrl)}`;
-    const from = "ranjitdas2048@gmail.com"; // your personal Gmail
+    const from = "ranjitdas2048@gmail.com";
 
     const subject = `Quiz ready: ${title}`;
     const html = `
-        <div style="font-family: sans-serif; max-width: 480px; margin: auto;">
-            <h2>Your quiz is ready</h2>
-            <p>A short quiz was generated for <b>${title}</b>. Click below to attempt it.</p>
-            <a href="${link}" style="display:inline-block;padding:10px 20px;background:#111;color:#fff;border-radius:6px;text-decoration:none;">
-                Attempt Quiz
-            </a>
-            <p style="color:#888;font-size:12px;margin-top:20px;">
-                This link works without logging in. Anyone with the link can attempt it.
-            </p>
+    <div style=""min-height: 100vh , font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; width: 100%; padding: 40px 20px; box-sizing: border-box; background-color: #ffffff; color: #09090b;">
+
+        <!-- Coregrasp Branding -->
+        <div style="margin-bottom: 40px;">
+            <span style="font-size: 20px; font-weight: 800; letter-spacing: -1px;">Coregrasp</span>
         </div>
-    `;
+        
+        <!-- Main Content -->
+        <h2 style="font-size: 28px; font-weight: 600; margin-top: 0; margin-bottom: 16px; letter-spacing: -0.5px;">
+            Your policy assessment is ready
+        </h2>
+        
+        <p style="color: #52525b; font-size: 16px; line-height: 1.6; margin-top: 0; margin-bottom: 32px; max-width: 600px;">
+            A new policy comprehension quiz has been generated for <strong style="color: #09090b; font-weight: 600;">${title}</strong>. Please take a few minutes to complete this assessment to ensure you are up to date with the latest guidelines.
+        </p>
+        
+        <!-- Call to Action -->
+        <a href="${link}" style="display: inline-block; padding: 14px 28px; background-color: #09090b; color: #ffffff; font-size: 15px; font-weight: 500; text-decoration: none; border-radius: 6px; text-align: center;">
+            Begin Assessment
+        </a>
+        
+        <!-- Footer -->
+        <hr style="border: none; border-top: 1px solid #e4e4e7; margin: 48px 0 24px 0; max-width: 600px; margin-left: 0;" />
+        
+        <p style="color: #a1a1aa; font-size: 13px; line-height: 1.5; margin: 0; max-width: 600px;">
+            This assessment was securely routed via Coregrasp. You do not need an account to complete it; anyone with this unique link can access the quiz. 
+        </p>
+        
+    </div>
+`;
 
     const messageParts = [
         `From: ${from}`,
