@@ -38,34 +38,38 @@ export async function sendQuizEmail(
 
     const subject = `Quiz ready: ${title}`;
     const html = `
-    <div style=""min-height: 100vh , font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; width: 100%; padding: 40px 20px; box-sizing: border-box; background-color: #ffffff; color: #09090b;">
-
-        <!-- Coregrasp Branding -->
-        <div style="margin-bottom: 40px;">
-            <span style="font-size: 20px; font-weight: 800; letter-spacing: -1px;">Coregrasp</span>
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #000000; width: 100%; min-height: 100vh; padding: 60px 20px; box-sizing: border-box; color: #ffffff;">
+        
+        <!-- Inner Container (Centers the content on large screens) -->
+        <div style="max-width: 600px; margin: 0 auto;">
+            
+            <!-- Coregrasp Branding -->
+            <div style="margin-bottom: 40px;">
+                <span style="font-size: 20px; font-weight: 800; letter-spacing: -1px; color: #ffffff;">Coregrasp</span>
+            </div>
+            
+            <!-- Main Content -->
+            <h2 style="color: #ffffff; font-size: 28px; font-weight: 600; margin-top: 0; margin-bottom: 16px; letter-spacing: -0.5px;">
+                Your policy assessment is ready
+            </h2>
+            
+            <p style="color: #a1a1aa; font-size: 16px; line-height: 1.6; margin-top: 0; margin-bottom: 32px;">
+                A new policy comprehension quiz has been generated for <strong style="color: #ffffff; font-weight: 600;">${title}</strong>. Please take a few minutes to complete this assessment to ensure you are up to date with the latest guidelines.
+            </p>
+            
+            <!-- Call to Action -->
+            <a href="${link}" style="display: inline-block; padding: 14px 28px; background-color: #ffffff; color: #000000; font-size: 15px; font-weight: 600; text-decoration: none; border-radius: 6px; text-align: center;">
+                Begin Assessment
+            </a>
+            
+            <!-- Footer -->
+            <hr style="border: none; border-top: 1px solid #27272a; margin: 48px 0 24px 0;" />
+            
+            <p style="color: #71717a; font-size: 13px; line-height: 1.5; margin: 0;">
+                This assessment was securely routed via Coregrasp. You do not need an account to complete it; anyone with this unique link can access the quiz. 
+            </p>
+            
         </div>
-        
-        <!-- Main Content -->
-        <h2 style="font-size: 28px; font-weight: 600; margin-top: 0; margin-bottom: 16px; letter-spacing: -0.5px;">
-            Your policy assessment is ready
-        </h2>
-        
-        <p style="color: #52525b; font-size: 16px; line-height: 1.6; margin-top: 0; margin-bottom: 32px; max-width: 600px;">
-            A new policy comprehension quiz has been generated for <strong style="color: #09090b; font-weight: 600;">${title}</strong>. Please take a few minutes to complete this assessment to ensure you are up to date with the latest guidelines.
-        </p>
-        
-        <!-- Call to Action -->
-        <a href="${link}" style="display: inline-block; padding: 14px 28px; background-color: #09090b; color: #ffffff; font-size: 15px; font-weight: 500; text-decoration: none; border-radius: 6px; text-align: center;">
-            Begin Assessment
-        </a>
-        
-        <!-- Footer -->
-        <hr style="border: none; border-top: 1px solid #e4e4e7; margin: 48px 0 24px 0; max-width: 600px; margin-left: 0;" />
-        
-        <p style="color: #a1a1aa; font-size: 13px; line-height: 1.5; margin: 0; max-width: 600px;">
-            This assessment was securely routed via Coregrasp. You do not need an account to complete it; anyone with this unique link can access the quiz. 
-        </p>
-        
     </div>
 `;
 

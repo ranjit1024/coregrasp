@@ -1,25 +1,21 @@
 "use client";
 
-import { SendQuizForm } from "@/app/components/ui/ sendQuiz";
 import MCQList from "@/app/components/ui/mcq";
-import { raw } from "@prisma/client/runtime/client";
 import { use, useEffect, useState } from "react";
 
 interface PolicyDetailsProps {
-    params: Promise<{ policy: string, url:string }>;
-    
+    params: Promise<{ policy: string, url: string }>;
 }
 
 export default function PolicyDetails({ params }: PolicyDetailsProps) {
     const { policy } = use(params);
-     const { url } = use(params);
-    // States for data, loading, and errors
-    const [data, setData] = useState<any>(null); // Replace 'any' with your specific MCQ array type if known
+    const { url } = use(params);
+    
+    const [data, setData] = useState<any>(null); 
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Prevent fetching if policy isn't available yet
         if (!policy) return;
 
         const fetchPolicyData = async () => {
@@ -34,15 +30,8 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
                 }
 
                 const json = await response.json();
-
-                // Safely navigate the nested API structure
-                const mcqData: string = json?.result?.finalResult?.mcq.questions;
-                console.log(mcqData)
+                const mcqData = json?.result?.finalResult?.mcq?.questions;
                
-           
-
-           
-                console.log(mcqData)
                 if (mcqData) {
                     setData(mcqData);
                 } else {
@@ -56,16 +45,14 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
         };
 
         fetchPolicyData();
-    }, [policy]); // Re-runs the fetch if the policy parameter changes
+    }, [policy]); 
 
-    // Conditional UI Rendering for UX
-    if (loading) return <div className="p-6 text-center text-gray-500">Loading policy details...</div>;
+    if (loading) return <div className="p-6 text-center text-zinc-500">Loading policy details...</div>;
     if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
 
     return (
         <div className="p-4">
-            {data ? <MCQList questions={data} /> : <p>No questions found.</p>}
-            <SendQuizForm policyUrl={policy}></SendQuizForm>
+            {data ? <MCQList questions={data} policyUrl={policy} /> : <p>No questions found.</p>}
         </div>
     );
 }
