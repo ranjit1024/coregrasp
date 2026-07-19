@@ -13,7 +13,7 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
- 
+
 model User {
   id            String    @id
   name          String
@@ -24,8 +24,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-  policies      Policy[]  
-
+  policies      Policy[]
+  candidate     Candidate[]
   @@unique([email])
   @@map("user")
 }
@@ -65,7 +65,6 @@ model Account {
   @@map("account")
 }
 
-
 enum PolicyStatus {
   PENDING
   PROCESSING
@@ -83,8 +82,17 @@ model Policy {
   createdAt DateTime     @default(now())
   userId    String
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@map("policy")
+}
+
+model Candidate {
+  id    String @id
+  email String
+  score String
+  userId String
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Verification {

@@ -55,6 +55,7 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Policy: 'Policy',
+  Candidate: 'Candidate',
   Verification: 'Verification'
 } as const
 
@@ -132,6 +133,16 @@ export const PolicyScalarFieldEnum = {
 } as const
 
 export type PolicyScalarFieldEnum = (typeof PolicyScalarFieldEnum)[keyof typeof PolicyScalarFieldEnum]
+
+
+export const CandidateScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  score: 'score',
+  userId: 'userId'
+} as const
+
+export type CandidateScalarFieldEnum = (typeof CandidateScalarFieldEnum)[keyof typeof CandidateScalarFieldEnum]
 
 
 export const VerificationScalarFieldEnum = {

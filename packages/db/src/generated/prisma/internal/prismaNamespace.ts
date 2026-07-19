@@ -388,6 +388,7 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Policy: 'Policy',
+  Candidate: 'Candidate',
   Verification: 'Verification'
 } as const
 
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "policy" | "verification"
+    modelProps: "user" | "session" | "account" | "policy" | "candidate" | "verification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -704,6 +705,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Candidate: {
+      payload: Prisma.$CandidatePayload<ExtArgs>
+      fields: Prisma.CandidateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CandidateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CandidateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>
+        }
+        findFirst: {
+          args: Prisma.CandidateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CandidateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>
+        }
+        findMany: {
+          args: Prisma.CandidateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>[]
+        }
+        create: {
+          args: Prisma.CandidateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>
+        }
+        createMany: {
+          args: Prisma.CandidateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CandidateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>[]
+        }
+        delete: {
+          args: Prisma.CandidateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>
+        }
+        update: {
+          args: Prisma.CandidateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>
+        }
+        deleteMany: {
+          args: Prisma.CandidateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CandidateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CandidateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>[]
+        }
+        upsert: {
+          args: Prisma.CandidateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CandidatePayload>
+        }
+        aggregate: {
+          args: Prisma.CandidateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCandidate>
+        }
+        groupBy: {
+          args: Prisma.CandidateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CandidateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CandidateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CandidateCountAggregateOutputType> | number
+        }
+      }
+    }
     Verification: {
       payload: Prisma.$VerificationPayload<ExtArgs>
       fields: Prisma.VerificationFieldRefs
@@ -875,6 +950,16 @@ export const PolicyScalarFieldEnum = {
 } as const
 
 export type PolicyScalarFieldEnum = (typeof PolicyScalarFieldEnum)[keyof typeof PolicyScalarFieldEnum]
+
+
+export const CandidateScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  score: 'score',
+  userId: 'userId'
+} as const
+
+export type CandidateScalarFieldEnum = (typeof CandidateScalarFieldEnum)[keyof typeof CandidateScalarFieldEnum]
 
 
 export const VerificationScalarFieldEnum = {
@@ -1095,6 +1180,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   policy?: Prisma.PolicyOmit
+  candidate?: Prisma.CandidateOmit
   verification?: Prisma.VerificationOmit
 }
 

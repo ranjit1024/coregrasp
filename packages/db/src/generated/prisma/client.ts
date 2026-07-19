@@ -59,6 +59,11 @@ export type Account = Prisma.AccountModel
  */
 export type Policy = Prisma.PolicyModel
 /**
+ * Model Candidate
+ * 
+ */
+export type Candidate = Prisma.CandidateModel
+/**
  * Model Verification
  * 
  */
