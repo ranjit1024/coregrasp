@@ -14,7 +14,6 @@ interface QuizProps {
     questions: MCQ[];
     policyUrl?: string;
     onComplete?: (score: number, total: number) => void;
-    allowRetake?: boolean;
 }
 
 // ─── Icons ───────────────────────────────────────────────────────
@@ -39,7 +38,7 @@ const ArrowPathIcon = () => (
 
 // ─── Main Component ──────────────────────────────────────────────
 
-export default function Quiz({ questions, policyUrl, onComplete, allowRetake = true }: QuizProps) {
+export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) {
     const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [showShake, setShowShake] = useState(false);
@@ -169,15 +168,7 @@ export default function Quiz({ questions, policyUrl, onComplete, allowRetake = t
                                     ? "Solid grasp. Check the explanations for missed questions."
                                     : "Review the policy and try again."}
                             </p>
-                            {allowRetake && (
-                                <button
-                                    onClick={handleRetake}
-                                    className="mt-3 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-400 border border-zinc-700 rounded-xl hover:bg-zinc-800 hover:text-white hover:border-zinc-600 transition-all"
-                                >
-                                    <ArrowPathIcon />
-                                    Retake
-                                </button>
-                            )}
+                         
                         </div>
                     </motion.div>
                 )}

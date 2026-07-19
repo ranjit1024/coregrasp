@@ -33,7 +33,7 @@ export async function sendQuizEmail(
     quizUrl: string,
     title: string
 ) {
-    const link = `https://coregrasp.app/quiz/${encodeURIComponent(quizUrl)}`;
+    const link = `http://localhost:3000/assessment/${encodeURIComponent(quizUrl)}`;
     const from = "ranjitdas2048@gmail.com";
 
     const subject = `Quiz ready: ${title}`;
