@@ -32,7 +32,7 @@ export default function MCQList({ questions, policyUrl }: MCQListProps) {
     }
 
     return (
-        <div className="max-w-5xl mx-auto space-y-8 p-6">
+        <div className="max-w-9xl mx-auto space-y-8 p-6">
             {/* Elegant Header Block */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 dark:border-zinc-800/80 pb-6">
                 <div className="flex flex-col gap-2">
