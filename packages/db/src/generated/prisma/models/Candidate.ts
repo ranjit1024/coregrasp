@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/wasm-compiler-edge"
-import type * as $Enums from "../enums.ts"
-import type * as Prisma from "../internal/prismaNamespace.ts"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Candidate
@@ -20,21 +20,31 @@ export type CandidateModel = runtime.Types.Result.DefaultSelection<Prisma.$Candi
 
 export type AggregateCandidate = {
   _count: CandidateCountAggregateOutputType | null
+  _avg: CandidateAvgAggregateOutputType | null
+  _sum: CandidateSumAggregateOutputType | null
   _min: CandidateMinAggregateOutputType | null
   _max: CandidateMaxAggregateOutputType | null
+}
+
+export type CandidateAvgAggregateOutputType = {
+  score: number | null
+}
+
+export type CandidateSumAggregateOutputType = {
+  score: number | null
 }
 
 export type CandidateMinAggregateOutputType = {
   id: string | null
   email: string | null
-  score: string | null
+  score: number | null
   userId: string | null
 }
 
 export type CandidateMaxAggregateOutputType = {
   id: string | null
   email: string | null
-  score: string | null
+  score: number | null
   userId: string | null
 }
 
@@ -46,6 +56,14 @@ export type CandidateCountAggregateOutputType = {
   _all: number
 }
 
+
+export type CandidateAvgAggregateInputType = {
+  score?: true
+}
+
+export type CandidateSumAggregateInputType = {
+  score?: true
+}
 
 export type CandidateMinAggregateInputType = {
   id?: true
@@ -107,6 +125,18 @@ export type CandidateAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CandidateAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CandidateSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CandidateMinAggregateInputType
@@ -137,6 +167,8 @@ export type CandidateGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: CandidateCountAggregateInputType | true
+  _avg?: CandidateAvgAggregateInputType
+  _sum?: CandidateSumAggregateInputType
   _min?: CandidateMinAggregateInputType
   _max?: CandidateMaxAggregateInputType
 }
@@ -144,9 +176,11 @@ export type CandidateGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type CandidateGroupByOutputType = {
   id: string
   email: string
-  score: string
+  score: number
   userId: string
   _count: CandidateCountAggregateOutputType | null
+  _avg: CandidateAvgAggregateOutputType | null
+  _sum: CandidateSumAggregateOutputType | null
   _min: CandidateMinAggregateOutputType | null
   _max: CandidateMaxAggregateOutputType | null
 }
@@ -172,7 +206,7 @@ export type CandidateWhereInput = {
   NOT?: Prisma.CandidateWhereInput | Prisma.CandidateWhereInput[]
   id?: Prisma.StringFilter<"Candidate"> | string
   email?: Prisma.StringFilter<"Candidate"> | string
-  score?: Prisma.StringFilter<"Candidate"> | string
+  score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -191,7 +225,7 @@ export type CandidateWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CandidateWhereInput[]
   NOT?: Prisma.CandidateWhereInput | Prisma.CandidateWhereInput[]
   email?: Prisma.StringFilter<"Candidate"> | string
-  score?: Prisma.StringFilter<"Candidate"> | string
+  score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -202,8 +236,10 @@ export type CandidateOrderByWithAggregationInput = {
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   _count?: Prisma.CandidateCountOrderByAggregateInput
+  _avg?: Prisma.CandidateAvgOrderByAggregateInput
   _max?: Prisma.CandidateMaxOrderByAggregateInput
   _min?: Prisma.CandidateMinOrderByAggregateInput
+  _sum?: Prisma.CandidateSumOrderByAggregateInput
 }
 
 export type CandidateScalarWhereWithAggregatesInput = {
@@ -212,55 +248,55 @@ export type CandidateScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CandidateScalarWhereWithAggregatesInput | Prisma.CandidateScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
   email?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
-  score?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
+  score?: Prisma.IntWithAggregatesFilter<"Candidate"> | number
   userId?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
 }
 
 export type CandidateCreateInput = {
-  id: string
+  id?: string
   email: string
-  score: string
+  score: number
   user: Prisma.UserCreateNestedOneWithoutCandidateInput
 }
 
 export type CandidateUncheckedCreateInput = {
-  id: string
+  id?: string
   email: string
-  score: string
+  score: number
   userId: string
 }
 
 export type CandidateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutCandidateNestedInput
 }
 
 export type CandidateUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CandidateCreateManyInput = {
-  id: string
+  id?: string
   email: string
-  score: string
+  score: number
   userId: string
 }
 
 export type CandidateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CandidateUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -281,6 +317,10 @@ export type CandidateCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
 }
 
+export type CandidateAvgOrderByAggregateInput = {
+  score?: Prisma.SortOrder
+}
+
 export type CandidateMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -293,6 +333,10 @@ export type CandidateMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+}
+
+export type CandidateSumOrderByAggregateInput = {
+  score?: Prisma.SortOrder
 }
 
 export type CandidateCreateNestedManyWithoutUserInput = {
@@ -337,16 +381,24 @@ export type CandidateUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.CandidateScalarWhereInput | Prisma.CandidateScalarWhereInput[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type CandidateCreateWithoutUserInput = {
-  id: string
+  id?: string
   email: string
-  score: string
+  score: number
 }
 
 export type CandidateUncheckedCreateWithoutUserInput = {
-  id: string
+  id?: string
   email: string
-  score: string
+  score: number
 }
 
 export type CandidateCreateOrConnectWithoutUserInput = {
@@ -381,32 +433,32 @@ export type CandidateScalarWhereInput = {
   NOT?: Prisma.CandidateScalarWhereInput | Prisma.CandidateScalarWhereInput[]
   id?: Prisma.StringFilter<"Candidate"> | string
   email?: Prisma.StringFilter<"Candidate"> | string
-  score?: Prisma.StringFilter<"Candidate"> | string
+  score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
 }
 
 export type CandidateCreateManyUserInput = {
-  id: string
+  id?: string
   email: string
-  score: string
+  score: number
 }
 
 export type CandidateUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CandidateUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CandidateUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -461,7 +513,7 @@ export type $CandidatePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
-    score: string
+    score: number
     userId: string
   }, ExtArgs["result"]["candidate"]>
   composites: {}
@@ -889,7 +941,7 @@ export interface Prisma__CandidateClient<T, Null = never, ExtArgs extends runtim
 export interface CandidateFieldRefs {
   readonly id: Prisma.FieldRef<"Candidate", 'String'>
   readonly email: Prisma.FieldRef<"Candidate", 'String'>
-  readonly score: Prisma.FieldRef<"Candidate", 'String'>
+  readonly score: Prisma.FieldRef<"Candidate", 'Int'>
   readonly userId: Prisma.FieldRef<"Candidate", 'String'>
 }
     
