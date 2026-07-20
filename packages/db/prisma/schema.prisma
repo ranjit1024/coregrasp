@@ -88,9 +88,9 @@ model Policy {
 }
 
 model Candidate {
-  id    String @id
+  id    String @id @default(cuid())
   email String
-  score String
+  score Int
   userId String
   user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

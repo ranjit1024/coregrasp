@@ -4,7 +4,8 @@ import { sendQuizEmail } from "../lib/email";
 import { Bindings } from "../../../shared/types";
 
 export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
-    const { policyUrl, recipientEmail } = await c.req.json<{
+    const {id, policyUrl, recipientEmail } = await c.req.json<{
+        id : string;
         policyUrl: string;
         recipientEmail: string;
     }>();
@@ -25,6 +26,14 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
 
     try {
         await sendQuizEmail(c.env, recipientEmail, policyUrl, policy.name ?? policyUrl);
+        await prisma.candidate.create({
+            data:{
+
+                email: recipientEmail,
+                score:"12",
+                userId:
+            }
+        })
     } catch (e) {
         console.error("sendQuizEmail failed:", e);
         return c.json({ error: "Failed to send email", detail: `${e}` }, 502);
