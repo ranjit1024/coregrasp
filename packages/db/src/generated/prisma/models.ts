@@ -8,10 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/User.js'
-export type * from './models/Session.js'
-export type * from './models/Account.js'
-export type * from './models/Policy.js'
-export type * from './models/Candidate.js'
-export type * from './models/Verification.js'
-export type * from './commonInputTypes.js'
+export type * from './models/User.ts'
+export type * from './models/Session.ts'
+export type * from './models/Account.ts'
+export type * from './models/Policy.ts'
+export type * from './models/Candidate.ts'
+export type * from './models/Verification.ts'
+export type * from './commonInputTypes.ts'

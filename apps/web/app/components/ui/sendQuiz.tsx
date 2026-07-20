@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-
+import { authClient } from "@/lib/auth-client";
+import { getuserId } from "@/lib/userId";
 export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -13,7 +14,7 @@ export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
             const res = await fetch(`https://api.ranjitdas2048.workers.dev/send-quiz`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ policyUrl, recipientEmail: email }),
+                body: JSON.stringify({ policyUrl, recipientEmail: email , userId:""})
             });
 
             const data = await res.json();

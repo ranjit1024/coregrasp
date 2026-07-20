@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SendQuizForm } from "@/app/components/ui/sendQuiz"; // Adjust import path as needed
+import { getuserId } from "@/lib/userId";
 
 export interface MCQ {
     question: string;
@@ -17,6 +18,13 @@ interface MCQListProps {
 
 export default function MCQList({ questions, policyUrl }: MCQListProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+  async function loadEmail() {
+    const result = await getuserId();
+    console.log(result);
+  }
+  useEffect(()=>{
+    loadEmail()
+  },[])
 
     if (!questions || questions.length === 0) {
         return (
