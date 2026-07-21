@@ -13,35 +13,49 @@ export interface MCQ {
 interface QuizProps {
     questions: MCQ[];
     policyUrl?: string;
-    onComplete?: (score: number, total: number) => void;
+    onComplete?: (score: number, total: number, email?: string) => void;
 }
 
 // ─── Icons ───────────────────────────────────────────────────────
 
 const CheckIcon = () => (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path d="M2 5.5L4 7.5L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="12" height="12" viewBox="0 0 10 10" fill="none">
+        <path d="M2 5.5L4 7.5L8 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
 
 const XIcon = () => (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path d="M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <svg width="12" height="12" viewBox="0 0 10 10" fill="none">
+        <path d="M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
 );
 
-const ArrowPathIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+const MailIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+);
+
+const InfoIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
     </svg>
 );
 
 // ─── Main Component ──────────────────────────────────────────────
 
-export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) {
+export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
     const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [showShake, setShowShake] = useState(false);
+    
+    // States for the email popup
+    const [showEmailModal, setShowEmailModal] = useState(false);
+    const [email, setEmail] = useState("");
+    
     const headerRef = useRef<HTMLDivElement>(null);
 
     const answeredCount = Object.keys(selectedAnswers).length;
@@ -63,8 +77,8 @@ export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) 
     const scorePercentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
 
     useEffect(() => {
-        if (isSubmitted && onComplete) onComplete(score, totalQuestions);
-    }, [isSubmitted, score, totalQuestions, onComplete]);
+        if (isSubmitted && onComplete) onComplete(score, totalQuestions, email);
+    }, [isSubmitted, score, totalQuestions, onComplete, email]);
 
     useEffect(() => {
         if (isSubmitted && headerRef.current) {
@@ -77,20 +91,21 @@ export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) 
         setSelectedAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
     }, [isSubmitted]);
 
-    const handleSubmit = useCallback(() => {
+    const handleInitialSubmit = useCallback(() => {
         if (!allAnswered) {
             setShowShake(true);
             setTimeout(() => setShowShake(false), 500);
             return;
         }
-        setIsSubmitted(true);
+        setShowEmailModal(true);
     }, [allAnswered]);
 
-    const handleRetake = useCallback(() => {
-        setSelectedAnswers({});
-        setIsSubmitted(false);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
+    const handleFinalSubmit = useCallback((e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) return;
+        setShowEmailModal(false);
+        setIsSubmitted(true);
+    }, [email]);
 
     if (!questions?.length) {
         return (
@@ -101,32 +116,32 @@ export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) 
     }
 
     return (
-        <div className="max-w-4xl mx-auto py-12 px-5">
+        <div className="relative max-w-3xl mx-auto py-16 px-5 font-sans">
             {/* Header */}
-            <div className="mb-10" ref={headerRef}>
-                <h1 className="text-[28px] font-bold tracking-tight text-white mb-2">
+            <div className="mb-14" ref={headerRef}>
+                <h1 className="text-[32px] font-bold tracking-tight text-white mb-3">
                     {isSubmitted ? "Assessment Results" : "Policy Assessment"}
                 </h1>
-                <p className="text-[15px] text-zinc-400 font-normal">
+                <p className="text-[16px] text-zinc-400 font-normal">
                     {isSubmitted
                         ? `You scored ${score} out of ${totalQuestions} (${scorePercentage}%)`
-                        : `Answer all ${totalQuestions} questions to submit your assessment.`}
+                        : `Complete all ${totalQuestions} questions to test your knowledge.`}
                 </p>
 
-                {/* Progress */}
+                {/* Progress Bar */}
                 {!isSubmitted && (
-                    <div className="mt-6">
-                        <div className="flex justify-between text-xs font-medium text-zinc-500 mb-2 tracking-wide">
-                            <span>Progress</span>
-                            <span>{answeredCount} / {totalQuestions}</span>
+                    <div className="mt-8">
+                        <div className="flex justify-between text-[13px] font-medium text-zinc-400 mb-3 tracking-wide">
+                            <span className="uppercase tracking-wider text-[11px] font-semibold">Progress</span>
+                            <span>{answeredCount} / {totalQuestions} answered</span>
                         </div>
-                        <div className="h-1 bg-zinc-800 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-zinc-800/80 rounded-full overflow-hidden shadow-inner">
                             <motion.div
                                 className="h-full rounded-full"
-                                style={{ background: "linear-gradient(90deg, #22c55e, #4ade80)" }}
+                                style={{ background: "linear-gradient(90deg, #10b981, #34d399)" }}
                                 initial={{ width: 0 }}
                                 animate={{ width: `${progress}%` }}
-                                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
                             />
                         </div>
                     </div>
@@ -137,159 +152,177 @@ export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) 
                     <motion.div
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-8 flex items-center gap-6"
+                        className="mt-10 flex items-center gap-8 bg-zinc-900/40 border border-zinc-800/60 p-6 rounded-3xl"
                     >
-                        <div className="relative w-[120px] h-[120px] flex-shrink-0">
+                        <div className="relative w-[110px] h-[110px] flex-shrink-0 drop-shadow-xl">
                             <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" fill="none" stroke="#232326" strokeWidth="6" />
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#27272a" strokeWidth="7" />
                                 <motion.circle
                                     cx="50" cy="50" r="45" fill="none"
-                                    stroke={scorePercentage >= 70 ? "#22c55e" : scorePercentage >= 50 ? "#f59e0b" : "#ef4444"}
-                                    strokeWidth="6" strokeLinecap="round"
+                                    stroke={scorePercentage >= 70 ? "#10b981" : scorePercentage >= 50 ? "#f59e0b" : "#ef4444"}
+                                    strokeWidth="7" strokeLinecap="round"
                                     strokeDasharray={2 * Math.PI * 45}
                                     initial={{ strokeDashoffset: 2 * Math.PI * 45 }}
                                     animate={{ strokeDashoffset: 2 * Math.PI * 45 * (1 - scorePercentage / 100) }}
-                                    transition={{ duration: 1, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
+                                    transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
                                 />
                             </svg>
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-[32px] font-extrabold tracking-tighter leading-none text-white">{scorePercentage}%</span>
-                                <span className="text-xs font-medium text-zinc-500 mt-1">{score} / {totalQuestions}</span>
+                                <span className="text-3xl font-extrabold tracking-tighter leading-none text-white">{scorePercentage}%</span>
                             </div>
                         </div>
                         <div>
-                            <p className="text-sm font-semibold text-white mb-1">
-                                {scorePercentage >= 80 ? "Excellent" : scorePercentage >= 60 ? "Well done" : scorePercentage >= 40 ? "Needs review" : "Study required"}
+                            <p className="text-lg font-bold text-white mb-1">
+                                {scorePercentage >= 80 ? "Outstanding Work!" : scorePercentage >= 60 ? "Good Job!" : scorePercentage >= 40 ? "Needs Review" : "Study Required"}
                             </p>
-                            <p className="text-sm text-zinc-400 leading-relaxed">
+                            <p className="text-[15px] text-zinc-400 leading-relaxed max-w-sm">
                                 {score === totalQuestions
-                                    ? "Perfect score! Strong understanding of the policy."
+                                    ? "You have a perfect understanding of the policies."
                                     : score >= totalQuestions * 0.7
-                                    ? "Solid grasp. Check the explanations for missed questions."
-                                    : "Review the policy and try again."}
+                                    ? "You have a solid grasp. Check below for the ones you missed."
+                                    : "Please review the policy documentation and try again."}
                             </p>
-                         
                         </div>
                     </motion.div>
                 )}
             </div>
 
-            {/* Questions */}
-            <div className="space-y-4" role="radiogroup">
+            {/* Questions List */}
+            <div className="space-y-6" role="radiogroup">
                 <AnimatePresence>
                     {questions.map((que, qIdx) => {
                         const result = results[qIdx];
                         const isCorrect = result?.isCorrect ?? false;
                         const userSelected = selectedAnswers[qIdx];
+                        const isAnswered = userSelected !== undefined;
 
                         return (
                             <motion.div
                                 key={qIdx}
-                                initial={{ opacity: 0, y: 16 }}
+                                initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: qIdx * 0.04, duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                                className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-7 hover:border-zinc-700 transition-colors duration-200"
+                                transition={{ delay: qIdx * 0.05, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                                className={`relative bg-zinc-900/30 backdrop-blur-md border rounded-3xl p-6 sm:p-8 transition-colors duration-300 ${
+                                    isAnswered && !isSubmitted ? "border-zinc-700/60" : "border-zinc-800/80"
+                                } ${isSubmitted && !isCorrect ? "border-red-900/30 bg-red-950/5" : ""}
+                                  ${isSubmitted && isCorrect ? "border-emerald-900/30 bg-emerald-950/5" : ""}`}
                             >
-                                {/* Question text */}
-                                <div className="flex items-start gap-3.5 mb-5">
-                                    <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-white/[0.05] flex items-center justify-center text-[13px] font-bold text-zinc-500 font-mono">
-                                        {String(qIdx + 1).padStart(2, "0")}
-                                    </span>
-                                    <h3 className="text-base font-medium text-white leading-relaxed pt-1">
+                                {/* Question Header */}
+                                <div className="flex items-start gap-4 mb-6">
+                                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold shadow-inner border ${
+                                        isSubmitted 
+                                            ? isCorrect 
+                                                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
+                                                : "bg-red-500/10 border-red-500/20 text-red-400"
+                                            : "bg-gradient-to-b from-zinc-800 to-zinc-900 border-zinc-700/50 text-zinc-300"
+                                    }`}>
+                                        {isSubmitted ? (isCorrect ? <CheckIcon /> : <XIcon />) : String(qIdx + 1).padStart(2, "0")}
+                                    </div>
+                                    <h3 className="text-[17px] font-medium text-zinc-100 leading-relaxed pt-1.5">
                                         {que.question}
                                     </h3>
-                                    {isSubmitted && (
-                                        <span className="ml-auto flex-shrink-0 mt-1" aria-label={isCorrect ? "Correct" : "Incorrect"}>
-                                            {isCorrect ? (
-                                                <div className="w-6 h-6 rounded-full bg-emerald-500/15 flex items-center justify-center text-emerald-400">
-                                                    <CheckIcon />
-                                                </div>
-                                            ) : (
-                                                <div className="w-6 h-6 rounded-full bg-red-500/15 flex items-center justify-center text-red-400">
-                                                    <XIcon />
-                                                </div>
-                                            )}
-                                        </span>
-                                    )}
                                 </div>
 
                                 {/* Options */}
-                                <div className="space-y-2 ml-11" role="radiogroup" aria-label={`Question ${qIdx + 1}`}>
+                                <div className="space-y-3 sm:ml-14" role="radiogroup" aria-label={`Question ${qIdx + 1}`}>
                                     {que.options.map((opt, oIdx) => {
                                         const isOptCorrect = oIdx === que.correctIndex;
                                         const isOptSelected = userSelected === oIdx;
                                         const showCorrect = isSubmitted && isOptCorrect;
                                         const showWrong = isSubmitted && isOptSelected && !isOptCorrect;
 
-                                        const baseClasses = "group flex items-center gap-3.5 w-full text-left px-4 py-3.5 rounded-xl border text-sm font-normal transition-all duration-150";
-                                        const stateClasses = showCorrect
-                                            ? "bg-emerald-500/[0.06] border-emerald-500/20 text-emerald-300"
-                                            : showWrong
-                                            ? "bg-red-500/[0.05] border-red-500/15 text-red-300/70 opacity-70"
-                                            : isSubmitted
-                                            ? "border-transparent text-zinc-600 opacity-50"
-                                            : isOptSelected
-                                            ? "bg-white/[0.04] border-zinc-600 text-white"
-                                            : "border-transparent text-zinc-400 hover:bg-white/[0.03] hover:border-zinc-700 hover:text-zinc-200";
+                                        // Styling logic for options
+                                        let stateClasses = "border-zinc-800/80 text-zinc-400 bg-zinc-950/30 hover:bg-zinc-800/50 hover:border-zinc-700";
+                                        
+                                        if (showCorrect) {
+                                            stateClasses = "bg-emerald-500/10 border-emerald-500/30 text-emerald-100 shadow-[0_0_15px_rgba(16,185,129,0.05)]";
+                                        } else if (showWrong) {
+                                            stateClasses = "bg-red-500/10 border-red-500/30 text-red-200/80";
+                                        } else if (isSubmitted) {
+                                            stateClasses = "border-transparent text-zinc-600 opacity-50 bg-transparent";
+                                        } else if (isOptSelected) {
+                                            stateClasses = "bg-white/10 border-white/30 text-white shadow-sm";
+                                        }
 
                                         return (
-                                            <button
+                                            <motion.button
                                                 key={oIdx}
+                                                whileTap={!isSubmitted ? { scale: 0.985 } : {}}
                                                 onClick={() => handleSelect(qIdx, oIdx)}
                                                 disabled={isSubmitted}
                                                 role="radio"
                                                 aria-checked={isOptSelected}
-                                                className={`${baseClasses} ${stateClasses} ${!isSubmitted ? "cursor-pointer" : "cursor-default"}`}
+                                                className={`group relative flex items-center w-full text-left px-5 py-4 rounded-2xl border-[1.5px] text-[15px] transition-all duration-200 ease-out ${stateClasses} ${!isSubmitted ? "cursor-pointer" : "cursor-default"}`}
                                             >
-                                                {/* Radio indicator */}
-                                                <span
-                                                    className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                                                {/* Custom Radio Button */}
+                                                <div
+                                                    className={`flex-shrink-0 w-5 h-5 mr-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                                                         showCorrect
                                                             ? "border-emerald-500 bg-emerald-500 text-zinc-950"
                                                             : showWrong
                                                             ? "border-red-500 bg-red-500 text-zinc-950"
                                                             : isOptSelected
-                                                            ? "border-white bg-white"
-                                                            : "border-zinc-600 group-hover:border-zinc-500"
+                                                            ? "border-white bg-transparent"
+                                                            : "border-zinc-600 group-hover:border-zinc-400 bg-zinc-950/50"
                                                     }`}
                                                 >
-                                                    {!isSubmitted && isOptSelected && (
-                                                        <span className="w-2 h-2 rounded-full bg-zinc-950" />
-                                                    )}
-                                                    {isSubmitted && (showCorrect || showWrong) && (
-                                                        <span className="text-current">
-                                                            {showCorrect ? <CheckIcon /> : <XIcon />}
-                                                        </span>
-                                                    )}
-                                                </span>
+                                                    <AnimatePresence>
+                                                        {!isSubmitted && isOptSelected && (
+                                                            <motion.div 
+                                                                initial={{ scale: 0 }} 
+                                                                animate={{ scale: 1 }} 
+                                                                exit={{ scale: 0 }} 
+                                                                className="w-2 h-2 rounded-full bg-white" 
+                                                            />
+                                                        )}
+                                                        {isSubmitted && (showCorrect || showWrong) && (
+                                                            <motion.div
+                                                                initial={{ scale: 0 }}
+                                                                animate={{ scale: 1 }}
+                                                                className="text-current"
+                                                            >
+                                                                {showCorrect ? <CheckIcon /> : <XIcon />}
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+                                                </div>
 
                                                 <span className="flex-1 leading-snug">{opt}</span>
 
-                                                {showCorrect && !isOptSelected && (
-                                                    <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-500/70">Correct</span>
+                                                {/* Feedback Label */}
+                                                {isSubmitted && showCorrect && !isOptSelected && (
+                                                    <span className="text-[12px] font-bold uppercase tracking-wider text-emerald-500/80 ml-3">Missed</span>
                                                 )}
-                                            </button>
+                                                {isSubmitted && showCorrect && isOptSelected && (
+                                                    <span className="text-[12px] font-bold uppercase tracking-wider text-emerald-500 ml-3">Correct</span>
+                                                )}
+                                            </motion.button>
                                         );
                                     })}
                                 </div>
 
-                                {/* Explanation */}
+                                {/* Explanation Box */}
                                 <AnimatePresence>
                                     {isSubmitted && que.explanation && (
                                         <motion.div
-                                            initial={{ opacity: 0, height: 0 }}
-                                            animate={{ opacity: 1, height: "auto" }}
+                                            initial={{ opacity: 0, height: 0, y: -10 }}
+                                            animate={{ opacity: 1, height: "auto", y: 0 }}
                                             exit={{ opacity: 0, height: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="ml-11 mt-3 overflow-hidden"
+                                            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                                            className="sm:ml-14 mt-4 overflow-hidden"
                                         >
-                                            <div className="px-5 py-4 rounded-xl bg-white/[0.02] border-l-[3px] border-zinc-600">
-                                                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500 mb-1.5">
-                                                    Explanation
-                                                </p>
-                                                <p className="text-[13.5px] text-zinc-400 leading-relaxed">
-                                                    {que.explanation}
-                                                </p>
+                                            <div className={`p-5 rounded-2xl border flex gap-3 ${isCorrect ? "bg-emerald-500/5 border-emerald-500/10" : "bg-zinc-800/30 border-zinc-700/30"}`}>
+                                                <div className={`mt-0.5 ${isCorrect ? "text-emerald-400" : "text-zinc-400"}`}>
+                                                    <InfoIcon />
+                                                </div>
+                                                <div>
+                                                    <p className={`text-[12px] font-bold uppercase tracking-wider mb-1 ${isCorrect ? "text-emerald-500" : "text-zinc-500"}`}>
+                                                        Explanation
+                                                    </p>
+                                                    <p className="text-[14px] text-zinc-300 leading-relaxed">
+                                                        {que.explanation}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </motion.div>
                                     )}
@@ -300,7 +333,7 @@ export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) 
                 </AnimatePresence>
             </div>
 
-            {/* Submit */}
+            {/* Bottom Action Area */}
             <AnimatePresence mode="wait">
                 {!isSubmitted && (
                     <motion.div
@@ -308,36 +341,101 @@ export default function Quiz({ questions, policyUrl, onComplete,  }: QuizProps) 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="mt-10"
+                        className="mt-12"
                     >
                         <motion.button
-                            onClick={handleSubmit}
-                            animate={showShake ? { x: [0, -6, 6, -6, 6, 0] } : {}}
+                            onClick={handleInitialSubmit}
+                            animate={showShake ? { x: [0, -8, 8, -8, 8, 0] } : {}}
                             transition={{ duration: 0.4 }}
-                            className={`w-full py-4 rounded-xl text-[15px] font-semibold transition-all duration-200 ${
+                            className={`w-full py-4 rounded-2xl text-[16px] font-bold transition-all duration-300 shadow-lg ${
                                 allAnswered
-                                    ? "bg-white text-zinc-950 hover:opacity-90 hover:-translate-y-0.5"
-                                    : "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                                    ? "bg-white text-zinc-950 hover:bg-zinc-200 hover:scale-[1.01] active:scale-[0.99] shadow-white/10"
+                                    : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50 shadow-none"
                             }`}
                         >
-                            {allAnswered ? "Submit Assessment" : `Answer ${totalQuestions - answeredCount} more question${totalQuestions - answeredCount !== 1 ? "s" : ""}`}
+                            {allAnswered ? "Complete Assessment" : `Answer ${totalQuestions - answeredCount} more question${totalQuestions - answeredCount !== 1 ? "s" : ""}`}
                         </motion.button>
+                        
                         {!allAnswered && (
-                            <p className="text-center text-[13px] text-zinc-600 mt-3">
-                                Complete all questions before submitting
+                            <p className="text-center text-[14px] text-zinc-500 mt-4">
+                                You must complete all questions before submitting.
                             </p>
                         )}
+                        
                         {policyUrl && (
                             <a
                                 href={policyUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block text-center text-[13px] text-zinc-600 hover:text-zinc-400 mt-3 transition-colors underline underline-offset-2 decoration-zinc-700"
+                                className="block text-center text-[14px] text-zinc-500 hover:text-white mt-4 transition-colors decoration-zinc-700 underline-offset-4"
                             >
-                                Review the policy document
+                                Need help? Review the policy document →
                             </a>
                         )}
                     </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Premium Email Popup Modal */}
+            <AnimatePresence>
+                {showEmailModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-md">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ duration: 0.3, type: "spring", bounce: 0.25 }}
+                            className="bg-zinc-900 border border-zinc-800/80 rounded-[32px] p-8 w-full max-w-md shadow-2xl relative overflow-hidden"
+                        >
+                            {/* Decorative background glow */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-32 bg-emerald-500/10 blur-[60px] rounded-full pointer-events-none" />
+
+                            <div className="relative">
+                                <div className="w-14 h-14 bg-zinc-800/50 border border-zinc-700/50 rounded-2xl flex items-center justify-center text-white mb-6 shadow-sm">
+                                    <MailIcon className="w-6 h-6" />
+                                </div>
+                                <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Almost done!</h2>
+                                <p className="text-[15px] text-zinc-400 mb-8 leading-relaxed">
+                                    Please enter your email address to submit your assessment and view your final score.
+                                </p>
+                                
+                                <form onSubmit={handleFinalSubmit} className="space-y-6">
+                                    <div>
+                                        <label htmlFor="email" className="sr-only">Email address</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
+                                                <MailIcon className="w-[18px] h-[18px]" />
+                                            </div>
+                                            <input
+                                                id="email"
+                                                type="email"
+                                                required
+                                                placeholder="you@company.com"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className="w-full bg-zinc-950/50 border border-zinc-800 rounded-2xl pl-12 pr-4 py-4 text-white text-[15px] placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all shadow-inner"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-3 pt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowEmailModal(false)}
+                                            className="py-4 px-5 rounded-2xl text-[14px] font-semibold text-zinc-300 bg-zinc-800/50 hover:bg-zinc-800 border border-transparent transition-all"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="flex-1 py-4 px-5 rounded-2xl text-[15px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                                        >
+                                            Submit Assessment
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
 
