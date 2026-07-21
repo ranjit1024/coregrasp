@@ -221,14 +221,14 @@ export type CandidateOrderByWithRelationInput = {
 
 export type CandidateWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  email?: string
   AND?: Prisma.CandidateWhereInput | Prisma.CandidateWhereInput[]
   OR?: Prisma.CandidateWhereInput[]
   NOT?: Prisma.CandidateWhereInput | Prisma.CandidateWhereInput[]
-  email?: Prisma.StringFilter<"Candidate"> | string
   score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id">
+}, "id" | "email">
 
 export type CandidateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
