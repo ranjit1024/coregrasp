@@ -18,13 +18,13 @@ interface MCQListProps {
 
 export default function MCQList({ questions, policyUrl }: MCQListProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-  async function loadEmail() {
-    const result = await getuserId();
-    console.log(result);
-  }
-  useEffect(()=>{
-    loadEmail()
-  },[])
+    async function loadEmail() {
+        const result = await getuserId();
+        console.log(result);
+    }
+    useEffect(() => {
+        loadEmail()
+    }, [])
 
     if (!questions || questions.length === 0) {
         return (
@@ -57,7 +57,7 @@ export default function MCQList({ questions, policyUrl }: MCQListProps) {
                         Questions & Verified Answers
                     </h2>
                 </div>
-                
+
                 {/* Send Quiz Trigger Button */}
                 <button
                     onClick={() => setIsModalOpen(true)}
@@ -78,8 +78,8 @@ export default function MCQList({ questions, policyUrl }: MCQListProps) {
                     const formattedIndex = String(index + 1).padStart(2, '0');
 
                     return (
-                        <div 
-                            key={index} 
+                        <div
+                            key={index}
                             className="relative group p-6 bg-white border border-zinc-200/80 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 dark:bg-zinc-900 dark:border-zinc-800/80"
                         >
                             <span className="absolute top-4 right-6 text-4xl font-black text-zinc-100/70 select-none font-mono dark:text-zinc-800/30">
@@ -99,18 +99,16 @@ export default function MCQList({ questions, policyUrl }: MCQListProps) {
                                     return (
                                         <div
                                             key={idx}
-                                            className={`p-3.5 rounded-xl border text-sm font-medium flex justify-between items-center transition-all duration-250 ${
-                                                isCorrect
+                                            className={`p-3.5 rounded-xl border text-sm font-medium flex justify-between items-center transition-all duration-250 ${isCorrect
                                                     ? "border-emerald-500/25 bg-emerald-50/30 text-emerald-950 dark:bg-emerald-950/15 dark:text-emerald-300 dark:border-emerald-500/10 shadow-[0_2px_8px_rgba(16,185,129,0.02)]"
                                                     : "border-zinc-100 bg-zinc-50/20 text-zinc-600 dark:border-zinc-800/30 dark:bg-zinc-900/10 dark:text-zinc-400"
-                                            }`}
+                                                }`}
                                         >
                                             <div className="flex items-center gap-3">
-                                                <span className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-bold ${
-                                                    isCorrect
+                                                <span className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-bold ${isCorrect
                                                         ? "bg-emerald-500 text-white dark:bg-emerald-600"
                                                         : "bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600"
-                                                }`}>
+                                                    }`}>
                                                     {String.fromCharCode(65 + idx)}
                                                 </span>
                                                 <span className="leading-normal">{option}</span>
@@ -151,9 +149,9 @@ export default function MCQList({ questions, policyUrl }: MCQListProps) {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-sm">
                     <div className="relative w-full max-w-md bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                        
+
                         {/* Close Modal Button */}
-                        <button 
+                        <button
                             onClick={() => setIsModalOpen(false)}
                             className="absolute top-4 right-4 p-1.5 rounded-md text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-300 transition-colors"
                         >
