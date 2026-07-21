@@ -18,13 +18,8 @@ interface MCQListProps {
 
 export default function MCQList({ questions, policyUrl }: MCQListProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    async function loadEmail() {
-        const result = await getuserId();
-        console.log(result);
-    }
-    useEffect(() => {
-        loadEmail()
-    }, [])
+    const [userId, setUserId] = useState<string>();
+ 
 
     if (!questions || questions.length === 0) {
         return (
