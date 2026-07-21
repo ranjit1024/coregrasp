@@ -5,7 +5,7 @@ import { result_Route } from "./route/result";
 import { Bindings } from "hono/types";
 import { get_url } from "./route/answer";
 import { send_quiz } from "./route/send-quiz";
-import { create_candidate } from "./route/valid";
+import { update_score } from "./route/update";
 
 const app = new Hono<{ Bindings: Bindings}>();
 app.use('*', cors());
@@ -14,5 +14,5 @@ app.post('/uplaod-pdf',  uplaod_Route );
 app.get('/ans/:url', get_url)
 app.get('/result', result_Route);
 app.post("/send-quiz", send_quiz);
-app.post('/create-candidate', create_candidate);
+app.post('/update-score', update_score);
 export default app;
