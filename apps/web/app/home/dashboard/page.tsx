@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { getuserCandidate } from "@/lib/candidate"
 
 // ── Mock Data ────────────────────────────────────────────────────────────────
 
@@ -44,8 +44,19 @@ function CoreGraspLogo({ className = "w-6 h-6 text-emerald-500" }: { className?:
 
 export default function Dashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("Overview")
+  const [activeTab, setActiveTab] = useState("Overview");
+  const [recent, setRecent] = useState<any[] | null>([]);
+  const loadCandidate  = async () => {
+   const candidate =  await getuserCandidate();
+   console.log(candidate);
+   if(!candidate) return;
+   setRecent(candidate)
+  }
 
+  useEffect(()=>{
+    loadCandidate()
+  }, [])
+ 
   return ( 
     
 <div>
@@ -226,22 +237,22 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/[0.04]">
-                    {recentAttempts.map((attempt) => (
+                    {recent!.map((attempt) => (
                       <tr key={attempt.id} className="hover:bg-white/[0.02] transition-colors">
                         <td className="py-3 px-6">
                           <div className="flex items-center gap-3">
                             <div className="w-7 h-7 rounded-full bg-[#18181B] flex items-center justify-center text-[11px] font-medium text-[#A1A1AA] border border-white/[0.08]">
-                              {attempt.name.split(' ').map(n => n[0]).join('')}
+                              {attempt.email.split(' ').map(n => n[0]).join('')}
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-[13px] font-medium text-[#FAFAFA]">{attempt.name}</span>
-                              <span className="text-[11px] text-[#71717A]">{attempt.role}</span>
+                              <span className="text-[13px] font-medium text-[#FAFAFA]">{attempt.email}</span>
+                              <span className="text-[11px] text-[#71717A]">{"Admin"}</span>
                             </div>
                           </div>
                         </td>
                         <td className="py-3 px-6">
                           <div className="text-[13px] text-[#FAFAFA]">{attempt.policy}</div>
-                          <div className="text-[11px] text-[#71717A]">{attempt.date}</div>
+                          <div className="text-[11px] text-[#71717A]">{Date()}</div>
                         </td>
                         <td className="py-3 px-6">
                           <span className="text-[13px] font-medium text-[#FAFAFA]">{attempt.score}%</span>
@@ -252,7 +263,7 @@ export default function Dashboard() {
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
                               : "bg-rose-500/10 text-rose-400 border-rose-500/20"
                           }`}>
-                            {attempt.status}
+                            {"pass"}
                           </span>
                         </td>
                         <td className="py-3 px-6 text-right">

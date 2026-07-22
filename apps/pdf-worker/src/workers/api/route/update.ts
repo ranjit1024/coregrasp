@@ -28,6 +28,7 @@ export async function update_score(c: Context<{ Bindings: Bindings }>) {
                 attempt: true,
             },
         });
+        console.log(result)
 
         if (result.count === 0) {
             const exists = await prisma.candidate.findFirst({ where: { email } });
