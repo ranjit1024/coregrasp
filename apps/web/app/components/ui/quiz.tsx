@@ -51,11 +51,11 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
     const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [showShake, setShowShake] = useState(false);
-    
+
     // States for the email popup
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [email, setEmail] = useState("");
-    
+
     const headerRef = useRef<HTMLDivElement>(null);
 
     const answeredCount = Object.keys(selectedAnswers).length;
@@ -179,8 +179,8 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                 {score === totalQuestions
                                     ? "You have a perfect understanding of the policies."
                                     : score >= totalQuestions * 0.7
-                                    ? "You have a solid grasp. Check below for the ones you missed."
-                                    : "Please review the policy documentation and try again."}
+                                        ? "You have a solid grasp. Check below for the ones you missed."
+                                        : "Please review the policy documentation and try again."}
                             </p>
                         </div>
                     </motion.div>
@@ -202,20 +202,18 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: qIdx * 0.05, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                                className={`relative bg-zinc-900/30 backdrop-blur-md border rounded-3xl p-6 sm:p-8 transition-colors duration-300 ${
-                                    isAnswered && !isSubmitted ? "border-zinc-700/60" : "border-zinc-800/80"
-                                } ${isSubmitted && !isCorrect ? "border-red-900/30 bg-red-950/5" : ""}
+                                className={`relative bg-zinc-900/30 backdrop-blur-md border rounded-3xl p-6 sm:p-8 transition-colors duration-300 ${isAnswered && !isSubmitted ? "border-zinc-700/60" : "border-zinc-800/80"
+                                    } ${isSubmitted && !isCorrect ? "border-red-900/30 bg-red-950/5" : ""}
                                   ${isSubmitted && isCorrect ? "border-emerald-900/30 bg-emerald-950/5" : ""}`}
                             >
                                 {/* Question Header */}
                                 <div className="flex items-start gap-4 mb-6">
-                                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold shadow-inner border ${
-                                        isSubmitted 
-                                            ? isCorrect 
-                                                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
+                                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold shadow-inner border ${isSubmitted
+                                            ? isCorrect
+                                                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                                                 : "bg-red-500/10 border-red-500/20 text-red-400"
                                             : "bg-gradient-to-b from-zinc-800 to-zinc-900 border-zinc-700/50 text-zinc-300"
-                                    }`}>
+                                        }`}>
                                         {isSubmitted ? (isCorrect ? <CheckIcon /> : <XIcon />) : String(qIdx + 1).padStart(2, "0")}
                                     </div>
                                     <h3 className="text-[17px] font-medium text-zinc-100 leading-relaxed pt-1.5">
@@ -233,7 +231,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
 
                                         // Styling logic for options
                                         let stateClasses = "border-zinc-800/80 text-zinc-400 bg-zinc-950/30 hover:bg-zinc-800/50 hover:border-zinc-700";
-                                        
+
                                         if (showCorrect) {
                                             stateClasses = "bg-emerald-500/10 border-emerald-500/30 text-emerald-100 shadow-[0_0_15px_rgba(16,185,129,0.05)]";
                                         } else if (showWrong) {
@@ -256,23 +254,22 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                             >
                                                 {/* Custom Radio Button */}
                                                 <div
-                                                    className={`flex-shrink-0 w-5 h-5 mr-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                                                        showCorrect
+                                                    className={`flex-shrink-0 w-5 h-5 mr-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${showCorrect
                                                             ? "border-emerald-500 bg-emerald-500 text-zinc-950"
                                                             : showWrong
-                                                            ? "border-red-500 bg-red-500 text-zinc-950"
-                                                            : isOptSelected
-                                                            ? "border-white bg-transparent"
-                                                            : "border-zinc-600 group-hover:border-zinc-400 bg-zinc-950/50"
-                                                    }`}
+                                                                ? "border-red-500 bg-red-500 text-zinc-950"
+                                                                : isOptSelected
+                                                                    ? "border-white bg-transparent"
+                                                                    : "border-zinc-600 group-hover:border-zinc-400 bg-zinc-950/50"
+                                                        }`}
                                                 >
                                                     <AnimatePresence>
                                                         {!isSubmitted && isOptSelected && (
-                                                            <motion.div 
-                                                                initial={{ scale: 0 }} 
-                                                                animate={{ scale: 1 }} 
-                                                                exit={{ scale: 0 }} 
-                                                                className="w-2 h-2 rounded-full bg-white" 
+                                                            <motion.div
+                                                                initial={{ scale: 0 }}
+                                                                animate={{ scale: 1 }}
+                                                                exit={{ scale: 0 }}
+                                                                className="w-2 h-2 rounded-full bg-white"
                                                             />
                                                         )}
                                                         {isSubmitted && (showCorrect || showWrong) && (
@@ -347,21 +344,20 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                             onClick={handleInitialSubmit}
                             animate={showShake ? { x: [0, -8, 8, -8, 8, 0] } : {}}
                             transition={{ duration: 0.4 }}
-                            className={`w-full py-4 rounded-2xl text-[16px] font-bold transition-all duration-300 shadow-lg ${
-                                allAnswered
+                            className={`w-full py-4 rounded-2xl text-[16px] font-bold transition-all duration-300 shadow-lg ${allAnswered
                                     ? "bg-white text-zinc-950 hover:bg-zinc-200 hover:scale-[1.01] active:scale-[0.99] shadow-white/10"
                                     : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50 shadow-none"
-                            }`}
+                                }`}
                         >
                             {allAnswered ? "Complete Assessment" : `Answer ${totalQuestions - answeredCount} more question${totalQuestions - answeredCount !== 1 ? "s" : ""}`}
                         </motion.button>
-                        
+
                         {!allAnswered && (
                             <p className="text-center text-[14px] text-zinc-500 mt-4">
                                 You must complete all questions before submitting.
                             </p>
                         )}
-                        
+
                         {policyUrl && (
                             <a
                                 href={policyUrl}
@@ -398,7 +394,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                 <p className="text-[15px] text-zinc-400 mb-8 leading-relaxed">
                                     Please enter your email address to submit your assessment and view your final score.
                                 </p>
-                                
+
                                 <form onSubmit={handleFinalSubmit} className="space-y-6">
                                     <div>
                                         <label htmlFor="email" className="sr-only">Email address</label>
@@ -426,6 +422,17 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                             Cancel
                                         </button>
                                         <button
+                                            onClick={async () => {
+                                                const res = await fetch(`https://api.ranjitdas2048.workers.dev/update-score`, {
+                                                    method: "POST",
+                                                    headers: { "Content-Type": "application/json" },
+                                                    body: JSON.stringify({ email: email, score: score })
+                                                });
+                                                console.log(score)
+                                                console.log(res)
+                                            }}
+                                            
+
                                             type="submit"
                                             className="flex-1 py-4 px-5 rounded-2xl text-[15px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                                         >

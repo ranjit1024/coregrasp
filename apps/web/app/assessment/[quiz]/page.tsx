@@ -4,14 +4,14 @@ import Quiz from "@/app/components/ui/quiz";
 import { use, useEffect, useState } from "react";
 
 interface PolicyDetailsProps {
-    params: Promise<{ quiz:string }>;
+    params: Promise<{ quiz: string }>;
 }
 
 export default function QuizPage({ params }: PolicyDetailsProps) {
     const { quiz } = use(params);
-    
-    
-    const [data, setData] = useState<any>(null); 
+
+
+    const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +31,7 @@ export default function QuizPage({ params }: PolicyDetailsProps) {
 
                 const json = await response.json();
                 const mcqData = json?.result?.finalResult?.mcq?.questions;
-               
+
                 if (mcqData) {
                     setData(mcqData);
                 } else {
@@ -45,7 +45,7 @@ export default function QuizPage({ params }: PolicyDetailsProps) {
         };
 
         fetchPolicyData();
-    }, []); 
+    }, []);
     console.log(quiz)
 
     if (loading) return <div className="p-6 text-center text-zinc-500">Loading policy details...</div>;
