@@ -92,6 +92,7 @@ model Candidate {
   email String @unique
   score Int
   userId String
+  attempt Boolean
   user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

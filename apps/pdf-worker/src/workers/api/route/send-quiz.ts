@@ -30,7 +30,8 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
             data:{
                 email:recipientEmail,
                 score: 0,
-                userId: userId
+                userId: userId,
+                attempt:false
             }
         })
     } catch (e) {

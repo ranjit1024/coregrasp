@@ -139,7 +139,8 @@ export const CandidateScalarFieldEnum = {
   id: 'id',
   email: 'email',
   score: 'score',
-  userId: 'userId'
+  userId: 'userId',
+  attempt: 'attempt'
 } as const
 
 export type CandidateScalarFieldEnum = (typeof CandidateScalarFieldEnum)[keyof typeof CandidateScalarFieldEnum]

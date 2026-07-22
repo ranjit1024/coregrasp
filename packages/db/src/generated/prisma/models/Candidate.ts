@@ -39,6 +39,7 @@ export type CandidateMinAggregateOutputType = {
   email: string | null
   score: number | null
   userId: string | null
+  attempt: boolean | null
 }
 
 export type CandidateMaxAggregateOutputType = {
@@ -46,6 +47,7 @@ export type CandidateMaxAggregateOutputType = {
   email: string | null
   score: number | null
   userId: string | null
+  attempt: boolean | null
 }
 
 export type CandidateCountAggregateOutputType = {
@@ -53,6 +55,7 @@ export type CandidateCountAggregateOutputType = {
   email: number
   score: number
   userId: number
+  attempt: number
   _all: number
 }
 
@@ -70,6 +73,7 @@ export type CandidateMinAggregateInputType = {
   email?: true
   score?: true
   userId?: true
+  attempt?: true
 }
 
 export type CandidateMaxAggregateInputType = {
@@ -77,6 +81,7 @@ export type CandidateMaxAggregateInputType = {
   email?: true
   score?: true
   userId?: true
+  attempt?: true
 }
 
 export type CandidateCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type CandidateCountAggregateInputType = {
   email?: true
   score?: true
   userId?: true
+  attempt?: true
   _all?: true
 }
 
@@ -178,6 +184,7 @@ export type CandidateGroupByOutputType = {
   email: string
   score: number
   userId: string
+  attempt: boolean
   _count: CandidateCountAggregateOutputType | null
   _avg: CandidateAvgAggregateOutputType | null
   _sum: CandidateSumAggregateOutputType | null
@@ -208,6 +215,7 @@ export type CandidateWhereInput = {
   email?: Prisma.StringFilter<"Candidate"> | string
   score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
+  attempt?: Prisma.BoolFilter<"Candidate"> | boolean
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -216,6 +224,7 @@ export type CandidateOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  attempt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -227,6 +236,7 @@ export type CandidateWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CandidateWhereInput | Prisma.CandidateWhereInput[]
   score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
+  attempt?: Prisma.BoolFilter<"Candidate"> | boolean
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "email">
 
@@ -235,6 +245,7 @@ export type CandidateOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  attempt?: Prisma.SortOrder
   _count?: Prisma.CandidateCountOrderByAggregateInput
   _avg?: Prisma.CandidateAvgOrderByAggregateInput
   _max?: Prisma.CandidateMaxOrderByAggregateInput
@@ -250,12 +261,14 @@ export type CandidateScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
   score?: Prisma.IntWithAggregatesFilter<"Candidate"> | number
   userId?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
+  attempt?: Prisma.BoolWithAggregatesFilter<"Candidate"> | boolean
 }
 
 export type CandidateCreateInput = {
   id?: string
   email: string
   score: number
+  attempt: boolean
   user: Prisma.UserCreateNestedOneWithoutCandidateInput
 }
 
@@ -264,12 +277,14 @@ export type CandidateUncheckedCreateInput = {
   email: string
   score: number
   userId: string
+  attempt: boolean
 }
 
 export type CandidateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   user?: Prisma.UserUpdateOneRequiredWithoutCandidateNestedInput
 }
 
@@ -278,6 +293,7 @@ export type CandidateUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CandidateCreateManyInput = {
@@ -285,12 +301,14 @@ export type CandidateCreateManyInput = {
   email: string
   score: number
   userId: string
+  attempt: boolean
 }
 
 export type CandidateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CandidateUncheckedUpdateManyInput = {
@@ -298,6 +316,7 @@ export type CandidateUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CandidateListRelationFilter = {
@@ -315,6 +334,7 @@ export type CandidateCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  attempt?: Prisma.SortOrder
 }
 
 export type CandidateAvgOrderByAggregateInput = {
@@ -326,6 +346,7 @@ export type CandidateMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  attempt?: Prisma.SortOrder
 }
 
 export type CandidateMinOrderByAggregateInput = {
@@ -333,6 +354,7 @@ export type CandidateMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  attempt?: Prisma.SortOrder
 }
 
 export type CandidateSumOrderByAggregateInput = {
@@ -393,12 +415,14 @@ export type CandidateCreateWithoutUserInput = {
   id?: string
   email: string
   score: number
+  attempt: boolean
 }
 
 export type CandidateUncheckedCreateWithoutUserInput = {
   id?: string
   email: string
   score: number
+  attempt: boolean
 }
 
 export type CandidateCreateOrConnectWithoutUserInput = {
@@ -435,30 +459,35 @@ export type CandidateScalarWhereInput = {
   email?: Prisma.StringFilter<"Candidate"> | string
   score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
+  attempt?: Prisma.BoolFilter<"Candidate"> | boolean
 }
 
 export type CandidateCreateManyUserInput = {
   id?: string
   email: string
   score: number
+  attempt: boolean
 }
 
 export type CandidateUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CandidateUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CandidateUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -468,6 +497,7 @@ export type CandidateSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   email?: boolean
   score?: boolean
   userId?: boolean
+  attempt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["candidate"]>
 
@@ -476,6 +506,7 @@ export type CandidateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   email?: boolean
   score?: boolean
   userId?: boolean
+  attempt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["candidate"]>
 
@@ -484,6 +515,7 @@ export type CandidateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   email?: boolean
   score?: boolean
   userId?: boolean
+  attempt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["candidate"]>
 
@@ -492,9 +524,10 @@ export type CandidateSelectScalar = {
   email?: boolean
   score?: boolean
   userId?: boolean
+  attempt?: boolean
 }
 
-export type CandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "score" | "userId", ExtArgs["result"]["candidate"]>
+export type CandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "score" | "userId" | "attempt", ExtArgs["result"]["candidate"]>
 export type CandidateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -515,6 +548,7 @@ export type $CandidatePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     email: string
     score: number
     userId: string
+    attempt: boolean
   }, ExtArgs["result"]["candidate"]>
   composites: {}
 }
@@ -943,6 +977,7 @@ export interface CandidateFieldRefs {
   readonly email: Prisma.FieldRef<"Candidate", 'String'>
   readonly score: Prisma.FieldRef<"Candidate", 'Int'>
   readonly userId: Prisma.FieldRef<"Candidate", 'String'>
+  readonly attempt: Prisma.FieldRef<"Candidate", 'Boolean'>
 }
     
 
