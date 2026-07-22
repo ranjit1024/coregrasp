@@ -55,6 +55,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
     // States for the email popup
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [email, setEmail] = useState("");
+    const [isSaving, setIsSaving] = useState(false)
 
     const headerRef = useRef<HTMLDivElement>(null);
 
@@ -62,6 +63,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
     const totalQuestions = questions.length;
     const allAnswered = answeredCount === totalQuestions;
     const progress = (answeredCount / totalQuestions) * 100;
+    const [alreadyAttempted, setAlreadyAttempted] = useState(false);
 
     const { score, results } = useMemo(() => {
         let correct = 0;
@@ -76,9 +78,14 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
 
     const scorePercentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
 
+
+
+
     useEffect(() => {
         if (isSubmitted && onComplete) onComplete(score, totalQuestions, email);
     }, [isSubmitted, score, totalQuestions, onComplete, email]);
+
+
 
     useEffect(() => {
         if (isSubmitted && headerRef.current) {
@@ -100,12 +107,37 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
         setShowEmailModal(true);
     }, [allAnswered]);
 
-    const handleFinalSubmit = useCallback((e: React.FormEvent) => {
+
+    const handleFinalSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email) return;
-        setShowEmailModal(false);
-        setIsSubmitted(true);
-    }, [email]);
+        if (!email || isSaving) return;
+        setIsSaving(true);
+        try {
+            const res = await fetch("https://api.ranjitdas2048.workers.dev/update-score", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, score }),
+            });
+
+            if (res.status === 409) {
+                setShowEmailModal(false);
+                setAlreadyAttempted(true);
+                return; // don't mark isSubmitted, don't show results
+            }
+
+            if (!res.ok) throw new Error(`Save failed: ${res.status}`);
+
+            setShowEmailModal(false);
+            setIsSubmitted(true);
+        } catch (err) {
+            console.error(err);
+            // TODO: surface a real error state to the user here too —
+            // right now a network failure silently closes the modal
+            // and does nothing, which looks broken.
+        } finally {
+            setIsSaving(false);
+        }
+    }, [email, score, isSaving]);
 
     if (!questions?.length) {
         return (
@@ -146,6 +178,31 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                         </div>
                     </div>
                 )}
+
+                <AnimatePresence>
+                    {alreadyAttempted && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-md">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                transition={{ duration: 0.3, type: "spring", bounce: 0.25 }}
+                                className="bg-zinc-900 border border-zinc-800/80 rounded-[32px] p-8 w-full max-w-md shadow-2xl text-center"
+                            >
+                                <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Already Submitted</h2>
+                                <p className="text-[15px] text-zinc-400 mb-8 leading-relaxed">
+                                    This email has already completed the assessment. Each candidate can only submit once.
+                                </p>
+                                <button
+                                    onClick={() => setAlreadyAttempted(false)}
+                                    className="w-full py-4 rounded-2xl text-[15px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 transition-all"
+                                >
+                                    Close
+                                </button>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
 
                 {/* Score Ring (submitted) */}
                 {isSubmitted && (
@@ -209,10 +266,10 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                 {/* Question Header */}
                                 <div className="flex items-start gap-4 mb-6">
                                     <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold shadow-inner border ${isSubmitted
-                                            ? isCorrect
-                                                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                                                : "bg-red-500/10 border-red-500/20 text-red-400"
-                                            : "bg-gradient-to-b from-zinc-800 to-zinc-900 border-zinc-700/50 text-zinc-300"
+                                        ? isCorrect
+                                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                                            : "bg-red-500/10 border-red-500/20 text-red-400"
+                                        : "bg-gradient-to-b from-zinc-800 to-zinc-900 border-zinc-700/50 text-zinc-300"
                                         }`}>
                                         {isSubmitted ? (isCorrect ? <CheckIcon /> : <XIcon />) : String(qIdx + 1).padStart(2, "0")}
                                     </div>
@@ -255,12 +312,12 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                                 {/* Custom Radio Button */}
                                                 <div
                                                     className={`flex-shrink-0 w-5 h-5 mr-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${showCorrect
-                                                            ? "border-emerald-500 bg-emerald-500 text-zinc-950"
-                                                            : showWrong
-                                                                ? "border-red-500 bg-red-500 text-zinc-950"
-                                                                : isOptSelected
-                                                                    ? "border-white bg-transparent"
-                                                                    : "border-zinc-600 group-hover:border-zinc-400 bg-zinc-950/50"
+                                                        ? "border-emerald-500 bg-emerald-500 text-zinc-950"
+                                                        : showWrong
+                                                            ? "border-red-500 bg-red-500 text-zinc-950"
+                                                            : isOptSelected
+                                                                ? "border-white bg-transparent"
+                                                                : "border-zinc-600 group-hover:border-zinc-400 bg-zinc-950/50"
                                                         }`}
                                                 >
                                                     <AnimatePresence>
@@ -345,8 +402,8 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                             animate={showShake ? { x: [0, -8, 8, -8, 8, 0] } : {}}
                             transition={{ duration: 0.4 }}
                             className={`w-full py-4 rounded-2xl text-[16px] font-bold transition-all duration-300 shadow-lg ${allAnswered
-                                    ? "bg-white text-zinc-950 hover:bg-zinc-200 hover:scale-[1.01] active:scale-[0.99] shadow-white/10"
-                                    : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50 shadow-none"
+                                ? "bg-white text-zinc-950 hover:bg-zinc-200 hover:scale-[1.01] active:scale-[0.99] shadow-white/10"
+                                : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50 shadow-none"
                                 }`}
                         >
                             {allAnswered ? "Complete Assessment" : `Answer ${totalQuestions - answeredCount} more question${totalQuestions - answeredCount !== 1 ? "s" : ""}`}
@@ -429,9 +486,9 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                                     body: JSON.stringify({ email: email, score: score })
                                                 });
                                                 console.log(score)
-                                                console.log(res)
+                                                console.log(res.json)
                                             }}
-                                            
+
 
                                             type="submit"
                                             className="flex-1 py-4 px-5 rounded-2xl text-[15px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]"
