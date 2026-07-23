@@ -19,9 +19,11 @@ export interface MCQ {
     options: string[]; 
     correctIndex: number; 
     explanation?: string;
+   
 }
 
 export interface MCQResult {
     questions: MCQ[];
     raw: string;
+    category:string
 }

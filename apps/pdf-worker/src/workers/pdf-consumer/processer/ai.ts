@@ -78,6 +78,7 @@ function safeParseJson(cleaned: string): any | null {
 
 export async function generateMcqs(
     buffer: ArrayBuffer,
+    
     env: Bindings,
 ): Promise<MCQResult> {
     const t0 = Date.now();
@@ -85,16 +86,18 @@ export async function generateMcqs(
     const { text } = await extractText(pdf, { mergePages: true });
     console.log(`Extraction took ${Date.now() - t0}ms, length: ${text.length}`);
 
-    const prompt = `You are a quiz generator. Read the document below and create exactly ${numQuestions} multiple-choice questions that test understanding of its key facts and concepts.
+  const prompt = `You are a quiz generator. Read the document below, classify its category, and create exactly ${numQuestions} multiple-choice questions that test understanding of its key facts and concepts.
 
 Rules:
 - Each question must have exactly 4 options.
 - Only one option is correct.
 - Avoid trivial or ambiguous questions.
 - Base every question strictly on the document content, not outside knowledge.
+- "category" should be a short 1-3 word label describing the document's subject/domain (e.g. "Finance", "Employment Policy", "Biology", "Software Engineering").
 
 Return ONLY a JSON object with no markdown, no backticks, no commentary — just raw JSON in this exact shape:
 {
+  "category": "string",
   "questions": [
     {
       "question": "string",
@@ -115,6 +118,7 @@ ${text.slice(0, 6000)}`;
 
     const parsed = safeParseJson(cleaned);
     const questions: MCQ[] = Array.isArray(parsed?.questions) ? parsed.questions : [];
+    const category: string = typeof parsed?.category === "string" ? parsed.category : "Uncategorized";
 
-    return { questions, raw: rawString };
+    return { questions, category, raw: rawString };
 }

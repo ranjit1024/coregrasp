@@ -5,7 +5,7 @@ import { createPrismaClient } from "../lib/db";
 
 const bodySchema = z.object({
     email: z.email(),
-    score: z.coerce.number().int().min(0).max(10),
+    score: z.coerce.number().int().min(0).max(100),
 });
 
 export async function update_score(c: Context<{ Bindings: Bindings }>) {

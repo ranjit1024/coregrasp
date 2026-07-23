@@ -483,7 +483,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                                 const res = await fetch(`https://api.ranjitdas2048.workers.dev/update-score`, {
                                                     method: "POST",
                                                     headers: { "Content-Type": "application/json" },
-                                                    body: JSON.stringify({ email: email, score: score })
+                                                    body: JSON.stringify({ email: email, score: (score / 10 * 100) })
                                                 });
                                                 console.log(score)
                                                 console.log(res.json)
