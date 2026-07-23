@@ -12,11 +12,16 @@ export default {
                 console.log(`Processing Job ${key} uploaded ${uploadedAt}`);
                 try {
                     await prisma.policy.update({ where: { key }, data: { status: "PROCESSING" } });
-                    await processMessage(message.body, env); 
-                    await prisma.policy.update({ where: { key }, data: { status: "READY" } });
-                    await prisma.policy.update({where: {key}, data: {
-                        url:`${key}.result.json`
-                    }})
+                    const res = await processMessage(message.body, env);
+                    const category = res?.category;
+                    await prisma.policy.update({
+                        where: { key },
+                        data: {
+                            status: "READY",
+                            url: `${key}.result.json`,
+                            category,
+                        },
+                    });
                     message.ack();
                 } catch (err) {
                     console.error(`Failed job ${key}`, err);

@@ -242,7 +242,7 @@ export default function Dashboard() {
                         <td className="py-3 px-6">
                           <div className="flex items-center gap-3">
                             <div className="w-7 h-7 rounded-full bg-[#18181B] flex items-center justify-center text-[11px] font-medium text-[#A1A1AA] border border-white/[0.08]">
-                              {attempt.email.split(' ').map(n => n[0]).join('')}
+                              {attempt.email.split(' ').map((n:any) => n[0]).join('')}
                             </div>
                             <div className="flex flex-col">
                               <span className="text-[13px] font-medium text-[#FAFAFA]">{attempt.email}</span>

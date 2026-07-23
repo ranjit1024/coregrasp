@@ -33,6 +33,7 @@ export type PolicyMinAggregateOutputType = {
   error: string | null
   createdAt: Date | null
   userId: string | null
+  category: string | null
 }
 
 export type PolicyMaxAggregateOutputType = {
@@ -44,6 +45,7 @@ export type PolicyMaxAggregateOutputType = {
   error: string | null
   createdAt: Date | null
   userId: string | null
+  category: string | null
 }
 
 export type PolicyCountAggregateOutputType = {
@@ -55,6 +57,7 @@ export type PolicyCountAggregateOutputType = {
   error: number
   createdAt: number
   userId: number
+  category: number
   _all: number
 }
 
@@ -68,6 +71,7 @@ export type PolicyMinAggregateInputType = {
   error?: true
   createdAt?: true
   userId?: true
+  category?: true
 }
 
 export type PolicyMaxAggregateInputType = {
@@ -79,6 +83,7 @@ export type PolicyMaxAggregateInputType = {
   error?: true
   createdAt?: true
   userId?: true
+  category?: true
 }
 
 export type PolicyCountAggregateInputType = {
@@ -90,6 +95,7 @@ export type PolicyCountAggregateInputType = {
   error?: true
   createdAt?: true
   userId?: true
+  category?: true
   _all?: true
 }
 
@@ -174,6 +180,7 @@ export type PolicyGroupByOutputType = {
   error: string | null
   createdAt: Date
   userId: string
+  category: string | null
   _count: PolicyCountAggregateOutputType | null
   _min: PolicyMinAggregateOutputType | null
   _max: PolicyMaxAggregateOutputType | null
@@ -206,6 +213,7 @@ export type PolicyWhereInput = {
   error?: Prisma.StringNullableFilter<"Policy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   userId?: Prisma.StringFilter<"Policy"> | string
+  category?: Prisma.StringNullableFilter<"Policy"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -218,6 +226,7 @@ export type PolicyOrderByWithRelationInput = {
   error?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -233,6 +242,7 @@ export type PolicyWhereUniqueInput = Prisma.AtLeast<{
   error?: Prisma.StringNullableFilter<"Policy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   userId?: Prisma.StringFilter<"Policy"> | string
+  category?: Prisma.StringNullableFilter<"Policy"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "key">
 
@@ -245,6 +255,7 @@ export type PolicyOrderByWithAggregationInput = {
   error?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PolicyCountOrderByAggregateInput
   _max?: Prisma.PolicyMaxOrderByAggregateInput
   _min?: Prisma.PolicyMinOrderByAggregateInput
@@ -262,6 +273,7 @@ export type PolicyScalarWhereWithAggregatesInput = {
   error?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Policy"> | Date | string
   userId?: Prisma.StringWithAggregatesFilter<"Policy"> | string
+  category?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
 }
 
 export type PolicyCreateInput = {
@@ -272,6 +284,7 @@ export type PolicyCreateInput = {
   status?: $Enums.PolicyStatus
   error?: string | null
   createdAt?: Date | string
+  category?: string | null
   user: Prisma.UserCreateNestedOneWithoutPoliciesInput
 }
 
@@ -284,6 +297,7 @@ export type PolicyUncheckedCreateInput = {
   error?: string | null
   createdAt?: Date | string
   userId: string
+  category?: string | null
 }
 
 export type PolicyUpdateInput = {
@@ -294,6 +308,7 @@ export type PolicyUpdateInput = {
   status?: Prisma.EnumPolicyStatusFieldUpdateOperationsInput | $Enums.PolicyStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutPoliciesNestedInput
 }
 
@@ -306,6 +321,7 @@ export type PolicyUncheckedUpdateInput = {
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PolicyCreateManyInput = {
@@ -317,6 +333,7 @@ export type PolicyCreateManyInput = {
   error?: string | null
   createdAt?: Date | string
   userId: string
+  category?: string | null
 }
 
 export type PolicyUpdateManyMutationInput = {
@@ -327,6 +344,7 @@ export type PolicyUpdateManyMutationInput = {
   status?: Prisma.EnumPolicyStatusFieldUpdateOperationsInput | $Enums.PolicyStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PolicyUncheckedUpdateManyInput = {
@@ -338,6 +356,7 @@ export type PolicyUncheckedUpdateManyInput = {
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PolicyListRelationFilter = {
@@ -359,6 +378,7 @@ export type PolicyCountOrderByAggregateInput = {
   error?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  category?: Prisma.SortOrder
 }
 
 export type PolicyMaxOrderByAggregateInput = {
@@ -370,6 +390,7 @@ export type PolicyMaxOrderByAggregateInput = {
   error?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  category?: Prisma.SortOrder
 }
 
 export type PolicyMinOrderByAggregateInput = {
@@ -381,6 +402,7 @@ export type PolicyMinOrderByAggregateInput = {
   error?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  category?: Prisma.SortOrder
 }
 
 export type PolicyCreateNestedManyWithoutUserInput = {
@@ -437,6 +459,7 @@ export type PolicyCreateWithoutUserInput = {
   status?: $Enums.PolicyStatus
   error?: string | null
   createdAt?: Date | string
+  category?: string | null
 }
 
 export type PolicyUncheckedCreateWithoutUserInput = {
@@ -447,6 +470,7 @@ export type PolicyUncheckedCreateWithoutUserInput = {
   status?: $Enums.PolicyStatus
   error?: string | null
   createdAt?: Date | string
+  category?: string | null
 }
 
 export type PolicyCreateOrConnectWithoutUserInput = {
@@ -487,6 +511,7 @@ export type PolicyScalarWhereInput = {
   error?: Prisma.StringNullableFilter<"Policy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   userId?: Prisma.StringFilter<"Policy"> | string
+  category?: Prisma.StringNullableFilter<"Policy"> | string | null
 }
 
 export type PolicyCreateManyUserInput = {
@@ -497,6 +522,7 @@ export type PolicyCreateManyUserInput = {
   status?: $Enums.PolicyStatus
   error?: string | null
   createdAt?: Date | string
+  category?: string | null
 }
 
 export type PolicyUpdateWithoutUserInput = {
@@ -507,6 +533,7 @@ export type PolicyUpdateWithoutUserInput = {
   status?: Prisma.EnumPolicyStatusFieldUpdateOperationsInput | $Enums.PolicyStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PolicyUncheckedUpdateWithoutUserInput = {
@@ -517,6 +544,7 @@ export type PolicyUncheckedUpdateWithoutUserInput = {
   status?: Prisma.EnumPolicyStatusFieldUpdateOperationsInput | $Enums.PolicyStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PolicyUncheckedUpdateManyWithoutUserInput = {
@@ -527,6 +555,7 @@ export type PolicyUncheckedUpdateManyWithoutUserInput = {
   status?: Prisma.EnumPolicyStatusFieldUpdateOperationsInput | $Enums.PolicyStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -540,6 +569,7 @@ export type PolicySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   error?: boolean
   createdAt?: boolean
   userId?: boolean
+  category?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
 
@@ -552,6 +582,7 @@ export type PolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   error?: boolean
   createdAt?: boolean
   userId?: boolean
+  category?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
 
@@ -564,6 +595,7 @@ export type PolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   error?: boolean
   createdAt?: boolean
   userId?: boolean
+  category?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
 
@@ -576,9 +608,10 @@ export type PolicySelectScalar = {
   error?: boolean
   createdAt?: boolean
   userId?: boolean
+  category?: boolean
 }
 
-export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "url" | "name" | "status" | "error" | "createdAt" | "userId", ExtArgs["result"]["policy"]>
+export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "url" | "name" | "status" | "error" | "createdAt" | "userId" | "category", ExtArgs["result"]["policy"]>
 export type PolicyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -603,6 +636,7 @@ export type $PolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     error: string | null
     createdAt: Date
     userId: string
+    category: string | null
   }, ExtArgs["result"]["policy"]>
   composites: {}
 }
@@ -1035,6 +1069,7 @@ export interface PolicyFieldRefs {
   readonly error: Prisma.FieldRef<"Policy", 'String'>
   readonly createdAt: Prisma.FieldRef<"Policy", 'DateTime'>
   readonly userId: Prisma.FieldRef<"Policy", 'String'>
+  readonly category: Prisma.FieldRef<"Policy", 'String'>
 }
     
 

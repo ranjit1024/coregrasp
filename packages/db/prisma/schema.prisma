@@ -81,6 +81,7 @@ model Policy {
   error     String?
   createdAt DateTime     @default(now())
   userId    String
+  category  String?  
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])

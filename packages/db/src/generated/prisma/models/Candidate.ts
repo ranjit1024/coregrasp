@@ -268,7 +268,7 @@ export type CandidateCreateInput = {
   id?: string
   email: string
   score: number
-  attempt: boolean
+  attempt?: boolean
   user: Prisma.UserCreateNestedOneWithoutCandidateInput
 }
 
@@ -277,7 +277,7 @@ export type CandidateUncheckedCreateInput = {
   email: string
   score: number
   userId: string
-  attempt: boolean
+  attempt?: boolean
 }
 
 export type CandidateUpdateInput = {
@@ -301,7 +301,7 @@ export type CandidateCreateManyInput = {
   email: string
   score: number
   userId: string
-  attempt: boolean
+  attempt?: boolean
 }
 
 export type CandidateUpdateManyMutationInput = {
@@ -415,14 +415,14 @@ export type CandidateCreateWithoutUserInput = {
   id?: string
   email: string
   score: number
-  attempt: boolean
+  attempt?: boolean
 }
 
 export type CandidateUncheckedCreateWithoutUserInput = {
   id?: string
   email: string
   score: number
-  attempt: boolean
+  attempt?: boolean
 }
 
 export type CandidateCreateOrConnectWithoutUserInput = {
@@ -466,7 +466,7 @@ export type CandidateCreateManyUserInput = {
   id?: string
   email: string
   score: number
-  attempt: boolean
+  attempt?: boolean
 }
 
 export type CandidateUpdateWithoutUserInput = {

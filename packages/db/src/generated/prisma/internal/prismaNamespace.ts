@@ -946,7 +946,8 @@ export const PolicyScalarFieldEnum = {
   status: 'status',
   error: 'error',
   createdAt: 'createdAt',
-  userId: 'userId'
+  userId: 'userId',
+  category: 'category'
 } as const
 
 export type PolicyScalarFieldEnum = (typeof PolicyScalarFieldEnum)[keyof typeof PolicyScalarFieldEnum]

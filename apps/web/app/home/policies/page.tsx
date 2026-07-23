@@ -13,6 +13,7 @@ interface PolicyDocument {
     createdAt: string;
     status: PolicyStatus;
     url: string;
+    category:string;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────
@@ -169,9 +170,9 @@ function PolicyRow({ policy, onClick }: { policy: PolicyDocument; onClick: () =>
                     </h4>
                     <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-[11px] font-medium text-zinc-500 bg-[#1c1e22] px-2 py-0.5 rounded border border-zinc-800">
-                            {policy.scope}
+                            {policy.category}
                         </span>
-                        <span className="text-[11px] font-mono text-zinc-700">{policy.id}</span>
+                       
                     </div>
                 </div>
             </div>
@@ -226,6 +227,7 @@ export default function PolicyStatusPage() {
                 }
 
                 const data = await res.json();
+                console.log(data)
 
                 if (isMounted) {
                     setPolicies(data.userName || []);
