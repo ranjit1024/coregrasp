@@ -1,6 +1,7 @@
 "use client";
 
 import MCQList from "@/app/components/ui/mcq";
+import QuizReviewLayout from "@/app/components/ui/quiz-skeloton";
 import { use, useEffect, useState } from "react";
 
 interface PolicyDetailsProps {
@@ -47,7 +48,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
         fetchPolicyData();
     }, [policy]); 
 
-    if (loading) return <div className="p-6 text-center text-zinc-500">Loading policy details...</div>;
+    if (loading) return <div className="p-6 text-center text-zinc-500"><QuizReviewLayout/></div>;
     if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
 
     return (
