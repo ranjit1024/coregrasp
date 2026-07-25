@@ -3,6 +3,7 @@
 import { useSession } from "../../../lib/auth-client";
 import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Skleton_policy_Loader from "@/app/components/ui/policy_loader";
 
 type PolicyStatus = "PENDING" | "PROCESSING" | "READY" | "FAILED";
 
@@ -263,7 +264,7 @@ export default function PolicyStatusPage() {
     if (isSessionPending) {
         return (
             <div className="min-h-screen bg-[#090A0C] flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+                <Skleton_policy_Loader/>
             </div>
         );
     }

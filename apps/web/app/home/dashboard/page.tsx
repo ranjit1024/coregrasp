@@ -46,8 +46,12 @@ export default function Dashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("Overview");
   const [recent, setRecent] = useState<any[] | null>([]);
+  const [isLoading,setIsLoading] = useState<boolean>(false);
+
   const loadCandidate  = async () => {
+    setIsLoading(true);
    const candidate =  await getuserCandidate();
+   setIsLoading(false)
    console.log(candidate);
    if(!candidate) return;
    setRecent(candidate)
@@ -57,6 +61,9 @@ export default function Dashboard() {
     loadCandidate()
   }, [])
  
+  if(isLoading){
+    return <div>Loading...</div>
+  }
   return ( 
     
 <div>
