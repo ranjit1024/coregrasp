@@ -11,8 +11,8 @@ export default function RootLayout({children}:{children:React.ReactNode}){
   const workspaceItems = [
     { name: "Overview", href: "/home/dashboard" },
     { name: "Policies & Quizzes", href: "/home/policies" },
-    { name: "Directory & Teams", href: "/home/directory" },
-    { name: "Analytics", href: "/home/analytics" },
+    // { name: "Directory & Teams", href: "/home/directory" },
+    // { name: "Analytics", href: "/home/analytics" },
   ];
 
   const settingsItems = [
