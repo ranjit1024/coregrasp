@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getuserCandidate } from "@/lib/candidate"
+import DashboardSkeleton from "@/app/components/ui/dashboardloader"
 
 // ── Mock Data ────────────────────────────────────────────────────────────────
 
@@ -62,7 +63,7 @@ export default function Dashboard() {
   }, [])
  
   if(isLoading){
-    return <div>Loading...</div>
+    return <DashboardSkeleton/>
   }
   return ( 
     

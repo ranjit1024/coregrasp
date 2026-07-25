@@ -1,3 +1,4 @@
+"use client"
 import { MoreHorizontal } from "lucide-react";
 
 export default function Dashboard() {
