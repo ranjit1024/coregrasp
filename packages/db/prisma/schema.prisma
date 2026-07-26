@@ -85,6 +85,7 @@ model Policy {
   userId    String
   category  String?
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidates Candidate[]
 
   @@index([userId])
   @@map("policy")
@@ -95,10 +96,10 @@ model Candidate {
   email    String
   score    Int
   userId   String
-  policyId String?
+  policyId String
   attempt  Boolean @default(false)
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  policy   Policy  @relation(fields: [policyId], references: [id], onDelete: Cascade)
   @@unique([email, policyId])
 }
 

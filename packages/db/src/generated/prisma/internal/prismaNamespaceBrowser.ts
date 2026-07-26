@@ -141,6 +141,7 @@ export const CandidateScalarFieldEnum = {
   email: 'email',
   score: 'score',
   userId: 'userId',
+  policyId: 'policyId',
   attempt: 'attempt'
 } as const
 

@@ -39,6 +39,7 @@ export type CandidateMinAggregateOutputType = {
   email: string | null
   score: number | null
   userId: string | null
+  policyId: string | null
   attempt: boolean | null
 }
 
@@ -47,6 +48,7 @@ export type CandidateMaxAggregateOutputType = {
   email: string | null
   score: number | null
   userId: string | null
+  policyId: string | null
   attempt: boolean | null
 }
 
@@ -55,6 +57,7 @@ export type CandidateCountAggregateOutputType = {
   email: number
   score: number
   userId: number
+  policyId: number
   attempt: number
   _all: number
 }
@@ -73,6 +76,7 @@ export type CandidateMinAggregateInputType = {
   email?: true
   score?: true
   userId?: true
+  policyId?: true
   attempt?: true
 }
 
@@ -81,6 +85,7 @@ export type CandidateMaxAggregateInputType = {
   email?: true
   score?: true
   userId?: true
+  policyId?: true
   attempt?: true
 }
 
@@ -89,6 +94,7 @@ export type CandidateCountAggregateInputType = {
   email?: true
   score?: true
   userId?: true
+  policyId?: true
   attempt?: true
   _all?: true
 }
@@ -184,6 +190,7 @@ export type CandidateGroupByOutputType = {
   email: string
   score: number
   userId: string
+  policyId: string
   attempt: boolean
   _count: CandidateCountAggregateOutputType | null
   _avg: CandidateAvgAggregateOutputType | null
@@ -215,8 +222,10 @@ export type CandidateWhereInput = {
   email?: Prisma.StringFilter<"Candidate"> | string
   score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
+  policyId?: Prisma.StringFilter<"Candidate"> | string
   attempt?: Prisma.BoolFilter<"Candidate"> | boolean
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  policy?: Prisma.XOR<Prisma.PolicyScalarRelationFilter, Prisma.PolicyWhereInput>
 }
 
 export type CandidateOrderByWithRelationInput = {
@@ -224,27 +233,33 @@ export type CandidateOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  policyId?: Prisma.SortOrder
   attempt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  policy?: Prisma.PolicyOrderByWithRelationInput
 }
 
 export type CandidateWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  email?: string
+  email_policyId?: Prisma.CandidateEmailPolicyIdCompoundUniqueInput
   AND?: Prisma.CandidateWhereInput | Prisma.CandidateWhereInput[]
   OR?: Prisma.CandidateWhereInput[]
   NOT?: Prisma.CandidateWhereInput | Prisma.CandidateWhereInput[]
+  email?: Prisma.StringFilter<"Candidate"> | string
   score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
+  policyId?: Prisma.StringFilter<"Candidate"> | string
   attempt?: Prisma.BoolFilter<"Candidate"> | boolean
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "email">
+  policy?: Prisma.XOR<Prisma.PolicyScalarRelationFilter, Prisma.PolicyWhereInput>
+}, "id" | "email_policyId">
 
 export type CandidateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  policyId?: Prisma.SortOrder
   attempt?: Prisma.SortOrder
   _count?: Prisma.CandidateCountOrderByAggregateInput
   _avg?: Prisma.CandidateAvgOrderByAggregateInput
@@ -261,6 +276,7 @@ export type CandidateScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
   score?: Prisma.IntWithAggregatesFilter<"Candidate"> | number
   userId?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
+  policyId?: Prisma.StringWithAggregatesFilter<"Candidate"> | string
   attempt?: Prisma.BoolWithAggregatesFilter<"Candidate"> | boolean
 }
 
@@ -270,6 +286,7 @@ export type CandidateCreateInput = {
   score: number
   attempt?: boolean
   user: Prisma.UserCreateNestedOneWithoutCandidateInput
+  policy: Prisma.PolicyCreateNestedOneWithoutCandidatesInput
 }
 
 export type CandidateUncheckedCreateInput = {
@@ -277,6 +294,7 @@ export type CandidateUncheckedCreateInput = {
   email: string
   score: number
   userId: string
+  policyId: string
   attempt?: boolean
 }
 
@@ -286,6 +304,7 @@ export type CandidateUpdateInput = {
   score?: Prisma.IntFieldUpdateOperationsInput | number
   attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
   user?: Prisma.UserUpdateOneRequiredWithoutCandidateNestedInput
+  policy?: Prisma.PolicyUpdateOneRequiredWithoutCandidatesNestedInput
 }
 
 export type CandidateUncheckedUpdateInput = {
@@ -293,6 +312,7 @@ export type CandidateUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
   attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
@@ -301,6 +321,7 @@ export type CandidateCreateManyInput = {
   email: string
   score: number
   userId: string
+  policyId: string
   attempt?: boolean
 }
 
@@ -316,6 +337,7 @@ export type CandidateUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
   attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
@@ -329,11 +351,17 @@ export type CandidateOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type CandidateEmailPolicyIdCompoundUniqueInput = {
+  email: string
+  policyId: string
+}
+
 export type CandidateCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  policyId?: Prisma.SortOrder
   attempt?: Prisma.SortOrder
 }
 
@@ -346,6 +374,7 @@ export type CandidateMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  policyId?: Prisma.SortOrder
   attempt?: Prisma.SortOrder
 }
 
@@ -354,6 +383,7 @@ export type CandidateMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   score?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  policyId?: Prisma.SortOrder
   attempt?: Prisma.SortOrder
 }
 
@@ -403,6 +433,48 @@ export type CandidateUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.CandidateScalarWhereInput | Prisma.CandidateScalarWhereInput[]
 }
 
+export type CandidateCreateNestedManyWithoutPolicyInput = {
+  create?: Prisma.XOR<Prisma.CandidateCreateWithoutPolicyInput, Prisma.CandidateUncheckedCreateWithoutPolicyInput> | Prisma.CandidateCreateWithoutPolicyInput[] | Prisma.CandidateUncheckedCreateWithoutPolicyInput[]
+  connectOrCreate?: Prisma.CandidateCreateOrConnectWithoutPolicyInput | Prisma.CandidateCreateOrConnectWithoutPolicyInput[]
+  createMany?: Prisma.CandidateCreateManyPolicyInputEnvelope
+  connect?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+}
+
+export type CandidateUncheckedCreateNestedManyWithoutPolicyInput = {
+  create?: Prisma.XOR<Prisma.CandidateCreateWithoutPolicyInput, Prisma.CandidateUncheckedCreateWithoutPolicyInput> | Prisma.CandidateCreateWithoutPolicyInput[] | Prisma.CandidateUncheckedCreateWithoutPolicyInput[]
+  connectOrCreate?: Prisma.CandidateCreateOrConnectWithoutPolicyInput | Prisma.CandidateCreateOrConnectWithoutPolicyInput[]
+  createMany?: Prisma.CandidateCreateManyPolicyInputEnvelope
+  connect?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+}
+
+export type CandidateUpdateManyWithoutPolicyNestedInput = {
+  create?: Prisma.XOR<Prisma.CandidateCreateWithoutPolicyInput, Prisma.CandidateUncheckedCreateWithoutPolicyInput> | Prisma.CandidateCreateWithoutPolicyInput[] | Prisma.CandidateUncheckedCreateWithoutPolicyInput[]
+  connectOrCreate?: Prisma.CandidateCreateOrConnectWithoutPolicyInput | Prisma.CandidateCreateOrConnectWithoutPolicyInput[]
+  upsert?: Prisma.CandidateUpsertWithWhereUniqueWithoutPolicyInput | Prisma.CandidateUpsertWithWhereUniqueWithoutPolicyInput[]
+  createMany?: Prisma.CandidateCreateManyPolicyInputEnvelope
+  set?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  disconnect?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  delete?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  connect?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  update?: Prisma.CandidateUpdateWithWhereUniqueWithoutPolicyInput | Prisma.CandidateUpdateWithWhereUniqueWithoutPolicyInput[]
+  updateMany?: Prisma.CandidateUpdateManyWithWhereWithoutPolicyInput | Prisma.CandidateUpdateManyWithWhereWithoutPolicyInput[]
+  deleteMany?: Prisma.CandidateScalarWhereInput | Prisma.CandidateScalarWhereInput[]
+}
+
+export type CandidateUncheckedUpdateManyWithoutPolicyNestedInput = {
+  create?: Prisma.XOR<Prisma.CandidateCreateWithoutPolicyInput, Prisma.CandidateUncheckedCreateWithoutPolicyInput> | Prisma.CandidateCreateWithoutPolicyInput[] | Prisma.CandidateUncheckedCreateWithoutPolicyInput[]
+  connectOrCreate?: Prisma.CandidateCreateOrConnectWithoutPolicyInput | Prisma.CandidateCreateOrConnectWithoutPolicyInput[]
+  upsert?: Prisma.CandidateUpsertWithWhereUniqueWithoutPolicyInput | Prisma.CandidateUpsertWithWhereUniqueWithoutPolicyInput[]
+  createMany?: Prisma.CandidateCreateManyPolicyInputEnvelope
+  set?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  disconnect?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  delete?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  connect?: Prisma.CandidateWhereUniqueInput | Prisma.CandidateWhereUniqueInput[]
+  update?: Prisma.CandidateUpdateWithWhereUniqueWithoutPolicyInput | Prisma.CandidateUpdateWithWhereUniqueWithoutPolicyInput[]
+  updateMany?: Prisma.CandidateUpdateManyWithWhereWithoutPolicyInput | Prisma.CandidateUpdateManyWithWhereWithoutPolicyInput[]
+  deleteMany?: Prisma.CandidateScalarWhereInput | Prisma.CandidateScalarWhereInput[]
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -416,12 +488,14 @@ export type CandidateCreateWithoutUserInput = {
   email: string
   score: number
   attempt?: boolean
+  policy: Prisma.PolicyCreateNestedOneWithoutCandidatesInput
 }
 
 export type CandidateUncheckedCreateWithoutUserInput = {
   id?: string
   email: string
   score: number
+  policyId: string
   attempt?: boolean
 }
 
@@ -459,13 +533,57 @@ export type CandidateScalarWhereInput = {
   email?: Prisma.StringFilter<"Candidate"> | string
   score?: Prisma.IntFilter<"Candidate"> | number
   userId?: Prisma.StringFilter<"Candidate"> | string
+  policyId?: Prisma.StringFilter<"Candidate"> | string
   attempt?: Prisma.BoolFilter<"Candidate"> | boolean
+}
+
+export type CandidateCreateWithoutPolicyInput = {
+  id?: string
+  email: string
+  score: number
+  attempt?: boolean
+  user: Prisma.UserCreateNestedOneWithoutCandidateInput
+}
+
+export type CandidateUncheckedCreateWithoutPolicyInput = {
+  id?: string
+  email: string
+  score: number
+  userId: string
+  attempt?: boolean
+}
+
+export type CandidateCreateOrConnectWithoutPolicyInput = {
+  where: Prisma.CandidateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CandidateCreateWithoutPolicyInput, Prisma.CandidateUncheckedCreateWithoutPolicyInput>
+}
+
+export type CandidateCreateManyPolicyInputEnvelope = {
+  data: Prisma.CandidateCreateManyPolicyInput | Prisma.CandidateCreateManyPolicyInput[]
+  skipDuplicates?: boolean
+}
+
+export type CandidateUpsertWithWhereUniqueWithoutPolicyInput = {
+  where: Prisma.CandidateWhereUniqueInput
+  update: Prisma.XOR<Prisma.CandidateUpdateWithoutPolicyInput, Prisma.CandidateUncheckedUpdateWithoutPolicyInput>
+  create: Prisma.XOR<Prisma.CandidateCreateWithoutPolicyInput, Prisma.CandidateUncheckedCreateWithoutPolicyInput>
+}
+
+export type CandidateUpdateWithWhereUniqueWithoutPolicyInput = {
+  where: Prisma.CandidateWhereUniqueInput
+  data: Prisma.XOR<Prisma.CandidateUpdateWithoutPolicyInput, Prisma.CandidateUncheckedUpdateWithoutPolicyInput>
+}
+
+export type CandidateUpdateManyWithWhereWithoutPolicyInput = {
+  where: Prisma.CandidateScalarWhereInput
+  data: Prisma.XOR<Prisma.CandidateUpdateManyMutationInput, Prisma.CandidateUncheckedUpdateManyWithoutPolicyInput>
 }
 
 export type CandidateCreateManyUserInput = {
   id?: string
   email: string
   score: number
+  policyId: string
   attempt?: boolean
 }
 
@@ -474,12 +592,14 @@ export type CandidateUpdateWithoutUserInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  policy?: Prisma.PolicyUpdateOneRequiredWithoutCandidatesNestedInput
 }
 
 export type CandidateUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
   attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
@@ -487,6 +607,39 @@ export type CandidateUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type CandidateCreateManyPolicyInput = {
+  id?: string
+  email: string
+  score: number
+  userId: string
+  attempt?: boolean
+}
+
+export type CandidateUpdateWithoutPolicyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  user?: Prisma.UserUpdateOneRequiredWithoutCandidateNestedInput
+}
+
+export type CandidateUncheckedUpdateWithoutPolicyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type CandidateUncheckedUpdateManyWithoutPolicyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  score?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   attempt?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
@@ -497,8 +650,10 @@ export type CandidateSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   email?: boolean
   score?: boolean
   userId?: boolean
+  policyId?: boolean
   attempt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["candidate"]>
 
 export type CandidateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -506,8 +661,10 @@ export type CandidateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   email?: boolean
   score?: boolean
   userId?: boolean
+  policyId?: boolean
   attempt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["candidate"]>
 
 export type CandidateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -515,8 +672,10 @@ export type CandidateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   email?: boolean
   score?: boolean
   userId?: boolean
+  policyId?: boolean
   attempt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["candidate"]>
 
 export type CandidateSelectScalar = {
@@ -524,30 +683,36 @@ export type CandidateSelectScalar = {
   email?: boolean
   score?: boolean
   userId?: boolean
+  policyId?: boolean
   attempt?: boolean
 }
 
-export type CandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "score" | "userId" | "attempt", ExtArgs["result"]["candidate"]>
+export type CandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "score" | "userId" | "policyId" | "attempt", ExtArgs["result"]["candidate"]>
 export type CandidateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
 }
 export type CandidateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
 }
 export type CandidateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
 }
 
 export type $CandidatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Candidate"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    policy: Prisma.$PolicyPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
     score: number
     userId: string
+    policyId: string
     attempt: boolean
   }, ExtArgs["result"]["candidate"]>
   composites: {}
@@ -944,6 +1109,7 @@ readonly fields: CandidateFieldRefs;
 export interface Prisma__CandidateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  policy<T extends Prisma.PolicyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PolicyDefaultArgs<ExtArgs>>): Prisma.Prisma__PolicyClient<runtime.Types.Result.GetResult<Prisma.$PolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -977,6 +1143,7 @@ export interface CandidateFieldRefs {
   readonly email: Prisma.FieldRef<"Candidate", 'String'>
   readonly score: Prisma.FieldRef<"Candidate", 'Int'>
   readonly userId: Prisma.FieldRef<"Candidate", 'String'>
+  readonly policyId: Prisma.FieldRef<"Candidate", 'String'>
   readonly attempt: Prisma.FieldRef<"Candidate", 'Boolean'>
 }
     

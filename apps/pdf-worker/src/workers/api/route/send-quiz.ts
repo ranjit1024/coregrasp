@@ -31,7 +31,7 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
 
         await prisma.candidate.upsert({
             where: {
-                email_policyId: {
+                email_policyId:{
                     email: recipientEmail,
                     policyId: policyUrl,
                 },
@@ -46,7 +46,7 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
                 score: 0,
                 userId,
                 attempt: false,
-                policyId: policy.id,
+                policyId: policyUrl
             },
         });
 
