@@ -162,7 +162,7 @@ export default function Candidates() {
                 <div className="flex-1 min-w-0">
                   <PolicyRow
                     policy={policy}
-                    onClick={() => router.push(`/home/policies/${policy.url}`)}
+                    onClick={() => router.push(`/home/candidates/${policy.url}`)}
                   />
                 </div>
 
