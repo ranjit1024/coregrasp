@@ -8,7 +8,7 @@ export async function sendQuizEmail(
     title: string
 ) {
     const link = `http://localhost:3000/assessment/${encodeURIComponent(quizUrl)}`;
-    const from = "Coregrasp quiz.coregrasp.online"; 
+    const from = "Coregrasp <quiz@quiz.coregrasp.online>"; 
 
     const subject = `Quiz ready: ${title}`;
     const html = `
@@ -57,7 +57,7 @@ export async function sendQuizEmail(
     });
 
     if (error) {
-        return  new Error(`Resend send failed: ${error.message}`);
+        throw  new Error(`Resend send failed: ${error.message}`);
     }
 
     return data;

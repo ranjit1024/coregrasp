@@ -25,34 +25,24 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
     }
 
     try {
-        const email = await sendQuizEmail(c.env, recipientEmail, policyUrl, policy.name ?? policyUrl);
-        console.log(email)
-
-
-        await prisma.candidate.upsert({
-            where: {
-                email_policyId:{
-                    email: recipientEmail,
-                    policyId: policyUrl,
-                },
-            },
-            update: {
-                score: 0,
-                attempt: false,
-                userId,
-            },
-            create: {
-                email: recipientEmail,
-                score: 0,
-                userId,
-                attempt: false,
-                policyId: policyUrl
-            },
+        const existing = await prisma.candidate.findUnique({
+            where: { email_policyId: { email: recipientEmail, policyId: policy.id } },
         });
 
+        if (existing?.attempt) {
+            return c.json({ error: "This candidate has already completed this quiz" }, 409);
+        }
+
+        await sendQuizEmail(c.env, recipientEmail, policyUrl, policy.name ?? policyUrl);
+        console.log(sendQuizEmail)
+        await prisma.candidate.upsert({
+            where: { email_policyId: { email: recipientEmail, policyId: policy.id } },
+            update: { score: 0, attempt: false, userId },
+            create: { email: recipientEmail, score: 0, userId, attempt: false, policyId: policy.id },
+        });
     } catch (e) {
-        console.error("sendQuizEmail failed:", e);
-        return c.json({ error: "Failed to send email", detail: `${e}` }, 502);
+        console.error("sendQuizEmail failed:", e instanceof Error ? e.message : String(e));
+        return c.json({ error: "Failed to send email", detail: e instanceof Error ? e.message : String(e) }, 502);
     }
 
 
