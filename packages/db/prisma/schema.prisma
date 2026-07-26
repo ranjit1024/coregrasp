@@ -15,17 +15,18 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String      @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean     @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   sessions      Session[]
   accounts      Account[]
   policies      Policy[]
   candidate     Candidate[]
+
   @@unique([email])
   @@map("user")
 }
@@ -40,6 +41,7 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([token])
   @@index([userId])
   @@map("session")
@@ -81,7 +83,7 @@ model Policy {
   error     String?
   createdAt DateTime     @default(now())
   userId    String
-  category  String?  
+  category  String?
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
@@ -89,12 +91,15 @@ model Policy {
 }
 
 model Candidate {
-  id    String @id @default(cuid())
-  email String @unique
-  score Int
-  userId String
-  attempt Boolean  @default(false)
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       String  @id @default(cuid())
+  email    String
+  score    Int
+  userId   String
+  policyId String?
+  attempt  Boolean @default(false)
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([email, policyId])
 }
 
 model Verification {

@@ -1,31 +1,5 @@
+import { Resend } from "resend";
 import { Bindings } from "../../../shared/types";
-
-async function getAccessToken(env: Bindings): Promise<string> {
-    const res = await fetch("https://oauth2.googleapis.com/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-            client_id: env.GMAIL_CLIENT_ID,
-            client_secret: env.GMAIL_CLIENT_SECRET,
-            refresh_token: env.GMAIL_REFRESH_TOKEN,
-            grant_type: "refresh_token",
-        }),
-    });
-
-    if (!res.ok) {
-        throw new Error(`Token refresh failed: ${res.status} ${await res.text()}`);
-    }
-
-    const data = await res.json<{ access_token: string }>();
-    return data.access_token;
-}
-
-function base64UrlEncode(str: string): string {
-    const bytes = new TextEncoder().encode(str);
-    let binary = "";
-    bytes.forEach((b) => (binary += String.fromCharCode(b)));
-    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
 
 export async function sendQuizEmail(
     env: Bindings,
@@ -34,7 +8,7 @@ export async function sendQuizEmail(
     title: string
 ) {
     const link = `http://localhost:3000/assessment/${encodeURIComponent(quizUrl)}`;
-    const from = "ranjitdas2048@gmail.com";
+    const from = "Coregrasp quiz.coregrasp.online"; 
 
     const subject = `Quiz ready: ${title}`;
     const html = `
@@ -73,36 +47,18 @@ export async function sendQuizEmail(
     </div>
 `;
 
-    const messageParts = [
-        `From: ${from}`,
-        `To: ${to}`,
-        `Subject: ${subject}`,
-        "MIME-Version: 1.0",
-        "Content-Type: text/html; charset=UTF-8",
-        "",
+    const resend = new Resend(env.RESEND_API_KEY);
+
+    const { data, error } = await resend.emails.send({
+        from,
+        to,
+        subject,
         html,
-    ];
-    const rawMessage = messageParts.join("\r\n");
-    const encodedMessage = base64UrlEncode(rawMessage);
+    });
 
-    const accessToken = await getAccessToken(env);
-
-    const res = await fetch(
-        "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
-        {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ raw: encodedMessage }),
-        }
-    );
-
-    if (!res.ok) {
-        const err = await res.text();
-        throw new Error(`Gmail send failed: ${res.status} ${err}`);
+    if (error) {
+        return  new Error(`Resend send failed: ${error.message}`);
     }
 
-    return res.json();
+    return data;
 }
