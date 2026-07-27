@@ -45,7 +45,7 @@ function CoreGraspLogo({ className = "w-6 h-6 text-emerald-500" }: { className?:
 
 export default function Dashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("Overview");
+
   const [recent, setRecent] = useState<any[] | null>([]);
   const [isLoading,setIsLoading] = useState<boolean>(false);
 
@@ -75,39 +75,7 @@ export default function Dashboard() {
         <div className="absolute top-0 inset-x-0 h-px  bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         {/* Top Header */}
-        <header className="h-[68px] w-full px-8 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-10 sticky top-0">
-          <h1 className="text-[16px] font-medium text-white">{activeTab}</h1>
-
-          <div className="flex items-center gap-4">
-            {/* Spotlight Search */}
-            <div className="hidden lg:flex items-center bg-[#18181B] border border-white/[0.08] rounded-md px-3 py-1.5 w-[280px] focus-within:ring-1 focus-within:ring-emerald-500/50 focus-within:border-emerald-500/50 transition-all shadow-sm">
-              <svg className="w-4 h-4 text-[#71717A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input 
-                type="text" 
-                placeholder="Search..." 
-                className="bg-transparent border-none outline-none text-[13px] text-white ml-2 w-full placeholder-[#71717A]"
-              />
-              <div className="flex items-center gap-0.5 text-[#71717A] text-[10px] font-medium">
-                <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1 py-0.5">⌘</kbd>
-                <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1 py-0.5">K</kbd>
-              </div>
-            </div>
-
-            <button className="relative w-8 h-8 rounded-md flex items-center justify-center text-[#A1A1AA] hover:bg-white/5 hover:text-white transition-colors">
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full ring-2 ring-[#09090B]" />
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-            </button>
-
-            <button onClick={(e)=> {
-              router.push("/home/upload")
-            }} className="bg-white hover:cursor-pointer text-black hover:bg-gray-200 font-medium text-[13px] px-4 py-1.5 rounded-md transition-colors flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-              New Policy
-            </button>
-          </div>
-        </header>
+       
 
         {/* Dashboard Scrollable Area */}
         <main className="flex-1 p-8 w-3rem">
