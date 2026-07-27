@@ -19,7 +19,7 @@ export default function Candidates() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
+  const [candiate,setCandidate] = useState<number|null>(null)
   useEffect(() => {
     let isMounted = true;
 
@@ -174,7 +174,7 @@ export default function Candidates() {
                       <strong className="text-zinc-200 text-[13px] mr-1">
                         {count}
                       </strong>
-                      {count === 1 ? "Employee" : "Employees"}
+                      {count === 1 ? "Candidate" : "Cadidates"}
                     </span>
                   </div>
                 </div>

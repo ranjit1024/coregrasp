@@ -142,7 +142,7 @@ const DesktopPdfUpload: React.FC = () => {
   const isDone = uploadState === "done";
 
   return (
-    <div className="min-h-screen bg-[#0A0A0C] flex items-center justify-center p-8 font-sans antialiased selection:bg-[#00E676]/30">
+    <div className="min-h-[90vh] -[#0A0A0C] flex items-center justify-center p-8 font-sans antialiased selection:bg-[#00E676]/30">
       <div className="w-full max-w-5xl">
         <div className="mb-6">
           <p className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wider mb-1.5">
