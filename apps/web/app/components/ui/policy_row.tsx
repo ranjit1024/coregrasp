@@ -15,8 +15,8 @@ const formatDate = (dateString: string) => {
 };
 
 interface PolicyRowProps {
-    policy: PolicyDocument; // Changed from PolicyWithCandidates for better reusability
-    onClick?: () => void;   // Made optional so it doesn't crash if the parent handles the click
+    policy: PolicyDocument;
+    onClick?: () => void;   
 }
 
 export function PolicyRow({ policy, onClick }: PolicyRowProps) {
