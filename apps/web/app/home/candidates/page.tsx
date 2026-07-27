@@ -7,11 +7,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Users, AlertCircle, Inbox, FileText } from "lucide-react";
 
-// Extend PolicyDocument to account for candidate metadata from API
 interface PolicyWithCandidates extends PolicyDocument {
   candidateCount?: number;
   candidates?: Array<unknown>;
 }
+
+
 
 export default function Candidates() {
   const { data: session, isPending: isSessionPending } = useSession();
@@ -42,7 +43,7 @@ export default function Candidates() {
         }
 
         const data = await res.json();
-
+        console.log(data)
         if (isMounted) {
           setPolicies(data.userName || []);
         }

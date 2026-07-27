@@ -10,15 +10,28 @@ export const result_Route = async (c: Context) => {
 
   const prisma = createPrismaClient(c.env.HYPERDRIVE.connectionString);
 
-  const policy = await prisma.policy.findMany({
-    where: { userId:userId},
+  const policies = await prisma.policy.findMany({
+    where: { userId },
+    include: {
+      _count: {
+        select: { candidates: true }, // relation field name on Policy model
+      },
+    },
   });
 
-  if (!policy) {
+  if (policies.length === 0) {
     return c.json({ error: "No policy found" }, 404);
   }
 
   return c.json({
-    userName: policy
+    policies: policies.map((p) => ({
+      id: p.id,
+      name: p.name,
+      key:p.key,
+      status: p.status,
+      url:p.url,
+      userId:p.userId,
+      candidateCount: p._count.candidates,
+    })),
   });
 };
