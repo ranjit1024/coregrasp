@@ -1,8 +1,10 @@
 "use client"
+import Link from "next/link";
 import { CoreGraspLogo } from "../components/ui/logo";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter, usePathname } from "next/navigation";
+import { BarChart3, LayoutDashboard, ShieldCheck, Users } from "lucide-react";
 
 export default function RootLayout({children}:{children:React.ReactNode}){
   const router = useRouter();
@@ -10,13 +12,12 @@ export default function RootLayout({children}:{children:React.ReactNode}){
   const pathname = usePathname();
     const [activeTab, setActiveTab] = useState("Overview");
 
-  const workspaceItems = [
-    { name: "Overview", href: "/home/dashboard" },
-    { name: "Policies & Quizzes", href: "/home/policies" },
-    { name: "Candidates", href: "/home/candidates" },
-    // { name: "Analytics", href: "/home/analytics" },
-  ];
-
+const workspaceItems = [
+  { name: "Overview", href: "/home/dashboard", icon: LayoutDashboard },
+  { name: "Policies & Quizzes", href: "/home/policies", icon: ShieldCheck },
+  { name: "Candidates", href: "/home/candidates", icon: Users },
+  { name: "Analytics", href: "/home/analytics", icon: BarChart3, disabled: true, badge: "Soon" },
+];
   const settingsItems = [
     { name: "Integrations", href: "/home/settings/integrations" },
     { name: "Organization", href: "/home/settings/organization" },
@@ -55,29 +56,45 @@ export default function RootLayout({children}:{children:React.ReactNode}){
           <div className="text-[11px] font-semibold text-[#71717A] uppercase tracking-wider mb-2 px-2">
             Workspace
           </div>
+
           {workspaceItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <button
-                key={item.name}
-                onClick={() => router.push(item.href)}
-                className={`flex items-center gap-3 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors duration-200 relative group text-left ${
-                  isActive
-                    ? "text-white bg-[#18181B]"
-                    : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
-                }`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute left-0 w-0.5 h-4 bg-emerald-500 rounded-r-full"
-                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                  />
-                )}
-                {item.name}
-              </button>
-            )
-          })}
+        // Check if the current URL matches the item's href
+        const isActive = pathname.startsWith(item.href);
+        const Icon = item.icon;
+
+        return (
+          <Link
+            key={item.name}
+            href={item.disabled ? "#" : item.href}
+            className={`
+              flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+              ${isActive 
+                ? "bg-zinc-800/50 text-zinc-100" // Active state (like your screenshot)
+                : item.disabled
+                  ? "text-zinc-600 cursor-not-allowed" // Disabled state
+                  : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30 active:scale-[0.98]" // Default state
+              }
+            `}
+            // Prevent navigation if disabled
+            onClick={(e) => item.disabled && e.preventDefault()}
+          >
+            <div className="flex items-center gap-3">
+              <Icon 
+                className={`w-4 h-4 ${isActive ? "text-zinc-100" : item.disabled ? "text-zinc-700" : "text-zinc-500"}`} 
+                strokeWidth={isActive ? 2.5 : 2} 
+              />
+              {item.name}
+            </div>
+
+            {/* Optional Badge (e.g., "Soon") */}
+            {item.badge && (
+              <span className="text-[10px] uppercase tracking-wider font-semibold bg-zinc-800/80 text-zinc-500 px-1.5 py-0.5 rounded">
+                {item.badge}
+              </span>
+            )}
+          </Link>
+        );
+      })}
 
           <div className="text-[11px] font-semibold text-[#71717A] uppercase tracking-wider mt-8 mb-2 px-2">
             Settings
@@ -133,39 +150,57 @@ export default function RootLayout({children}:{children:React.ReactNode}){
   <motion.div
  
   >
-      <header className="h-[68px] w-full px-8 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-10 sticky top-0">
-          <h1 className="text-[16px] font-medium text-white">{""}</h1>
+    <header className="h-[68px] w-full px-8 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-10 sticky top-0">
+  
+  {/* Left side - Either remove this or pass a dynamic breadcrumb/title */}
+  <div className="text-[14px] font-medium text-zinc-400">
+    {pathname.split("/")[2]}
+  </div>
 
-          <div className="flex items-center gap-4">
-            {/* Spotlight Search */}
-            <div className="hidden lg:flex items-center bg-[#18181B] border border-white/[0.08] rounded-md px-3 py-1.5 w-[280px] focus-within:ring-1 focus-within:ring-emerald-500/50 focus-within:border-emerald-500/50 transition-all shadow-sm">
-              <svg className="w-4 h-4 text-[#71717A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input 
-                type="text" 
-                placeholder="Search..." 
-                className="bg-transparent border-none outline-none text-[13px] text-white ml-2 w-full placeholder-[#71717A]"
-              />
-              <div className="flex items-center gap-0.5 text-[#71717A] text-[10px] font-medium">
-                <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1 py-0.5">⌘</kbd>
-                <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1 py-0.5">K</kbd>
-              </div>
-            </div>
+  {/* Right Side Actions */}
+  <div className="flex items-center gap-4">
+    
+    {/* Spotlight Search */}
+    <div className="hidden lg:flex items-center bg-[#18181B] border border-white/[0.08] rounded-md px-3 py-1.5 w-[280px] focus-within:ring-1 focus-within:ring-emerald-500/50 focus-within:border-emerald-500/50 transition-all shadow-sm">
+      <svg className="w-4 h-4 text-[#71717A] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input
+        type="text"
+        placeholder="Search..."
+        aria-label="Search workspace"
+        className="bg-transparent border-none outline-none text-[13px] text-white ml-2 w-full placeholder-[#71717A]"
+      />
+      <div className="flex items-center gap-0.5 text-[#71717A] text-[10px] font-medium shrink-0">
+        <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1.5 py-0.5 shadow-sm">⌘</kbd>
+        <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1.5 py-0.5 shadow-sm">K</kbd>
+      </div>
+    </div>
 
-            <button className="relative w-8 h-8 rounded-md flex items-center justify-center text-[#A1A1AA] hover:bg-white/5 hover:text-white transition-colors">
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full ring-2 ring-[#09090B]" />
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-            </button>
+    {/* Notification Bell */}
+    <button 
+      aria-label="Notifications"
+      className="relative w-8 h-8 rounded-md flex items-center justify-center text-[#A1A1AA] hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 transition-all"
+    >
+      <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full ring-2 ring-[#09090B]" />
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+      </svg>
+    </button>
 
-            <button onClick={(e)=> {
-              router.push("/home/upload")
-            }} className="bg-white hover:cursor-pointer text-black hover:bg-gray-200 font-medium text-[13px] px-4 py-1.5 rounded-md transition-colors flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-              New Policy
-            </button>
-          </div>
-        </header>
+    {/* Primary Action Button */}
+    <button
+      onClick={() => router.push("/home/upload")}
+      className="bg-white text-zinc-900 hover:bg-zinc-200 active:bg-zinc-300 font-medium text-[13px] px-4 py-1.5 rounded-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+    >
+      <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+      </svg>
+      New Policy
+    </button>
+
+  </div>
+</header>
     {children}
   </motion.div>
 </AnimatePresence>

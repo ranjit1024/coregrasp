@@ -5,12 +5,25 @@ export interface PolicyDocument {
     id: string;
     name: string;
     scope: string;
-    createdAt: string;
-    status: PolicyStatus;
+    category: string;
     url: string;
-    category:string;
+    status: PolicyStatus;
+    createdAt: string; // Usually an ISO string from the database
 }
 
+export interface Candidate {
+    id: string;
+    email: string;
+    status?: "INVITED" | "IN_PROGRESS" | "COMPLETED";
+    score?: number;
+    completedAt?: string;
+}
+
+
+export interface PolicyWithCandidates extends PolicyDocument {
+    candidateCount: number ; 
+    candidates: Candidate[]; 
+}
 
 export const statusConfig: Record<
     PolicyStatus,

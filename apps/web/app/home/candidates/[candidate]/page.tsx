@@ -66,7 +66,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
     // ---------------------------------------------------------------------------
     if (isLoading) {
         return (
-            <div className="w-full max-w-5xl mx-auto p-6 md:p-8 space-y-8">
+            <div className="w-full max-w-7xl mx-auto p-6 md:p-8 space-y-8">
                 <div className="space-y-2">
                     <div className="h-8 w-64 bg-zinc-900 rounded-md animate-pulse" />
                     <div className="h-4 w-72 bg-zinc-900/50 rounded-md animate-pulse" />
@@ -88,7 +88,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
     // ---------------------------------------------------------------------------
     if (error) {
         return (
-            <div className="w-full max-w-5xl mx-auto p-6 md:p-8">
+            <div className="w-full max-w-7xl mx-auto p-6 md:p-8">
                 <div className="flex items-start gap-3 p-4 bg-red-950/20 border border-red-900/50 rounded-xl text-red-400">
                     <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                     <div className="space-y-1">
@@ -104,7 +104,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
     // MAIN RENDER
     // ---------------------------------------------------------------------------
     return (
-        <div className="w-full max-w-5xl mx-auto p-6 md:p-8 space-y-8 font-sans selection:bg-zinc-800">
+        <div className="w-full max-w-7xl mx-auto p-6 md:p-8 space-y-8 font-sans selection:bg-zinc-800">
             
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-6">

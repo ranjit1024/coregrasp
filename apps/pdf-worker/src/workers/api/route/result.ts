@@ -31,6 +31,7 @@ export const result_Route = async (c: Context) => {
       status: p.status,
       url:p.url,
       userId:p.userId,
+      category:p.category,
       candidateCount: p._count.candidates,
     })),
   });
