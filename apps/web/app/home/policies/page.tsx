@@ -115,7 +115,7 @@ export default function PolicyStatusPage() {
     if (isLoading || isSessionPending) {
         return (
             <div className="min-h-screen bg-zinc-950 text-zinc-300 antialiased p-6 md:p-12 animate-in fade-in duration-500">
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-8xl mx-auto">
                     {/* Header Skeleton */}
                     <div className="space-y-3 mb-10">
                         <div className="h-8 w-64 bg-zinc-900 rounded-lg animate-pulse" />
@@ -152,7 +152,7 @@ export default function PolicyStatusPage() {
     // ---------------------------------------------------------------------------
     return (
         <div className="min-h-screen bg-zinc-950 text-zinc-300 antialiased p-6 md:p-10 selection:bg-zinc-800">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-8xl mx-auto">
                 
                 {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-xs font-medium text-zinc-500 mb-8">

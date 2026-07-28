@@ -66,7 +66,7 @@ export default function Candidates() {
   // ---------------------------------------------------------------------------
   if (isLoading || isSessionPending) {
     return (
-      <div className="w-full max-w-7xl mx-auto p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
+      <div className="w-full max-w-8xl mx-auto p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
         {/* Header Skeleton */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/5 pb-6">
           <div className="space-y-3">
@@ -103,7 +103,7 @@ export default function Candidates() {
   // ---------------------------------------------------------------------------
   if (error) {
     return (
-      <div className="w-full max-w-7xl mx-auto p-6 md:p-8 animate-in fade-in zoom-in-95 duration-300">
+      <div className="w-full max-w-8xl mx-auto p-6 md:p-8 animate-in fade-in zoom-in-95 duration-300">
         <div className="flex flex-col items-center justify-center py-16 px-4 bg-red-950/10 border border-red-900/30 rounded-3xl text-center">
           <div className="bg-red-950/30 p-3 rounded-full mb-4 ring-1 ring-red-900/50">
             <AlertCircle className="w-8 h-8 text-red-500" />
@@ -125,7 +125,7 @@ export default function Candidates() {
   // MAIN RENDER
   // ---------------------------------------------------------------------------
   return (
-    <div className="w-full max-w-7xl mx-auto p-6 md:p-8 space-y-8 font-sans selection:bg-zinc-800 animate-in fade-in duration-500">
+    <div className="w-full max-w-8xl mx-auto p-6 md:p-8 space-y-8 font-sans selection:bg-zinc-800 animate-in fade-in duration-500">
       
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-white/10 pb-6">
