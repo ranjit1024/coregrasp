@@ -1,32 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-// import { getuserCandidate } from "@/lib/candidate" // Uncomment in your actual project
-// import DashboardSkeleton from "@/app/components/ui/dashboardloader" // Uncomment in your actual project
+import { useState } from "react"
 
-// ── Mock Data ────────────────────────────────────────────────────────────────
+// ── Mock Data: The Pipeline ──────────────────────────────────────────────────
 
 const statCards = [
-  { label: "Active Policies", val: "12", sub: "2 require updates", trend: "neutral" },
-  { label: "Avg. Pass Rate", val: "78%", sub: "+4.2% this month", trend: "up" },
-  { label: "Pending Quizzes", val: "142", sub: "Across 3 campaigns", trend: "down" },
-  { label: "High-Risk Gaps", val: "3", sub: "IT Security, POSH", trend: "alert" },
+  { label: "Policies Uploaded", val: "12", sub: "3 currently active", trend: "neutral" },
+  { label: "Questions Generated", val: "148", sub: "+24 this week", trend: "up" },
+  { label: "Invites Sent", val: "842", sub: "Across 4 departments", trend: "neutral" },
+  { label: "Avg. Pass Rate", val: "84%", sub: "Target is 90%", trend: "alert" },
 ]
 
-const policyPerformance = [
-  { name: "Code of Conduct", passed: 245, failed: 12, pending: 43 },
-  { name: "IT Security v2", passed: 180, failed: 45, pending: 82 },
-  { name: "Leave Policy Q4", passed: 310, failed: 22, pending: 15 },
-  { name: "Expense Guidelines", passed: 156, failed: 38, pending: 110 },
+const policyLibrary = [
+  { id: "P1", name: "Data Privacy v2.1.pdf", status: "Ready", questions: 12, date: "Today, 09:00 AM" },
+  { id: "P2", name: "Remote Work Q3.pdf", status: "Generating", questions: null, date: "Today, 10:15 AM" },
+  { id: "P3", name: "Code of Conduct.pdf", status: "Ready", questions: 15, date: "Yesterday" },
 ]
 
-const mockCandidates = [
-  { id: "1", email: "priya.sharma@company.com", policy: "IT Security v2", score: 88, status: "Pass", date: "Today, 10:42 AM" },
-  { id: "2", email: "arjun.mehta@company.com", policy: "Leave Policy Q4", score: 52, status: "Fail", date: "Today, 09:15 AM" },
+// NEW: Active rollout data for the middle-right section
+const activeRollouts = [
+  { id: "R1", name: "Code of Conduct", completed: 142, total: 150, status: "healthy" },
+  { id: "R2", name: "Remote Work Q3", completed: 18, total: 60, status: "lagging" },
+  { id: "R3", name: "Data Privacy v2.1", completed: 89, total: 90, status: "healthy" },
+]
+
+const candidateTracking = [
+  { id: "1", email: "priya.sharma@company.com", policy: "Data Privacy v2.1", score: 92, status: "Pass", date: "Today, 10:42 AM" },
+  { id: "2", email: "arjun.mehta@company.com", policy: "Data Privacy v2.1", score: null, status: "Pending", date: "Sent Yesterday" },
   { id: "3", email: "sanjana.rao@company.com", policy: "Code of Conduct", score: 100, status: "Pass", date: "Yesterday" },
-  { id: "4", email: "dev.patil@company.com", policy: "IT Security v2", score: 61, status: "Fail", date: "Yesterday" },
-  { id: "5", email: "kavya.nair@company.com", policy: "Remote Work Guide", score: 92, status: "Pass", date: "Oct 12" },
+  { id: "4", email: "dev.patil@company.com", policy: "Remote Work Q3", score: 61, status: "Fail", date: "Oct 12" },
+  { id: "5", email: "kavya.nair@company.com", policy: "Code of Conduct", score: null, status: "Pending", date: "Sent Oct 11" },
 ]
 
 // ── Helper ──────────────────────────────────────────────────────────────────
@@ -40,33 +43,10 @@ const getInitials = (email: string) => {
 
 // ── Main Dashboard Component ────────────────────────────────────────────────
 
-export default function Dashboard() {
-  const router = useRouter();
+export default function RevislyDashboard() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [recent, setRecent] = useState<any[] | null>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const loadCandidate = async () => {
-    setIsLoading(true);
-    try {
-      // const candidate = await getuserCandidate();
-      // if (candidate) setRecent(candidate);
-      
-      // Fallback to mock data for demonstration
-      setRecent(mockCandidates); 
-    } catch (error) {
-      console.error("Failed to load candidates:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    loadCandidate()
-  }, [])
- 
   if (isLoading) {
-    // return <DashboardSkeleton />
     return <div className="min-h-screen bg-[#09090B] flex items-center justify-center text-white/50 text-sm">Loading Workspace...</div>
   }
 
@@ -78,16 +58,14 @@ export default function Dashboard() {
 
       {/* ── Main Content ── */}
       <main className="p-6 md:p-8 w-full">
-        <div className="max-w-8xl  mx-auto flex flex-col gap-6">
-          
-          {/* Header Section */}
-          <div className="flex justify-between items-end mb-2">
-            <div>
-              <h1 className="text-xl font-semibold tracking-tight text-white">Revisly Dashboard</h1>
-              <p className="text-[13px] text-[#A1A1AA] mt-1">Monitor policy comprehension and employee compliance.</p>
-            </div>
-          </div>
+        <div className="max-w-8xl mx-auto flex flex-col gap-6">
 
+           {/* Breadcrumb */}
+                <nav className="flex items-center gap-2 text-xs font-medium text-zinc-500 mb-8">
+                    <a href="#" className="hover:text-zinc-300 transition-colors">Workspace</a>
+                    <span className="text-zinc-700">/</span>
+                    <span className="text-zinc-300">DashBoard</span>
+                </nav>
           {/* ── KPI Grid ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {statCards.map((stat, i) => (
@@ -116,89 +94,109 @@ export default function Dashboard() {
             ))}
           </div>
 
-          {/* ── Middle Row: Charts & Alerts ── */}
+          {/* ── Middle Row: Policy Library & Active Rollouts ── */}
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
 
-            {/* Performance by Policy */}
-            <div className="bg-[#121214] border border-white/[0.08] rounded-xl p-6 flex flex-col">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-[14px] font-medium text-white">Performance by Policy</h2>
+            {/* Policy Library (The Input) */}
+            <div className="bg-[#121214] border border-white/[0.08] rounded-xl flex flex-col overflow-hidden">
+              <div className="px-6 py-5 border-b border-white/[0.08] flex justify-between items-center">
+                <h2 className="text-[14px] font-medium text-white">Policy Library & Generator</h2>
                 <button className="text-[12px] text-[#A1A1AA] hover:text-white transition-colors flex items-center gap-1">
-                  View All <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  View All
                 </button>
               </div>
 
-              <div className="flex flex-col gap-5 flex-1">
-                {policyPerformance.map((policy) => {
-                  const total = policy.passed + policy.failed + policy.pending;
-                  const passPct = (policy.passed / total) * 100;
-                  const failPct = (policy.failed / total) * 100;
-                  const pendPct = (policy.pending / total) * 100;
+              <div className="flex flex-col divide-y divide-white/[0.04]">
+                {policyLibrary.map((policy) => (
+                  <div key={policy.id} className="p-6 hover:bg-white/[0.02] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-lg bg-[#18181B] border border-white/[0.08] flex items-center justify-center text-[#71717A]">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[14px] font-medium text-[#FAFAFA]">{policy.name}</span>
+                        <span className="text-[12px] text-[#71717A] mt-1">Uploaded: {policy.date}</span>
+                      </div>
+                    </div>
 
+                    <div className="flex flex-col sm:items-end gap-3">
+                      <div className="flex items-center gap-2">
+                        {policy.status === "Ready" ? (
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-500">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            {policy.questions} MCQs Ready
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-500">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                            AI is generating MCQs...
+                          </span>
+                        )}
+                      </div>
+
+                      {policy.status === "Ready" && (
+                        <div className="flex items-center gap-2">
+                          <button className="text-[11px] font-medium text-white bg-white/[0.06] hover:bg-white/[0.1] px-3 py-1.5 rounded transition-colors">
+                            Review MCQs
+                          </button>
+                          <button className="text-[11px] font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 px-3 py-1.5 rounded transition-colors">
+                            Send Invites
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Active Rollouts / Campaign Tracker */}
+            <div className="bg-[#121214] border border-white/[0.08] rounded-xl p-6 flex flex-col">
+              <h2 className="text-[14px] font-medium text-white mb-6">Active Rollouts</h2>
+              
+              <div className="flex-1 flex flex-col gap-6">
+                {activeRollouts.map((rollout) => {
+                  const percentage = Math.round((rollout.completed / rollout.total) * 100);
+                  
                   return (
-                    <div key={policy.name} className="group">
-                      <div className="flex justify-between text-[12px] mb-2">
-                        <span className="font-medium text-[#FAFAFA]">{policy.name}</span>
-                        <span className="text-[#71717A] text-[11px]">{total} attempts</span>
+                    <div key={rollout.id} className="group">
+                      <div className="flex justify-between items-end mb-2">
+                        <div className="flex flex-col">
+                          <span className="text-[13px] font-medium text-[#FAFAFA]">{rollout.name}</span>
+                          <span className="text-[11px] text-[#71717A] mt-0.5">{rollout.completed} of {rollout.total} completed</span>
+                        </div>
+                        <span className={`text-[12px] font-medium ${rollout.status === 'lagging' ? 'text-amber-500' : 'text-emerald-500'}`}>
+                          {percentage}%
+                        </span>
                       </div>
-                      <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden flex ring-1 ring-white/[0.05]">
-                        <div style={{ width: `${passPct}%` }} className="h-full bg-emerald-500 transition-all duration-1000 ease-out" />
-                        <div style={{ width: `${failPct}%` }} className="h-full bg-rose-500 transition-all duration-1000 ease-out" />
-                        <div style={{ width: `${pendPct}%` }} className="h-full bg-[#3F3F46] transition-all duration-1000 ease-out" />
+                      
+                      {/* Progress Bar */}
+                      <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
+                        <div 
+                          style={{ width: `${percentage}%` }} 
+                          className={`h-full transition-all duration-1000 ease-out ${rollout.status === 'lagging' ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                        />
                       </div>
+                      
+                      {/* Action trigger for lagging rollouts */}
+                      {rollout.status === 'lagging' && (
+                        <button className="mt-3 text-[11px] font-medium text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 px-3 py-1.5 rounded transition-colors w-full">
+                          Nudge {rollout.total - rollout.completed} Pending Users
+                        </button>
+                      )}
                     </div>
                   )
                 })}
               </div>
-              
-              <div className="flex gap-4 mt-6 pt-4 border-t border-white/[0.08] text-[11px] font-medium text-[#A1A1AA]">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-emerald-500" /> Passed</div>
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-rose-500" /> Failed</div>
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#3F3F46]" /> Pending</div>
-              </div>
-            </div>
-
-            {/* Required Actions / Alerts */}
-            <div className="bg-[#121214] border border-white/[0.08] rounded-xl p-6 flex flex-col">
-              <h2 className="text-[14px] font-medium text-white mb-4">Required Actions</h2>
-              <div className="flex-1 flex flex-col gap-3">
-                
-                {/* Alert 1 */}
-                <div className="p-4 rounded-lg bg-[#18181B] border border-white/[0.04] hover:border-emerald-500/20 transition-colors group">
-                  <div className="flex items-center gap-2 text-[12px] font-medium text-emerald-500 mb-1">
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    Autopilot Sequence
-                  </div>
-                  <p className="text-[12px] text-[#A1A1AA] leading-relaxed mb-3">
-                    142 pending employees will receive Slack nudges tomorrow at 09:00.
-                  </p>
-                  <button className="text-[11px] font-medium text-white px-3 py-1.5 rounded bg-white/[0.06] hover:bg-white/[0.1] transition-colors w-full">
-                    Review Schedule
-                  </button>
-                </div>
-
-                {/* Alert 2 */}
-                <div className="p-4 rounded-lg bg-[#18181B] border border-rose-500/10 hover:border-rose-500/30 transition-colors group">
-                  <div className="flex items-center gap-2 text-[12px] font-medium text-rose-500 mb-1">
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    Policy Expiring
-                  </div>
-                  <p className="text-[12px] text-[#A1A1AA] leading-relaxed mb-3">
-                    Data Privacy v1.4 expires in 4 days. A new upload is required.
-                  </p>
-                  <button className="text-[11px] font-medium text-white px-3 py-1.5 rounded bg-white/[0.06] hover:bg-white/[0.1] transition-colors w-full">
-                    Upload PDF
-                  </button>
-                </div>
-
-              </div>
             </div>
           </div>
 
-          {/* ── Table Area ── */}
+          {/* ── Table Area: Candidate Tracking (The Output) ── */}
           <div className="bg-[#121214] border border-white/[0.08] rounded-xl overflow-hidden">
             <div className="px-6 py-4 border-b border-white/[0.08] flex items-center justify-between">
-              <h2 className="text-[14px] font-medium text-white">Recent Completions</h2>
+              <h2 className="text-[14px] font-medium text-white">Candidate Tracking</h2>
               <button className="text-[12px] font-medium text-[#A1A1AA] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded px-3 py-1.5 transition-colors">
                 Export CSV
               </button>
@@ -208,7 +206,7 @@ export default function Dashboard() {
               <table className="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
                   <tr className="border-b border-white/[0.08] bg-[#0E0E11]">
-                    <th className="py-3 px-6 text-[11px] font-medium text-[#71717A] uppercase tracking-wider">Candidate</th>
+                    <th className="py-3 px-6 text-[11px] font-medium text-[#71717A] uppercase tracking-wider">Candidate Email</th>
                     <th className="py-3 px-6 text-[11px] font-medium text-[#71717A] uppercase tracking-wider">Policy Assessed</th>
                     <th className="py-3 px-6 text-[11px] font-medium text-[#71717A] uppercase tracking-wider">Score</th>
                     <th className="py-3 px-6 text-[11px] font-medium text-[#71717A] uppercase tracking-wider">Status</th>
@@ -216,7 +214,7 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.04]">
-                  {recent?.map((attempt) => (
+                  {candidateTracking.map((attempt) => (
                     <tr key={attempt.id} className="hover:bg-white/[0.02] transition-colors">
                       <td className="py-3 px-6">
                         <div className="flex items-center gap-3">
@@ -225,34 +223,41 @@ export default function Dashboard() {
                           </div>
                           <div className="flex flex-col">
                             <span className="text-[13px] font-medium text-[#FAFAFA]">{attempt.email}</span>
-                            <span className="text-[11px] text-[#71717A]">Employee</span>
+                            <span className="text-[11px] text-[#71717A]">{attempt.date}</span>
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-6">
                         <div className="text-[13px] text-[#FAFAFA]">{attempt.policy}</div>
-                        <div className="text-[11px] text-[#71717A]">{attempt.date || "Just now"}</div>
                       </td>
                       <td className="py-3 px-6">
-                        <span className="text-[13px] font-medium text-[#FAFAFA]">{attempt.score}%</span>
-                      </td>
-                      <td className="py-3 px-6">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${
-                          (attempt.status === "Pass" || attempt.score >= 70)
-                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
-                            : "bg-rose-500/10 text-rose-400 border-rose-500/20"
-                        }`}>
-                          {attempt.status || (attempt.score >= 70 ? "Pass" : "Fail")}
+                        <span className="text-[13px] font-medium text-[#FAFAFA]">
+                          {attempt.score !== null ? `${attempt.score}%` : "--"}
                         </span>
                       </td>
+                      <td className="py-3 px-6">
+                        {attempt.status === "Pending" ? (
+                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border bg-white/[0.04] text-[#A1A1AA] border-white/[0.08]">
+                             Pending
+                           </span>
+                        ) : (
+                           <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${
+                             attempt.status === "Pass" 
+                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
+                               : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                           }`}>
+                             {attempt.status}
+                           </span>
+                        )}
+                      </td>
                       <td className="py-3 px-6 text-right">
-                        {(attempt.status === "Fail" || attempt.score < 70) ? (
-                          <button className="text-[11px] font-medium text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 px-2.5 py-1.5 rounded transition-colors">
+                        {(attempt.status === "Fail" || attempt.status === "Pending") ? (
+                          <button className="text-[11px] font-medium text-white bg-white/[0.06] hover:bg-white/[0.1] px-2.5 py-1.5 rounded transition-colors">
                             Send Nudge
                           </button>
                         ) : (
                           <button className="text-[11px] font-medium text-[#71717A] hover:text-white bg-white/[0.04] hover:bg-white/[0.08] px-2.5 py-1.5 rounded transition-colors">
-                            Details
+                            View Log
                           </button>
                         )}
                       </td>
