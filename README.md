@@ -4,7 +4,7 @@
 
 ## Overview
 
-CoreGrasp is designed to help developers gain a deeper understanding of software projects by providing intelligent analysis, structured insights, and an intuitive development workflow. It aims to reduce the time required to navigate unfamiliar codebases and improve developer productivity .
+CoreGrasp is an AI-driven compliance platform that helps HR teams verify employee understanding. Instead of hoping employees read static PDFs, CoreGrasp automatically extracts key information, generates multiple-choice assessments, and tracks completion rates and comprehension scores across the organization.
 
 ## Tech Stack
 
