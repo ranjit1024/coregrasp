@@ -11,6 +11,17 @@ export async function Dashboard_data(){
     }
     const email = session.user.email;
 
-    // Top bar
-    
+    // Top bar\
+    const policies = await prisma.user.findMany({
+        where:{
+            email: email
+        },
+        include:{
+            policies:true
+        }
+    })
+    console.log(policies);
+    return {data:{
+        policies
+    }}
 } 

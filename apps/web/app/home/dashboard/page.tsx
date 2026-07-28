@@ -1,6 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { Dashboard_data } from "@/lib/dashboard"
+import { date } from "better-auth"
+import { AwardIcon } from "lucide-react"
+import { useEffect, useState } from "react"
 
 // ── Mock Data: The Pipeline ──────────────────────────────────────────────────
 
@@ -45,7 +48,14 @@ const getInitials = (email: string) => {
 
 export default function RevislyDashboard() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  async function loadData() {
+    const res =  await Dashboard_data();
+    const policyUpload = res?.data.policies.length;
+    return res;
+  }
+  useEffect( ()=>{
+    loadData()
+  },[])
   if (isLoading) {
     return <div className="min-h-screen bg-[#09090B] flex items-center justify-center text-white/50 text-sm">Loading Workspace...</div>
   }
