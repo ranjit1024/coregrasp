@@ -12,5 +12,6 @@ export const auth = betterAuth({
     },
   },
   trustedOrigins:["https://coregrasp.vercel.app"],
+  baseURL:  process.env.BETTER_AUTH_URL || "http://localhost:3000",
   plugins: [nextCookies()],
 });
