@@ -48,9 +48,12 @@ const getInitials = (email: string) => {
 
 export default function RevislyDashboard() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [Uploaded , setUploaded] = useState<number| undefined>(0);
   async function loadData() {
     const res =  await Dashboard_data();
     const policyUpload = res?.data.policies.length;
+    setUploaded(policyUpload)
+    console.log(policyUpload)
     return res;
   }
   useEffect( ()=>{
