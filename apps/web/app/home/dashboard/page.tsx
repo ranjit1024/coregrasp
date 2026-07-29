@@ -1,18 +1,13 @@
 "use client"
 
 import { Dashboard_data } from "@/lib/dashboard"
+import { Upload } from "@hugeicons/core-free-icons"
 import { date } from "better-auth"
 import { AwardIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 
-// ── Mock Data: The Pipeline ──────────────────────────────────────────────────
 
-const statCards = [
-  { label: "Policies Uploaded", val: "12", sub: "3 currently active", trend: "neutral" },
-  { label: "Questions Generated", val: "148", sub: "+24 this week", trend: "up" },
-  { label: "Invites Sent", val: "842", sub: "Across 4 departments", trend: "neutral" },
-  { label: "Avg. Pass Rate", val: "84%", sub: "Target is 90%", trend: "alert" },
-]
+
 
 const policyLibrary = [
   { id: "P1", name: "Data Privacy v2.1.pdf", status: "Ready", questions: 12, date: "Today, 09:00 AM" },
@@ -49,13 +44,26 @@ const getInitials = (email: string) => {
 export default function RevislyDashboard() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [Uploaded , setUploaded] = useState<number| undefined>(0);
+  const [NofQuestion , setNoofquestion] = useState<number| undefined>(0);
+  const [Invaite, setInvite] = useState<number| undefined>(0);
   async function loadData() {
     const res =  await Dashboard_data();
-    const policyUpload = res?.data.policies.length;
+    const policyUpload = res?.data.policies?.length;
+    const nofquestion = policyUpload! * 5;
+    const invite = res?.data?.candidate;
     setUploaded(policyUpload)
+    setNoofquestion(nofquestion)
+    setInvite(invite)
     console.log(policyUpload)
     return res;
   }
+  const statCards = [
+  { label: "Policies Uploaded", val: Uploaded, sub: "", trend: "neutral" },
+  { label: "Questions Generated", val: NofQuestion, sub: "+24 this week", trend: "up" },
+  { label: "Invites Sent", val: Invaite, sub: "Across 4 departments", trend: "neutral" },
+  { label: "Avg. Pass Rate", val: "84%", sub: "Target is 90%", trend: "alert" },
+]
+
   useEffect( ()=>{
     loadData()
   },[])
