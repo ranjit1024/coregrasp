@@ -20,10 +20,10 @@ export async function Dashboard_data(){
             candidate:true
         }
     })
- 
-    
+    console.log(user)
     return {data:{
         policies: user?.policies,
-        candidate:user?.candidate.length
+        total_candidate: user?.candidate.length,
+        candidates: user?.candidate
     }}
 } 
