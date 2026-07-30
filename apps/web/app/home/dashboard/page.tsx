@@ -13,11 +13,6 @@ import {
   Eye
 } from "lucide-react"
 
-// ── Mock Data ───────────────────────────────────────────────────────────────
-
-
-
-
 const candidateTracking = [
   { id: "1", email: "priya.sharma@company.com", policy: "Data Privacy v2.1", score: 92, status: "Pass", date: "Today, 10:42 AM" },
   { id: "2", email: "arjun.mehta@company.com", policy: "Data Privacy v2.1", score: null, status: "Pending", date: "Sent Yesterday" },
