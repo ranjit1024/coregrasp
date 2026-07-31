@@ -12,9 +12,7 @@ import {
   ChevronRight,
   RefreshCcw,
   Search,
-  CheckCircle2,
-  TrendingUp,
-  Sparkles
+  Activity
 } from "lucide-react";
 import { PolicyRow } from "@/app/components/ui/policy_row";
 import { motion, AnimatePresence } from "framer-motion";
@@ -74,14 +72,12 @@ export default function Candidates() {
     };
   }, [session?.user?.id, isSessionPending]);
 
-  // Filter policies based on user search query
   const filteredPolicies = useMemo(() => {
     return policies.filter((p) => 
       p.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [policies, searchQuery]);
 
-  // Calculate quick summary metrics
   const totalCandidatesCount = useMemo(() => {
     return policies.reduce((acc, p) => {
       const count = p.candidateCount ?? (Array.isArray(p.candidates) ? p.candidates.length : 0);
@@ -102,7 +98,7 @@ export default function Candidates() {
   const itemVariants = {
     hidden: { opacity: 0, y: 15 },
     show: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.3 } },
-  } as const;
+  } as const
 
   // ─── Loading State ─────────────────────────────────────────────────────
 
@@ -110,21 +106,12 @@ export default function Candidates() {
     return (
       <div className="min-h-screen bg-[#09090B] p-6 md:p-10 w-full flex flex-col">
         <div className="max-w-8xl mx-auto w-full space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/[0.04] pb-6">
-            <div className="space-y-3">
-              <div className="h-8 w-48 bg-white/[0.02] rounded-lg animate-pulse" />
-              <div className="h-4 w-72 bg-white/[0.04] rounded-md animate-pulse" />
-            </div>
-            <div className="h-9 w-32 bg-white/[0.02] rounded-xl animate-pulse" />
+          <div className="space-y-4">
+            <div className="h-8 w-64 bg-white/[0.02] rounded-lg animate-pulse" />
+            <div className="h-4 w-96 bg-white/[0.02] rounded-md animate-pulse" />
           </div>
-          <div className="space-y-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="h-[76px] bg-[#121214] border border-white/[0.04] rounded-xl animate-pulse flex items-center justify-between p-4"
-              />
-            ))}
-          </div>
+       
+          <div className="h-[200px] bg-white/[0.02] border border-white/[0.04] rounded-xl animate-pulse" />
         </div>
       </div>
     );
@@ -160,18 +147,18 @@ export default function Candidates() {
   // ─── Main Render ───────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[#09090B] text-zinc-300 font-sans selection:bg-white/20">
+    <div className="min-h-screen bg-[#09090B] text-zinc-300 font-sans selection:bg-white/20 pb-20">
       
       {/* Subtle Top Glow */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-      <main className="max-w-8xl mx-auto p-6 md:p-10 w-full flex flex-col gap-6">
+      <main className="max-w-8xl mx-auto p-6 md:p-10 w-full flex flex-col gap-8">
         
         {/* Breadcrumbs */}
         <motion.nav 
           initial={{ opacity: 0, y: -10 }} 
           animate={{ opacity: 1, y: 0 }} 
-          className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500 mb-2"
+          className="flex items-center gap-1.5 text-[12px] font-medium text-zinc-500 mb-2"
         >
           <a href="#" className="hover:text-zinc-300 transition-colors">Workspace</a>
           <ChevronRight className="w-3.5 h-3.5" />
@@ -185,137 +172,105 @@ export default function Candidates() {
           className="flex flex-col gap-8"
         >
           {/* Header Section */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-white/[0.04] pb-6">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-semibold text-zinc-100 tracking-tight flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 bg-white/[0.02] border border-white/[0.04] rounded-xl">
-                  <FileText className="w-5 h-5 text-zinc-400" />
-                </div>
+          <motion.div variants={itemVariants} className="flex flex-col gap-3">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center w-10 h-10 bg-white/[0.02] border border-white/[0.04] rounded-xl shadow-sm">
+                <FileText className="w-5 h-5 text-zinc-400" />
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-100 tracking-tight">
                 Active Assessments
               </h1>
-              <p className="text-[14px] text-zinc-500 max-w-xl leading-relaxed">
-                Track employee comprehension and candidate participation across all of your deployed corporate policies.
-              </p>
-            </div>
-            
-            {/* Metric Badge */}
-            <div className="inline-flex items-center gap-2.5 bg-[#121214] border border-white/[0.08] px-4 py-2 rounded-lg shadow-sm">
-              <div className="relative flex items-center justify-center w-2 h-2">
-                <div className="absolute w-full h-full rounded-full bg-emerald-500 opacity-40 animate-ping" />
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              {/* Refined Metric Badge integrated into the title flow */}
+              <div className="hidden sm:flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md ml-2">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                </span>
+                <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-widest">
+                  {policies.length} Active
+                </span>
               </div>
-              <span className="text-[11px] font-semibold text-zinc-300 uppercase tracking-widest">
-                {policies.length} {policies.length === 1 ? "Policy" : "Policies"} Active
-              </span>
             </div>
+            <p className="text-[14px] text-zinc-500 max-w-full leading-relaxed sm:ml-14">
+              Track employee comprehension and candidate participation across all of your deployed corporate policies.
+            </p>
           </motion.div>
 
-          {/* Quick Metrics Overview Strip */}
-          <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="relative overflow-hidden bg-[#121214] border border-white/[0.04] rounded-xl p-5 flex items-center justify-between">
-              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-blue-500 opacity-70" />
-              <div className="space-y-1">
-                <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-500">Total Enrolled Candidates</span>
-                <p className="text-3xl font-medium tracking-tight text-zinc-100">{totalCandidatesCount}</p>
-              </div>
-              <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-center text-zinc-400">
-                <Users className="w-5 h-5" />
-              </div>
-            </div>
 
-            <div className="relative overflow-hidden bg-[#121214] border border-white/[0.04] rounded-xl p-5 flex items-center justify-between">
-              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-emerald-500 opacity-70" />
-              <div className="space-y-1">
-                <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-500">Deployment Status</span>
-                <p className="text-3xl font-medium tracking-tight text-emerald-400 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 inline-block" /> Operational
-                </p>
-              </div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-            </div>
-          </motion.div>
 
           {/* Interactive Search Filter Bar */}
-          <motion.div variants={itemVariants} className="flex items-center gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-              <input
-                type="text"
-                placeholder="Search active policies by name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#121214] border border-white/[0.04] rounded-xl pl-11 pr-4 py-3 text-[13px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-white/[0.12] transition-colors shadow-sm"
-              />
-            </div>
+          <motion.div variants={itemVariants} className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <input
+              type="text"
+              placeholder="Search active policies by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-[#121214] border border-white/[0.04] rounded-xl pl-11 pr-4 py-3 text-[13px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-white/[0.1] focus:bg-white/[0.02] transition-all shadow-sm"
+            />
           </motion.div>
 
-          {/* Content Section */}
+          {/* Unified List Section */}
           <AnimatePresence mode="wait">
             {filteredPolicies.length === 0 ? (
               /* Premium Empty State */
               <motion.div 
                 key="empty"
                 variants={itemVariants}
-                className="relative flex flex-col items-center justify-center py-20 px-4 text-center bg-[#121214] border border-dashed border-white/[0.08] rounded-2xl overflow-hidden"
+                className="flex flex-col items-center justify-center py-20 px-4 text-center bg-[#121214] border border-dashed border-white/[0.08] rounded-xl shadow-sm"
               >
-                <div className="relative flex items-center justify-center w-14 h-14 bg-white/[0.02] rounded-2xl mb-5 border border-white/[0.04] shadow-sm">
-                  <Inbox className="w-6 h-6 text-zinc-500" strokeWidth={1.5} />
+                <div className="flex items-center justify-center w-12 h-12 bg-white/[0.02] border border-white/[0.04] rounded-full mb-4">
+                  <Inbox className="w-5 h-5 text-zinc-500" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-[15px] font-medium text-zinc-200 mb-1.5">
+                <h3 className="text-[14px] font-medium text-zinc-200 mb-1">
                   {searchQuery ? "No matching policies found" : "No assessments active"}
                 </h3>
-                <p className="text-[13px] text-zinc-500 max-w-sm leading-relaxed">
+                <p className="text-[13px] text-zinc-500 max-w-[280px] leading-relaxed">
                   {searchQuery 
-                    ? `We couldn't find any active policies matching "${searchQuery}".` 
-                    : "You haven't deployed any policy tests yet. Once policies are assigned, candidate tracking will appear here."}
+                    ? `No active policies matching "${searchQuery}".` 
+                    : "You haven't deployed any policy tests yet."}
                 </p>
               </motion.div>
             ) : (
-              /* Policy List */
-              <motion.div key="list" className="flex flex-col gap-3">
-                {filteredPolicies.map((policy) => {
-                  const count =
-                    policy.candidateCount ??
-                    (Array.isArray(policy.candidates) ? policy.candidates.length : 0);
+              /* Seamless Policy List */
+              <motion.div 
+                key="list" 
+                variants={itemVariants}
+                className="bg-[#121214] border border-white/[0.04] rounded-xl overflow-hidden shadow-sm"
+              >
+                <div className="flex flex-col">
+                  {filteredPolicies.map((policy) => {
+                    const count = policy.candidateCount ?? (Array.isArray(policy.candidates) ? policy.candidates.length : 0);
 
-                  return (
-                    <motion.div
-                      variants={itemVariants}
-                      key={policy.id}
-                      onClick={() => router.push(`/home/candidates/${policy.url}`)}
-                      whileHover={{ scale: 1.005 }}
-                      whileTap={{ scale: 0.995 }}
-                      className="group relative flex items-center justify-between bg-[#121214] border border-white/[0.04] hover:border-white/[0.08] hover:bg-white/[0.02] rounded-xl p-3.5 cursor-pointer transition-colors shadow-sm"
-                    >
-                      {/* Policy Details Component */}
-                      <div className="flex-1 min-w-0 pointer-events-none">
-                        <PolicyRow policy={policy} />
-                      </div>
-
-                      {/* Right Side Action / Metrics */}
-                      <div className="shrink-0 flex items-center gap-3 pl-4 ml-2 border-l border-white/[0.04] group-hover:border-white/[0.08] transition-colors">
-                        
-                        {/* Candidate Badge */}
-                        <div className="flex items-center gap-2 bg-white/[0.02] border border-white/[0.04] group-hover:bg-white/[0.04] px-3.5 py-1.5 rounded-lg transition-colors">
-                          <Users className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-400" />
-                          <span className="text-[12px] font-medium text-zinc-400">
-                            <strong className="text-zinc-100 font-semibold mr-1">
-                              {count}
-                            </strong>
-                            {count === 1 ? "Candidate" : "Candidates"}
-                          </span>
+                    return (
+                      <div
+                        key={policy.id}
+                        onClick={() => router.push(`/home/candidates/${policy.url}`)}
+                        className="group flex items-center justify-between border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors cursor-pointer"
+                      >
+                        {/* 
+                          Render PolicyRow but disable pointer events so the hover state 
+                          is controlled entirely by this outer container to prevent "double boxing". 
+                        */}
+                        <div className="flex-1 min-w-0 pointer-events-none">
+                          <PolicyRow policy={policy} />
                         </div>
 
-                        {/* Interactive Arrow */}
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-transparent group-hover:bg-white/[0.04]">
-                          <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-zinc-300 transition-all duration-300 group-hover:translate-x-0.5" />
+                        {/* Integrated Right-Side Action Metrics */}
+                        <div className="shrink-0 flex items-center gap-4 pr-5">
+                          <div className="hidden sm:flex items-center gap-1.5 bg-white/[0.02] border border-white/[0.04] px-2.5 py-1 rounded-md text-[11px] font-medium text-zinc-400 group-hover:bg-white/[0.04] group-hover:text-zinc-300 transition-colors">
+                            <Users className="w-3.5 h-3.5" />
+                            {count} <span className="hidden md:inline">Candidates</span>
+                          </div>
+                          
+                          <div className="flex items-center justify-center w-6 h-6 rounded bg-transparent group-hover:bg-white/[0.04] transition-colors">
+                            <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-zinc-300 group-hover:translate-x-0.5 transition-all" />
+                          </div>
                         </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

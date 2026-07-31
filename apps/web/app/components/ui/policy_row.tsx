@@ -30,7 +30,7 @@ export function PolicyRow({ policy, onClick }: PolicyRowProps) {
             role={onClick ? "button" : "listitem"}
             tabIndex={onClick ? 0 : -1}
             className={`
-                grid grid-cols-[1fr_auto_auto] sm:grid-cols-[1fr_140px_120px] items-center p-2 
+                grid grid-cols-[1fr_auto_auto] sm:grid-cols-[1fr_140px_120px] items-center p-4
                 border-b border-white/[0.04] last:border-b-0 group transition-colors duration-200
                 ${onClick ? "cursor-pointer hover:bg-white/[0.02] active:bg-white/[0.04]" : ""}
             `}
