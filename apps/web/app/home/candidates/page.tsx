@@ -239,7 +239,7 @@ export default function Candidates() {
             value={assessmentStats.passed} 
             icon={CheckCircle2} 
             color="emerald" 
-            delay={0}
+           
             subValue={`${assessmentStats.passRate}% rate`}
           />
           <StatsCard 
@@ -247,21 +247,21 @@ export default function Candidates() {
             value={assessmentStats.failed} 
             icon={XCircle} 
             color="rose" 
-            delay={0.05}
+           
           />
           <StatsCard 
             label="Total Candidates" 
             value={assessmentStats.totalCandidates} 
             icon={Users} 
             color="blue" 
-            delay={0.1}
+          
           />
           <StatsCard 
             label="Average Marks" 
             value={assessmentStats.averageMarks} 
             icon={Award} 
             color="amber" 
-            delay={0.15}
+           
           />
         </div>
 
