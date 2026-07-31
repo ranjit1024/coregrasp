@@ -7,45 +7,53 @@ interface StatsCardProps {
   label: string;
   value: string | number;
   icon: LucideIcon;
-  trend?: string;
-  color: "emerald" | "blue" | "amber" | "rose";
-  delay?: number;
+  color: "emerald" | "rose" | "blue" | "amber" | "violet";
+  subValue?: string;
 }
 
-const colorMap = {
-  emerald: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  blue: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  amber: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  rose: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+const accentMap = {
+  emerald: "text-emerald-300",
+  rose: "text-rose-300",
+  blue: "text-blue-300",
+  amber: "text-amber-300",
+  violet: "text-violet-300",
 };
 
-export function StatsCard({ label, value, icon: Icon, trend, color, delay = 0 }: StatsCardProps) {
+export function StatsCard({ label, value, icon: Icon, color, subValue }: StatsCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.4, ease: "easeOut" }}
-      className="relative bg-[#121214] border border-white/[0.04] rounded-xl p-5 overflow-hidden group hover:border-white/[0.08] transition-colors duration-300"
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative overflow-hidden rounded-xl border border-white/[0.04] bg-[#0c0c0e] p-6 transition-colors duration-500 hover:border-white/[0.08]"
     >
-      {/* Subtle top highlight */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      {/* Soft ambient glow on hover */}
+      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/[0.015] blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
       
-      <div className="flex items-start justify-between mb-3">
-        <div className={`w-9 h-9 rounded-lg border flex items-center justify-center ${colorMap[color]}`}>
-          <Icon className="w-4 h-4" strokeWidth={1.5} />
+      {/* Hairline top sheen */}
+      <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Icon + Subvalue row */}
+      <div className="relative flex items-start justify-between">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.05] bg-white/[0.02] transition-all duration-300 group-hover:border-white/[0.08] group-hover:bg-white/[0.03]">
+          <Icon className={`h-4 w-4 ${accentMap[color]}`} strokeWidth={1.5} />
         </div>
-        {trend && (
-          <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-            {trend}
+
+        {subValue && (
+          <span className="mt-1 text-[11px] font-medium tabular-nums text-zinc-600 group-hover:text-zinc-500 transition-colors duration-300">
+            {subValue}
           </span>
         )}
       </div>
-      
-      <div className="text-[22px] font-semibold text-zinc-100 tracking-tight tabular-nums">
-        {value}
-      </div>
-      <div className="text-[11px] text-zinc-500 font-medium mt-0.5 uppercase tracking-wider">
-        {label}
+
+      {/* Value + Label */}
+      <div className="relative mt-6">
+        <div className="text-2xl font-semibold tracking-tight text-zinc-100 tabular-nums leading-none">
+          {value}
+        </div>
+        <div className="mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-600">
+          {label}
+        </div>
       </div>
     </motion.div>
   );

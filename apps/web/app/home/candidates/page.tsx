@@ -12,22 +12,35 @@ import {
   ChevronRight,
   RefreshCcw,
   Search,
-  Activity,
   CheckCircle2,
-  Clock,
-  BarChart3
+  XCircle,
+  BarChart3,
+  Award
 } from "lucide-react";
 import { PolicyRow } from "@/app/components/ui/policy_row";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { StatsCard } from "@/app/components/ui/candita_state";
 
-interface PolicyWithCandidates extends PolicyDocument {
-  candidateCount?: number;
-  candidates?: Array<unknown>;
+/* 
+  Extend this interface based on your actual API response.
+  Assumes candidates have: status ("PASSED" | "FAILED"), score/marks: number
+*/
+interface Candidate {
+  id?: string;
+  status?: "PASSED" | "FAILED" | "PENDING" | string;
+  score?: number;
+  marks?: number;
+  totalMarks?: number;
+  [key: string]: unknown;
 }
 
-type StatusFilter = "ALL" | "PROCESSING" | "READY" ;
+interface PolicyWithCandidates extends PolicyDocument {
+  candidateCount?: number;
+  candidates?: Candidate[];
+}
+
+type StatusFilter = "ALL" | "PROCESSING" | "COMPLETED" | "DRAFT";
 
 export default function Candidates() {
   const { data: session, isPending: isSessionPending } = useSession();
@@ -88,22 +101,55 @@ export default function Candidates() {
     });
   }, [policies, searchQuery, statusFilter]);
 
-  const stats = useMemo(() => {
-    const total = policies.length;
-    const processing = policies.filter(p => p.status === "PROCESSING").length;
-    const completed = policies.filter(p => p.status === "READY").length;
-    const totalCandidates = policies.reduce((acc, p) => {
-      const count = p.candidateCount ?? (Array.isArray(p.candidates) ? p.candidates.length : 0);
-      return acc + count;
-    }, 0);
-    return { total, processing, completed, totalCandidates };
+  /* ─── Assessment Stats ─────────────────────────────────────────────── */
+  const assessmentStats = useMemo(() => {
+    let totalCandidates = 0;
+    let passed = 0;
+    let failed = 0;
+    let totalScore = 0;
+    let scoredCandidates = 0;
+
+    policies.forEach((policy) => {
+      const candidates = policy.candidates || [];
+      totalCandidates += candidates.length;
+
+      candidates.forEach((c) => {
+        const status = (c.status || "").toUpperCase();
+        if (status === "PASSED" || status === "PASS" || status === "COMPLETED") {
+          passed++;
+        } else if (status === "FAILED" || status === "FAIL") {
+          failed++;
+        }
+
+        const score = c.score ?? c.marks ?? 0;
+        if (typeof score === "number" && score > 0) {
+          totalScore += score;
+          scoredCandidates++;
+        }
+      });
+    });
+
+    const averageMarks = scoredCandidates > 0 
+      ? (totalScore / scoredCandidates).toFixed(1) 
+      : "0";
+
+    const passRate = totalCandidates > 0 
+      ? Math.round((passed / totalCandidates) * 100) 
+      : 0;
+
+    return {
+      totalCandidates,
+      passed,
+      failed,
+      averageMarks,
+      passRate,
+    };
   }, [policies]);
 
   const filters: { label: string; value: StatusFilter; count: number }[] = [
-    { label: "All", value: "ALL", count: stats.total },
-    { label: "Processing", value: "PROCESSING", count: stats.processing },
-    { label: "Completed", value: "READY", count: stats.completed },
-  
+    { label: "All", value: "ALL", count: policies.length },
+    { label: "Processing", value: "PROCESSING", count: policies.filter(p => p.status === "PROCESSING").length },
+    { label: "Completed", value: "COMPLETED", count: policies.filter(p => p.status === "READY").length },
   ];
 
   const containerVariants = {
@@ -125,7 +171,7 @@ export default function Candidates() {
     return (
       <div className="min-h-screen bg-[#09090B] p-6 md:p-10 w-full flex flex-col">
         <div className="max-w-8xl mx-auto w-full space-y-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-28 bg-white/[0.02] border border-white/[0.04] rounded-xl animate-pulse" />
             ))}
@@ -169,7 +215,7 @@ export default function Candidates() {
   return (
     <div className="min-h-screen bg-[#09090B] text-zinc-300 font-sans selection:bg-white/20 pb-20">
       
-      {/* Top ambient glow */}
+      {/* Ambient lighting */}
       <div className="fixed top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent z-50 pointer-events-none" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-white/[0.015] blur-[120px] rounded-full pointer-events-none" />
 
@@ -186,34 +232,35 @@ export default function Candidates() {
           <span className="text-zinc-300">Assessments</span>
         </motion.nav>
 
-        {/* Stats Overview Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* ─── Assessment Stats Grid ────────────────────────────────────── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatsCard
-            label="Total Assessments" 
-            value={stats.total} 
-            icon={BarChart3} 
-            color="blue" 
+            label="Passed" 
+            value={assessmentStats.passed} 
+            icon={CheckCircle2} 
+            color="emerald" 
             delay={0}
+            subValue={`${assessmentStats.passRate}% rate`}
           />
           <StatsCard 
-            label="Total Candidates" 
-            value={stats.totalCandidates} 
-            icon={Users} 
-            color="emerald" 
+            label="Failed" 
+            value={assessmentStats.failed} 
+            icon={XCircle} 
+            color="rose" 
             delay={0.05}
           />
           <StatsCard 
-            label="Processing" 
-            value={stats.processing} 
-            icon={Clock} 
-            color="amber" 
+            label="Total Candidates" 
+            value={assessmentStats.totalCandidates} 
+            icon={Users} 
+            color="blue" 
             delay={0.1}
           />
           <StatsCard 
-            label="Completed" 
-            value={stats.completed} 
-            icon={CheckCircle2} 
-            color="emerald" 
+            label="Average Marks" 
+            value={assessmentStats.averageMarks} 
+            icon={Award} 
+            color="amber" 
             delay={0.15}
           />
         </div>
