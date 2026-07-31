@@ -10,43 +10,74 @@ export function ScoreChart({ distribution }: Props) {
   // Prevent division by zero if all counts are 0
   const maxCount = Math.max(...distribution.map((d) => d.count), 1);
 
+  // Array of gradients to color-code the bars from low (red/orange) to high (green/teal)
+  const barColors = [
+    "from-rose-500/50 to-rose-400/90 group-hover:from-rose-500/70 group-hover:to-rose-300",
+    "from-orange-500/50 to-orange-400/90 group-hover:from-orange-500/70 group-hover:to-orange-300",
+    "from-amber-500/50 to-amber-400/90 group-hover:from-amber-500/70 group-hover:to-amber-300",
+    "from-emerald-500/50 to-emerald-400/90 group-hover:from-emerald-500/70 group-hover:to-emerald-300",
+    "from-teal-500/50 to-teal-400/90 group-hover:from-teal-500/70 group-hover:to-teal-300",
+    "from-blue-500/50 to-blue-400/90 group-hover:from-blue-500/70 group-hover:to-blue-300",
+  ];
+
   return (
     <div className="flex flex-col rounded-xl bg-[#09090B] border border-white/[0.04] p-6 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-[14px] font-medium text-zinc-100">Score Distribution</h2>
-        <span className="text-[12px] text-zinc-500">All Assessments</span>
+      <div className="mb-8 flex items-center justify-between">
+        <div className="flex flex-col">
+          <h2 className="text-[14px] font-medium text-zinc-100">Score Distribution</h2>
+          <span className="text-[12px] text-zinc-500 mt-0.5">Assessment performance across ranges</span>
+        </div>
       </div>
 
-      {/* Chart Rows */}
-      <div className="space-y-4">
+      {/* Chart Area */}
+      <div className="relative h-48 w-full flex items-end justify-between gap-2 sm:gap-4 mt-4">
+        
+        {/* Subtle background grid lines */}
+        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none mb-6">
+          {[0, 1, 2, 3].map((_, i) => (
+            <div key={i} className="w-full h-[1px] bg-white/[0.02]" />
+          ))}
+        </div>
+
+        {/* Vertical Bars */}
         {distribution.map((item, index) => {
-          const percentage = (item.count / maxCount) * 100;
+          const heightPercentage = (item.count / maxCount) * 100;
+          // Assign a color based on the index (caps at the last color if there are many ranges)
+          const colorClass = barColors[Math.min(index, barColors.length - 1)];
 
           return (
-            <div key={item.range} className="group flex items-center gap-4">
-              {/* Range Label */}
-              <span className="w-12 text-[12px] font-medium text-zinc-400 tabular-nums">
-                {item.range}
-              </span>
+            <div 
+              key={item.range} 
+              className="group relative flex flex-1 flex-col items-center justify-end h-full z-10"
+            >
+              {/* Hover Tooltip (Count) */}
+              <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center">
+                <span className="text-[11px] font-semibold text-zinc-100 bg-[#18181B] border border-white/[0.08] px-2.5 py-1 rounded-md shadow-xl">
+                  {item.count}
+                </span>
+                {/* Tooltip notch */}
+                <div className="w-1.5 h-1.5 bg-[#18181B] border-r border-b border-white/[0.08] rotate-45 -mt-[4px]" />
+              </div>
 
-              {/* Bar Track */}
-              <div className="relative flex-1 h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
+              {/* Bar */}
+              <div className="w-full max-w-[40px] flex-1 flex items-end">
                 <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${percentage}%` }}
+                  initial={{ height: 0 }}
+                  animate={{ height: `${heightPercentage}%` }}
                   transition={{ 
-                    duration: 1, 
-                    delay: index * 0.1, 
-                    ease: "easeOut" 
+                    duration: 0.8, 
+                    delay: index * 0.05, 
+                    type: "spring",
+                    bounce: 0.2
                   }}
-                  className="absolute top-0 left-0 h-full rounded-full bg-zinc-300 transition-colors group-hover:bg-white"
+                  className={`w-full rounded-t-md bg-gradient-to-t ${colorClass} transition-all duration-300 min-h-[4px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]`}
                 />
               </div>
 
-              {/* Count Value */}
-              <span className="w-8 text-right text-[12px] text-zinc-500 tabular-nums">
-                {item.count}
+              {/* X-Axis Label */}
+              <span className="mt-3 text-[11px] font-medium text-zinc-500 whitespace-nowrap group-hover:text-zinc-300 transition-colors">
+                {item.range}
               </span>
             </div>
           );

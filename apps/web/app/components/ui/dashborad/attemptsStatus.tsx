@@ -1,42 +1,65 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 interface Props {
   attempted: number;
   notAttempted: number;
 }
 
 export function AttemptStatus({ attempted, notAttempted }: Props) {
+  // Prevent division by zero
   const total = attempted + notAttempted || 1;
   const attemptedPct = Math.round((attempted / total) * 100);
   const notAttemptedPct = Math.round((notAttempted / total) * 100);
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-gray-900">Attempt Status</h2>
+    <div className="flex flex-col rounded-xl bg-[#09090B] border border-white/[0.04] p-6 shadow-sm overflow-hidden">
+      {/* Header */}
+      <div className="mb-7 flex items-center justify-between">
+        <h2 className="text-[14px] font-medium text-zinc-100">Attempt Status</h2>
+        <span className="text-[12px] text-zinc-500">Overall completion</span>
+      </div>
       
-      <div className="space-y-4">
-        <div>
-          <div className="mb-1 flex justify-between text-sm">
-            <span className="text-gray-600">Attempted</span>
-            <span className="font-medium text-green-600">{attempted} ({attemptedPct}%)</span>
+      <div className="space-y-6">
+        {/* Attempted Bar */}
+        <div className="group">
+          <div className="mb-2 flex justify-between items-end">
+            <span className="text-[13px] font-medium text-zinc-300">Attempted</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[14px] font-semibold text-emerald-400">{attempted}</span>
+              <span className="text-[11px] font-medium text-zinc-500">({attemptedPct}%)</span>
+            </div>
           </div>
-          <div className="h-2 rounded-full bg-gray-100">
-            <div
-              className="h-2 rounded-full bg-green-500"
-              style={{ width: `${attemptedPct}%` }}
+          {/* Track */}
+          <div className="h-1.5 w-full rounded-full bg-white/[0.04] overflow-hidden">
+            {/* Animated Fill */}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${attemptedPct}%` }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="h-full rounded-full bg-gradient-to-r from-emerald-500/50 to-emerald-400 transition-colors"
             />
           </div>
         </div>
 
-        <div>
-          <div className="mb-1 flex justify-between text-sm">
-            <span className="text-gray-600">Not Attempted</span>
-            <span className="font-medium text-red-500">{notAttempted} ({notAttemptedPct}%)</span>
+        {/* Not Attempted Bar */}
+        <div className="group">
+          <div className="mb-2 flex justify-between items-end">
+            <span className="text-[13px] font-medium text-zinc-300">Not Attempted</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[14px] font-semibold text-orange-400">{notAttempted}</span>
+              <span className="text-[11px] font-medium text-zinc-500">({notAttemptedPct}%)</span>
+            </div>
           </div>
-          <div className="h-2 rounded-full bg-gray-100">
-            <div
-              className="h-2 rounded-full bg-red-400"
-              style={{ width: `${notAttemptedPct}%` }}
+          {/* Track */}
+          <div className="h-1.5 w-full rounded-full bg-white/[0.04] overflow-hidden">
+            {/* Animated Fill */}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${notAttemptedPct}%` }}
+              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+              className="h-full rounded-full bg-gradient-to-r from-orange-500/50 to-orange-400 transition-colors"
             />
           </div>
         </div>
