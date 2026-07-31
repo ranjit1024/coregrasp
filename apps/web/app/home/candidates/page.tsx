@@ -3,15 +3,18 @@
 import { useSession } from "@/lib/auth-client";
 import { PolicyDocument } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { 
   Users, 
   AlertCircle, 
   Inbox, 
   FileText, 
   ChevronRight,
-  Loader2,
-  RefreshCcw
+  RefreshCcw,
+  Search,
+  CheckCircle2,
+  TrendingUp,
+  Sparkles
 } from "lucide-react";
 import { PolicyRow } from "@/app/components/ui/policy_row";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,6 +29,7 @@ export default function Candidates() {
   const [policies, setPolicies] = useState<PolicyWithCandidates[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -70,6 +74,21 @@ export default function Candidates() {
     };
   }, [session?.user?.id, isSessionPending]);
 
+  // Filter policies based on user search query
+  const filteredPolicies = useMemo(() => {
+    return policies.filter((p) => 
+      p.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [policies, searchQuery]);
+
+  // Calculate quick summary metrics
+  const totalCandidatesCount = useMemo(() => {
+    return policies.reduce((acc, p) => {
+      const count = p.candidateCount ?? (Array.isArray(p.candidates) ? p.candidates.length : 0);
+      return acc + count;
+    }, 0);
+  }, [policies]);
+
   // ─── Animation Variants ────────────────────────────────────────────────
 
   const containerVariants = {
@@ -89,9 +108,8 @@ export default function Candidates() {
 
   if (isLoading || isSessionPending) {
     return (
-      <div className="min-h-screen bg-[#09090B] p-6 md:p-10 w-full flex flex-col gap-8">
+      <div className="min-h-screen bg-[#09090B] p-6 md:p-10 w-full flex flex-col">
         <div className="max-w-8xl mx-auto w-full space-y-8">
-          {/* Header Skeleton */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/[0.04] pb-6">
             <div className="space-y-3">
               <div className="h-8 w-48 bg-white/[0.02] rounded-lg animate-pulse" />
@@ -99,23 +117,12 @@ export default function Candidates() {
             </div>
             <div className="h-9 w-32 bg-white/[0.02] rounded-xl animate-pulse" />
           </div>
-          
-          {/* List Skeleton */}
           <div className="space-y-3">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
                 className="h-[76px] bg-[#121214] border border-white/[0.04] rounded-xl animate-pulse flex items-center justify-between p-4"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-white/[0.02] rounded-lg" />
-                  <div className="space-y-2">
-                    <div className="h-4 w-32 bg-white/[0.04] rounded-md" />
-                    <div className="h-3 w-24 bg-white/[0.02] rounded-md" />
-                  </div>
-                </div>
-                <div className="h-8 w-28 bg-white/[0.02] rounded-lg" />
-              </div>
+              />
             ))}
           </div>
         </div>
@@ -203,27 +210,72 @@ export default function Candidates() {
             </div>
           </motion.div>
 
+          {/* Quick Metrics Overview Strip */}
+          <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="relative overflow-hidden bg-[#121214] border border-white/[0.04] rounded-xl p-5 flex items-center justify-between">
+              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-blue-500 opacity-70" />
+              <div className="space-y-1">
+                <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-500">Total Enrolled Candidates</span>
+                <p className="text-3xl font-medium tracking-tight text-zinc-100">{totalCandidatesCount}</p>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-center text-zinc-400">
+                <Users className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="relative overflow-hidden bg-[#121214] border border-white/[0.04] rounded-xl p-5 flex items-center justify-between">
+              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-emerald-500 opacity-70" />
+              <div className="space-y-1">
+                <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-500">Deployment Status</span>
+                <p className="text-3xl font-medium tracking-tight text-emerald-400 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 inline-block" /> Operational
+                </p>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Interactive Search Filter Bar */}
+          <motion.div variants={itemVariants} className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <input
+                type="text"
+                placeholder="Search active policies by name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#121214] border border-white/[0.04] rounded-xl pl-11 pr-4 py-3 text-[13px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-white/[0.12] transition-colors shadow-sm"
+              />
+            </div>
+          </motion.div>
+
           {/* Content Section */}
           <AnimatePresence mode="wait">
-            {policies.length === 0 ? (
+            {filteredPolicies.length === 0 ? (
               /* Premium Empty State */
               <motion.div 
                 key="empty"
                 variants={itemVariants}
-                className="relative flex flex-col items-center justify-center py-24 px-4 text-center bg-[#121214] border border-dashed border-white/[0.08] rounded-2xl overflow-hidden"
+                className="relative flex flex-col items-center justify-center py-20 px-4 text-center bg-[#121214] border border-dashed border-white/[0.08] rounded-2xl overflow-hidden"
               >
                 <div className="relative flex items-center justify-center w-14 h-14 bg-white/[0.02] rounded-2xl mb-5 border border-white/[0.04] shadow-sm">
                   <Inbox className="w-6 h-6 text-zinc-500" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-[15px] font-medium text-zinc-200 mb-1.5">No assessments active</h3>
+                <h3 className="text-[15px] font-medium text-zinc-200 mb-1.5">
+                  {searchQuery ? "No matching policies found" : "No assessments active"}
+                </h3>
                 <p className="text-[13px] text-zinc-500 max-w-sm leading-relaxed">
-                  You haven't deployed any policy tests yet. Once policies are assigned, candidate tracking will appear here.
+                  {searchQuery 
+                    ? `We couldn't find any active policies matching "${searchQuery}".` 
+                    : "You haven't deployed any policy tests yet. Once policies are assigned, candidate tracking will appear here."}
                 </p>
               </motion.div>
             ) : (
               /* Policy List */
               <motion.div key="list" className="flex flex-col gap-3">
-                {policies.map((policy) => {
+                {filteredPolicies.map((policy) => {
                   const count =
                     policy.candidateCount ??
                     (Array.isArray(policy.candidates) ? policy.candidates.length : 0);
@@ -235,7 +287,7 @@ export default function Candidates() {
                       onClick={() => router.push(`/home/candidates/${policy.url}`)}
                       whileHover={{ scale: 1.005 }}
                       whileTap={{ scale: 0.995 }}
-                      className="group relative flex items-center justify-between bg-[#121214] border border-white/[0.04] hover:border-white/[0.08] hover:bg-white/[0.02] rounded-xl p-3 cursor-pointer transition-colors shadow-sm"
+                      className="group relative flex items-center justify-between bg-[#121214] border border-white/[0.04] hover:border-white/[0.08] hover:bg-white/[0.02] rounded-xl p-3.5 cursor-pointer transition-colors shadow-sm"
                     >
                       {/* Policy Details Component */}
                       <div className="flex-1 min-w-0 pointer-events-none">
@@ -246,10 +298,10 @@ export default function Candidates() {
                       <div className="shrink-0 flex items-center gap-3 pl-4 ml-2 border-l border-white/[0.04] group-hover:border-white/[0.08] transition-colors">
                         
                         {/* Candidate Badge */}
-                        <div className="flex items-center gap-2 bg-white/[0.02] border border-white/[0.04] group-hover:bg-white/[0.04] px-3 py-1.5 rounded-lg transition-colors">
+                        <div className="flex items-center gap-2 bg-white/[0.02] border border-white/[0.04] group-hover:bg-white/[0.04] px-3.5 py-1.5 rounded-lg transition-colors">
                           <Users className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-400" />
-                          <span className="text-[12px] font-medium text-zinc-500">
-                            <strong className="text-zinc-200 font-semibold mr-1">
+                          <span className="text-[12px] font-medium text-zinc-400">
+                            <strong className="text-zinc-100 font-semibold mr-1">
                               {count}
                             </strong>
                             {count === 1 ? "Candidate" : "Candidates"}
