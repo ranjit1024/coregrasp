@@ -1,5 +1,5 @@
-import { AttemptStatus } from "@/app/components/ui/dashborad/ attemptsStatus";
-import { ScoreChart } from "@/app/components/ui/dashborad/ scoreChats";
+import { AttemptStatus } from "@/app/components/ui/dashborad/attemptsStatus";
+import { ScoreChart } from "@/app/components/ui/dashborad/scoreChats";
 import DashboardSkeleton from "@/app/components/ui/dashborad/dashboardloader";
 import { PolicyBreakdown } from "@/app/components/ui/dashborad/policyBreakdown";
 import { RecentCandidates } from "@/app/components/ui/dashborad/recentCandidate";
@@ -9,10 +9,9 @@ import { Suspense } from "react";
 
 
 
-
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen bg-[#000000] p-6 text-slate-200">
       <div className="mx-auto max-w-8xl space-y-6">
         <Suspense fallback={<DashboardSkeleton />}>
           <DashboardContent />
@@ -27,8 +26,8 @@ async function DashboardContent() {
 
   if (!result.success) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-8 text-center">
-        <h2 className="text-lg font-semibold text-red-800">
+      <div className="rounded-xl border border-red-200 bg-white p-8 text-center">
+        <h2 className="text-lg font-semibold text-red-600">
           {result.error === "Unauthorized" ? "Please sign in" : result.error}
         </h2>
       </div>
@@ -39,16 +38,9 @@ async function DashboardContent() {
 
   return (
     <>
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Welcome back, {data.user.name?.split(" ")[0] || "there"}
-          </h1>
-          <p className="text-gray-500">
-            {data.stats.totalPolicies} policies · {data.stats.totalCandidates} candidates
-          </p>
-        </div>
+      {/* Subheader */}
+      <div className="text-sm text-slate-400">
+        {data.stats.totalPolicies} policies · {data.stats.totalCandidates} candidates
       </div>
 
       {/* Stats Grid */}
