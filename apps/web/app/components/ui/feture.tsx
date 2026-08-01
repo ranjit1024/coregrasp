@@ -137,24 +137,82 @@ const features = [
       </div>
     )
   },
-  {
-    size: "large",
-    gradient: "from-rose-500/[0.08] via-transparent to-transparent",
-    icon: "📊",
-    title: "Auto-Evaluation",
-    desc: "Instant scoring with AI-powered answer analysis. Detects policy comprehension gaps and flags high-risk candidates automatically.",
-    tags: ["AI-Graded", "Risk-Flags"],
-    visual: (
-      <div className="h-24 w-full flex items-end gap-2 px-2 pb-2">
-        {[85, 62, 94, 78, 55, 88, 72, 96, 45, 82, 91, 67].map((h, i) => (
-          <div key={i} className="flex-1 flex flex-col items-center gap-1">
-            <div className="w-full bg-gradient-to-t from-rose-500/20 to-rose-400/5 rounded-t-sm transition-all duration-700 group-hover:from-rose-500/30" style={{ height: `${h}%` }} />
-            {i % 3 === 0 && <div className="text-[7px] text-white/20 font-mono">{h}</div>}
+ {
+  size: "large",
+  gradient: "from-rose-500/[0.08] via-transparent to-transparent",
+  icon: "📊",
+  title: "Auto-Evaluation",
+  desc: "Instant scoring with AI-powered answer analysis. Detects policy comprehension gaps and flags high-risk candidates automatically.",
+  tags: ["AI-Graded", "Risk-Flags"],
+  visual: (
+    <div className="relative h-full w-full min-h-[140px] flex items-center gap-5 px-2">
+      {/* Left: Score Ring */}
+     
+
+      {/* Right: Bar Chart + Scan */}
+      <div className="flex-1 flex flex-col justify-center gap-3">
+        {/* Chart header */}
+        <div className="flex items-center justify-between">
+          <span className="text-[9px] uppercase tracking-wider text-white/30 font-medium">Comprehension</span>
+          <div className="flex items-center gap-1.5">
+            <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[9px] text-emerald-400/60 font-medium">Live</span>
           </div>
-        ))}
+        </div>
+
+        {/* Bars */}
+        <div className="flex items-end gap-[3px] h-16">
+          {[85, 62, 94, 78, 55, 88, 72, 100, 45, 82, 91, 67].map((h, i) => {
+            const isRisk = h < 60;
+            return (
+              <div key={i} className="flex-1 flex flex-col items-center gap-1 group/bar">
+                <div className="relative w-full">
+                  <div 
+                    className={`w-full rounded-t-sm transition-all duration-700 ${
+                      isRisk 
+                        ? 'bg-gradient-to-t from-rose-500/40 to-rose-400/10 group-hover/bar:from-rose-500/60' 
+                        : 'bg-gradient-to-t from-rose-500/20 to-rose-400/5 group-hover/bar:from-rose-500/30'
+                    }`}
+                    style={{ height: `${h * 0.6}px` }}
+                  />
+                  {/* Risk indicator */}
+                  {isRisk && (
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7px] opacity-0 group-hover/bar:opacity-100 transition-opacity">
+                      ⚠️
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Scan line effect */}
+        <div className="relative h-[1px] bg-white/[0.04] overflow-hidden rounded-full">
+          <div className="absolute top-0 left-0 h-full w-1/3 bg-gradient-to-r from-transparent via-rose-400/30 to-transparent animate-[scan_2.5s_ease-in-out_infinite]" />
+        </div>
+
+        {/* Bottom metrics */}
+        <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center gap-2">
+            <span className="text-[9px] text-white/20 font-mono">Avg: 76.4</span>
+            <span className="text-[9px] text-rose-400/40 font-mono">● 2 flagged</span>
+          </div>
+          <div className="h-1 w-12 bg-white/[0.04] rounded-full overflow-hidden">
+            <div className="h-full w-3/4 bg-gradient-to-r from-rose-500/40 to-rose-400/20 rounded-full" />
+          </div>
+        </div>
       </div>
-    )
-  },
+
+      <style jsx>{`
+        @keyframes scan {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(400%); }
+        }
+      `}</style>
+    </div>
+  )
+},
   {
     size: "default",
     gradient: "from-cyan-500/[0.08] via-transparent to-transparent",
@@ -185,7 +243,7 @@ const features = [
     visual: (
       <div className="h-full w-full flex flex-col justify-center gap-4 p-2">
         <div className="flex items-end justify-between gap-2 h-24">
-          {[65, 82, 45, 90, 78, 95, 60, 88].map((h, i) => (
+          {[100, 82, 45, 90, 78, 95, 60, 88].map((h, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
               <div className="w-full bg-gradient-to-t from-indigo-500/25 to-indigo-400/5 rounded-t-md" style={{ height: `${h}%` }} />
             </div>
@@ -245,7 +303,7 @@ export default function HRBentoFeatures() {
         viewport={{ once: true, margin: "-50px" }}
         className="max-w-[1200px] mx-auto w-full px-6 
           grid grid-cols-1 md:grid-cols-4 gap-5 
-          auto-rows-[260px] grid-flow-dense h-full"
+          auto-rows-[300px] grid-flow-dense h-full"
       >
         {features.map((f, i) => {
           const gridClass = 
