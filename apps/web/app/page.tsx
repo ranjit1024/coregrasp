@@ -1,113 +1,161 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { useRouter } from "next/navigation"
-import { CoreGraspLogo } from "./components/ui/logo"
+import RadialFeatures from "./components/ui/feture"
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface Candidate {
+  name: string
+  score: string
+  pass: boolean
+  avatar: string
+}
+
+interface PolicyBar {
+  label: string
+  pct: number
+  color: string
+}
+
+interface Step {
+  icon: React.ReactNode
+  step: string
+  title: string
+  desc: string
+}
+
+interface Feature {
+  title: string
+  desc: string
+  size: "small" | "large" | "tall" | "full"
+  visual: React.ReactNode
+}
+
+interface PricingTier {
+  name: string
+  price: string
+  period: string
+  description: string
+  features: string[]
+  highlighted?: boolean
+}
 
 // ── Data ────────────────────────────────────────────────────────────────────
 
-const candidates = [
-  { name: "Priya Sharma", score: "88%", pass: true },
-  { name: "Arjun Mehta", score: "52%", pass: false },
-  { name: "Sanjana Rao", score: "79%", pass: true },
-  { name: "Dev Patil", score: "61%", pass: false },
+const candidates: Candidate[] = [
+  { name: "Priya Sharma", score: "88%", pass: true, avatar: "PS" },
+  { name: "Arjun Mehta", score: "52%", pass: false, avatar: "AM" },
+  { name: "Sanjana Rao", score: "79%", pass: true, avatar: "SR" },
+  { name: "Dev Patil", score: "61%", pass: false, avatar: "DP" },
+  { name: "Ananya Krishnan", score: "94%", pass: true, avatar: "AK" },
 ]
 
-const policyBars = [
-  { label: "Leave Policy", pct: 74, color: "bg-emerald-500" },
-  { label: "Code of Conduct", pct: 88, color: "bg-emerald-500" },
+const policyBars: PolicyBar[] = [
+  { label: "Leave Policy", pct: 74, color: "bg-emerald-400" },
+  { label: "Code of Conduct", pct: 88, color: "bg-emerald-400" },
   { label: "IT Security", pct: 61, color: "bg-amber-400" },
-  { label: "POSH", pct: 45, color: "bg-rose-500" },
+  { label: "POSH", pct: 45, color: "bg-rose-400" },
+  { label: "Data Privacy", pct: 92, color: "bg-emerald-400" },
 ]
 
-const steps = [
+const steps: Step[] = [
   {
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-[20px] h-[20px] text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 3v13m0 0l-4-4m4 4l4-4" />
       </svg>
     ),
-    step: "Step 1",
+    step: "01",
     title: "Upload your policy PDF",
-    desc: "Drop in any internal policy document  leave rules, code of conduct, IT security, anything.",
+    desc: "Drop in any internal policy document — leave rules, code of conduct, IT security, anything.",
   },
   {
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-[20px] h-[20px] text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 3l14 9-14 9V3z" />
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
       </svg>
     ),
-    step: "Step 2",
+    step: "02",
     title: "AI generates the quiz",
-    desc: "CoreGrasp reads the document and creates multiple-choice questions that test real understanding not just memory.",
+    desc: "CoreGrasp reads the document and creates multiple-choice questions that test real understanding — not just memory.",
   },
   {
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-[20px] h-[20px] text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
       </svg>
     ),
-    step: "Step 3",
+    step: "03",
     title: "Send to your team, see results",
-    desc: "Share a link. Your dashboard shows who passed, who failed, and who hasn't taken it yet.",
+    desc: "Share a link. Your dashboard shows who passed, who failed, and who hasn't taken it yet — in real time.",
   },
 ]
 
-const features = [
+// Restructured Bento Grid with clean vertical separation (Media top, text bottom for precise alignment)
+
+
+const pricingTiers: PricingTier[] = [
   {
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-      </svg>
-    ),
-    title: "No test writing required",
-    desc: "CoreGrasp generates all questions from your document. HR teams stop spending days writing tests by hand.",
-    accent: true,
+    name: "Starter",
+    price: "$0",
+    period: "forever",
+    description: "Perfect for small teams trying out CoreGrasp.",
+    features: ["Up to 50 employees", "3 active policies", "Basic analytics", "Email support"],
   },
   {
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 21V7a2 2 0 012-2h4V3h6v2h4a2 2 0 012 2v14M9 21v-6h6v6" />
-      </svg>
-    ),
-    title: "Works for every team size",
-    desc: "Each company gets its own isolated workspace. Send quiz links to 5 people or 5,000 — results stay separate per org.",
-    accent: false,
+    name: "Business",
+    price: "$49",
+    period: "/month",
+    description: "For growing teams that need compliance at scale.",
+    features: ["Up to 500 employees", "Unlimited policies", "Advanced analytics", "Slack & Teams integration", "Priority support", "CSV & API import"],
+    highlighted: true,
   },
   {
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-      </svg>
-    ),
-    title: "See gaps, not just checkboxes",
-    desc: "Your dashboard shows exactly which policy sections your team is getting wrong so you know where to run training.",
-    accent: false,
+    name: "Enterprise",
+    price: "Custom",
+    period: "",
+    description: "Dedicated support and custom integrations.",
+    features: ["Unlimited employees", "Unlimited policies", "Custom AI tuning", "SSO & SAML", "Dedicated CSM", "SLA guarantee"],
   },
 ]
+
+const companyLogos = ["Acme Corp", "Globex", "Initech", "Umbrella", "Massive", "Hooli"]
 
 // ── Animations ──────────────────────────────────────────────────────────────
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-} as const;
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
+}
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 }
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
   }
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const router = useRouter();
+  const router = useRouter()
   const [picked, setPicked] = useState<number | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  const { scrollYProgress } = useScroll()
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0])
+  const heroY = useTransform(scrollYProgress, [0, 0.15], [0, -40])
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const options = [
     { letter: "A", text: "5 days — carryover is limited to unused days at year-end", correct: false },
@@ -118,57 +166,75 @@ export default function Home() {
 
   return (
     <div
-      className="flex flex-col min-h-screen overflow-x-hidden bg-[#09090b] text-[#fafafa] antialiased selection:bg-emerald-500/30"
+      className="flex flex-col min-h-screen overflow-x-hidden bg-[#000000] text-[#fafafa] antialiased selection:bg-emerald-500/30 selection:text-emerald-50"
       style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, lineHeight: 1.6 }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
-        * .serif { font-family: 'Instrument Serif', serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+        .serif { font-family: 'Instrument Serif', serif; }
       `}</style>
+
+      {/* ── AMBIENT BACKGROUND & GRID ── */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000_70%,transparent_100%)]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-emerald-500/[0.04] rounded-full blur-[140px]" />
+        <div className="absolute top-[30%] right-[-10%] w-[500px] h-[500px] bg-emerald-500/[0.03] rounded-full blur-[120px]" />
+      </div>
 
       {/* ── NAV ── */}
       <motion.nav
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="flex items-center justify-between px-8 py-5 border-b border-white/10 bg-[#09090b]/80 backdrop-blur-md sticky top-0 z-50"
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className={`flex items-center justify-between px-6 lg:px-10 py-4 sticky top-0 z-50 transition-all duration-300 ${
+          scrolled 
+            ? "bg-black/60 backdrop-blur-xl shadow-2xl shadow-black/50 ring-1 ring-white/[0.02]" 
+            : "bg-transparent"
+        }`}
       >
-
-      <div className="flex justify-between items-center gap-2">
-
-          <CoreGraspLogo className="w-7 h-7 text-emerald-400 relative z-10 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
-
-          <span className="serif text-2xl lg:text-3xl tracking-wide text-white">
+        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => router.push("/")}>
+          <div className="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_15px_rgba(52,211,153,0.15)] group-hover:scale-105 transition-transform duration-300">
+            <span className="serif text-lg text-white font-normal">C</span>
+          </div>
+          <span className="serif text-2xl tracking-wide text-white">
             Core<span className="text-emerald-400">Grasp</span>
           </span>
         </div>
 
-        {/* Text Mark */}
-        {/* Desktop links */}
-        <div className="hidden md:flex gap-8 lg:gap-14 text-[14px] lg:text-[15px] text-[#a1a1aa] font-medium">
-          {["How it works", "Features", "Pricing"].map(l => (
-            <a key={l} href="#" className="no-underline hover:text-white transition-colors duration-200">{l}</a>
+        <div className="hidden md:flex items-center gap-10 text-[13px] text-[#a1a1aa] font-medium uppercase tracking-widest">
+          {[
+            { label: "How it works", href: "#how-it-works" },
+            { label: "Features", href: "#features" },
+            { label: "Pricing", href: "#pricing" },
+          ].map((l) => (
+            <a 
+              key={l.label} 
+              href={l.href} 
+              className="no-underline hover:text-white transition-colors duration-200"
+            >
+              {l.label}
+            </a>
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="hidden md:block text-[14px] font-medium px-6 py-2.5 rounded-lg border border-white/20 bg-transparent text-white hover:bg-white/10 hover:border-white/30 transition-all cursor-pointer"
+            onClick={() => router.push("/signin")}
+            className="hidden md:block text-[13px] font-semibold px-6 py-2.5 rounded-full bg-white/[0.05] text-white hover:bg-white hover:text-black transition-all duration-300 cursor-pointer backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
           >
-            Request access
+            Request Access
           </motion.button>
 
-          {/* Hamburger */}
           <button
-            className="md:hidden flex flex-col gap-1.5 p-1 cursor-pointer border-none bg-transparent"
-            onClick={() => setMenuOpen(o => !o)}
+            className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer border-none bg-transparent"
+            onClick={() => setMenuOpen((o) => !o)}
             aria-label="Toggle menu"
           >
-            <span className={`block w-6 h-0.5 bg-white transition-all duration-200 origin-center ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`block w-6 h-0.5 bg-white transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`block w-6 h-0.5 bg-white transition-all duration-200 origin-center ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+            <span className={`block w-5 h-[1.5px] bg-white transition-all duration-300 origin-center ${menuOpen ? "rotate-45 translate-y-[5px]" : ""}`} />
+            <span className={`block w-5 h-[1.5px] bg-white transition-all duration-300 ${menuOpen ? "opacity-0 translate-x-2" : ""}`} />
+            <span className={`block w-5 h-[1.5px] bg-white transition-all duration-300 origin-center ${menuOpen ? "-rotate-45 -translate-y-[5px]" : ""}`} />
           </button>
         </div>
       </motion.nav>
@@ -179,13 +245,19 @@ export default function Home() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden flex flex-col gap-5 px-6 py-6 bg-[#09090b] border-b border-white/10 overflow-hidden"
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden flex flex-col gap-5 px-6 py-6 bg-black/90 backdrop-blur-xl overflow-hidden sticky top-[65px] z-40 ring-1 ring-white/[0.02]"
           >
-            {["How it works", "Features", "Pricing"].map(l => (
-              <a key={l} href="#" className="text-[15px] font-medium text-[#a1a1aa] no-underline hover:text-white">{l}</a>
+            {["How it works", "Features", "Pricing"].map((l) => (
+              <a key={l} href="#" className="text-[13px] font-medium text-[#a1a1aa] uppercase tracking-widest no-underline hover:text-white transition-colors">
+                {l}
+              </a>
             ))}
-            <button className="text-[15px] font-medium px-4 py-2.5 mt-2 rounded-lg border border-white/20 bg-transparent text-white text-center cursor-pointer">
-              Request access
+            <button 
+              onClick={() => router.push("/signin")}
+              className="text-[14px] font-semibold px-4 py-3 mt-2 rounded-full bg-white text-black text-center cursor-pointer hover:bg-white/90 transition-all duration-300"
+            >
+              Request Access
             </button>
           </motion.div>
         )}
@@ -193,130 +265,209 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <motion.section
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-        className="max-w-[720px] lg:max-w-[900px] mx-auto w-full px-6 pt-[100px] pb-16 flex flex-col items-center text-center"
+        style={{ opacity: heroOpacity, y: heroY }}
+        className="relative max-w-[800px] lg:max-w-[1000px] mx-auto w-full px-6 pt-[140px] pb-24 flex flex-col items-center text-center z-10"
       >
-        <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 text-[12px] font-semibold tracking-[.08em] uppercase px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-8">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-          HR policy compliance tool
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2.5 rounded-full bg-white/[0.02] text-emerald-400 mb-10 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_30px_rgba(52,211,153,0.1)] ring-1 ring-white/[0.03]"
+        >
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
+          </span>
+          Compliance Engine 2.0
         </motion.div>
 
-        <motion.h1 variants={fadeInUp} className="serif font-normal leading-[1.05] tracking-tight text-[clamp(2.5rem,6vw,4.5rem)] mb-6 text-white">
-          Turn a policy PDF into<br />
-          <em className="text-emerald-400 not-italic">a quiz your team must pass.</em>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="serif font-normal leading-[1.0] tracking-[-0.03em] text-[clamp(3.2rem,7vw,6.5rem)] mb-8 text-white drop-shadow-2xl"
+        >
+          Turn a policy PDF into
+          <br />
+          <em className="text-emerald-400 not-italic">a verifiable mandate.</em>
         </motion.h1>
 
-        <motion.p variants={fadeInUp} className="text-[16px] lg:text-[18px] text-[#a1a1aa] leading-[1.75] max-w-[560px] mb-8">
-          Upload any internal policy document. CoreGrasp uses AI to read it, generate questions, and send a quiz to your team so you know who actually understands the rules.
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="text-[17px] lg:text-[19px] text-[#a1a1aa] leading-[1.6] max-w-[620px] mb-10 font-light"
+        >
+          Upload any internal policy document. CoreGrasp uses AI to parse it, generate rigorous assessments, and deploy them instantly so you know who actually understands the rules.
         </motion.p>
 
-        <motion.p variants={fadeInUp} className="text-[14px] text-[#71717a] mb-10 font-medium">
-          Trusted by distributed teams & modern enterprises
-        </motion.p>
-
-        <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-5">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="flex flex-col sm:flex-row justify-center gap-4 mb-20 w-full sm:w-auto"
+        >
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02, boxShadow: "0 0 40px rgba(255,255,255,0.2)" }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => router.push("/signin")}
-            className="text-[15px] font-semibold px-9 py-4 rounded-lg bg-white text-black border-none cursor-pointer hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+            className="text-[14px] font-bold px-10 py-4 rounded-full bg-white text-black cursor-pointer hover:bg-gray-100 transition-all duration-300 w-full sm:w-auto uppercase tracking-widest"
           >
-            Try it free  - upload a PDF
+            Deploy Free Quiz
           </motion.button>
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="text-[15px] font-medium px-9 py-4 rounded-lg border border-white/20 bg-transparent text-white cursor-pointer hover:bg-white/5 transition-colors"
+            whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.06)" }}
+            whileTap={{ scale: 0.98 }}
+            className="text-[14px] font-semibold px-10 py-4 rounded-full bg-white/[0.03] text-white cursor-pointer transition-all backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.03] w-full sm:w-auto uppercase tracking-widest"
           >
-            Watch a 2-min demo
+            View Architecture
           </motion.button>
+        </motion.div>
+
+        {/* Social Proof */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="flex flex-col items-center gap-6 w-full"
+        >
+          <div className="h-[1px] w-24 bg-white/[0.1] mb-2 rounded-full" />
+          <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#71717a]">
+            Infrastructure Trusted By
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-10 lg:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-700">
+            {companyLogos.map((logo) => (
+              <span key={logo} className="serif text-[22px] text-white font-normal tracking-wide">
+                {logo}
+              </span>
+            ))}
+          </div>
         </motion.div>
       </motion.section>
 
       {/* ── DASHBOARD MOCKUP ── */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-        className="max-w-[760px] lg:max-w-5xl mx-auto w-full px-6 pb-24"
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-[1000px] lg:max-w-[1200px] mx-auto w-full px-6 pb-32 z-10"
       >
-        <div className="bg-[#18181b] border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/60 hover:border-white/20 transition-colors duration-500">
-          <div className="bg-[#121214] border-b border-white/5 px-6 py-4 flex items-center gap-2.5">
-            <span className="w-3 h-3 rounded-full bg-white/20" />
-            <span className="w-3 h-3 rounded-full bg-white/20" />
-            <span className="w-3 h-3 rounded-full bg-white/20" />
-            <span className="text-[13px] font-medium text-[#71717a] ml-3">coregrasp-dashboard / Acme Corp</span>
+        <div className="bg-black/40 backdrop-blur-2xl rounded-3xl overflow-hidden shadow-[0_30px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/[0.03] relative group">
+          {/* Top-bar Glass effect */}
+          <div className="bg-white/[0.01] px-6 py-4 flex items-center gap-4 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.02)]">
+            <div className="flex gap-2">
+              <span className="w-3 h-3 rounded-full bg-white/[0.1] shadow-inner" />
+              <span className="w-3 h-3 rounded-full bg-white/[0.1] shadow-inner" />
+              <span className="w-3 h-3 rounded-full bg-white/[0.1] shadow-inner" />
+            </div>
+            <div className="flex-1 flex justify-center">
+              <span className="text-[11px] font-mono font-medium text-[#71717a] bg-white/[0.03] px-4 py-1.5 rounded-full ring-1 ring-white/[0.02]">
+                acme-corp.coregrasp.com/dashboard
+              </span>
+            </div>
           </div>
 
-          <div className="p-6 lg:p-8">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
+          <div className="p-6 lg:p-10 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
               {[
-                { label: "Policies uploaded", val: "4", sub: "Leave, Conduct, IT", subColor: "text-emerald-400" },
-                { label: "Employees tested", val: "312", sub: "↑ 24 this week", subColor: "text-emerald-400" },
-                { label: "Need re-training", val: "38", sub: "Reminders active", subColor: "text-rose-400" },
+                { label: "Active Policies", val: "04", sub: "Leave, Conduct, IT", subColor: "text-emerald-400", trend: "+1 WTD" },
+                { label: "Employees Sync'd", val: "312", sub: "↑ 24 WTD", subColor: "text-emerald-400", trend: "92% CPL" },
+                { label: "Mandate Gaps", val: "38", sub: "Reminders active", subColor: "text-rose-400", trend: "↓ 12% MTD" },
               ].map((s, i) => (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
                   key={i}
-                  className="bg-white/5 border border-white/5 rounded-xl p-5 lg:p-6 flex flex-col justify-center"
+                  className="bg-white/[0.02] rounded-2xl p-6 lg:p-8 flex flex-col justify-between hover:bg-white/[0.03] transition-all duration-300 ring-1 ring-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
                 >
-                  <div className="text-[12px] font-bold text-[#71717a] uppercase tracking-wider mb-2 truncate">{s.label}</div>
-                  <div className={`serif text-4xl lg:text-5xl mb-2 ${i === 2 ? "text-rose-400" : "text-white"}`}>{s.val}</div>
-                  <div className={`text-[13px] font-medium ${s.subColor}`}>{s.sub}</div>
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="text-[10px] font-bold text-[#71717a] uppercase tracking-widest">{s.label}</div>
+                    <div className="text-[9px] font-mono text-[#52525b] ring-1 ring-white/[0.03] px-2 py-0.5 rounded-full bg-black/50">{s.trend}</div>
+                  </div>
+                  <div className={`serif text-5xl lg:text-6xl mb-2 tracking-tight ${i === 2 ? "text-rose-400" : "text-white"}`}>{s.val}</div>
+                  <div className={`text-[11px] font-mono uppercase tracking-wider ${s.subColor}`}>{s.sub}</div>
                 </motion.div>
               ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-5">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="bg-white/5 border border-white/5 rounded-xl p-6"
+                transition={{ duration: 0.6 }}
+                className="bg-white/[0.02] rounded-2xl p-6 lg:p-8 ring-1 ring-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
               >
-                <div className="text-[14px] font-semibold mb-5 text-white">Recent attempts — Leave Policy</div>
-                {candidates.map((c, i) => (
-                  <div
-                    key={c.name}
-                    className="flex justify-between items-center py-3 border-b border-white/5 last:border-0 text-[14px]"
-                  >
-                    <span className="text-[#a1a1aa] font-medium">{c.name}</span>
-                    <span className={`text-[12px] font-bold px-3 py-1 rounded-md ${c.pass
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                        : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                      }`}>
-                      {c.score} · {c.pass ? "Pass" : "Fail"}
-                    </span>
+                <div className="flex justify-between items-center mb-6">
+                  <div className="text-[12px] font-bold uppercase tracking-widest text-white">Latest Attempts // Leave Policy</div>
+                  <div className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full ring-1 ring-emerald-500/20 shadow-[0_0_10px_rgba(52,211,153,0.1)] flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" /> LIVE
                   </div>
-                ))}
+                </div>
+                <div className="space-y-2">
+                  {candidates.map((c, i) => (
+                    <motion.div
+                      key={c.name}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.05 }}
+                      className="flex justify-between items-center py-3 px-4 rounded-xl hover:bg-white/[0.03] transition-colors group/row"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center text-[10px] font-mono text-[#a1a1aa] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.05]">
+                          {c.avatar}
+                        </div>
+                        <span className="text-[13px] text-[#a1a1aa] font-medium group-hover/row:text-white transition-colors">{c.name}</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="w-28 h-1.5 bg-white/[0.03] overflow-hidden hidden sm:block rounded-full">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: c.score }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: 0.3 + i * 0.1, ease: "easeOut" }}
+                            className={`h-full rounded-full ${c.pass ? "bg-emerald-400" : "bg-rose-400"}`}
+                          />
+                        </div>
+                        <span className={`text-[11px] font-mono px-3 py-1 rounded-full ring-1 ${
+                          c.pass
+                            ? "bg-emerald-500/10 text-emerald-400 ring-emerald-500/20"
+                            : "bg-rose-500/10 text-rose-400 ring-rose-500/20"
+                        }`}>
+                          {c.score}
+                        </span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="bg-white/5 border border-white/5 rounded-xl p-6"
+                transition={{ duration: 0.6 }}
+                className="bg-white/[0.02] rounded-2xl p-6 lg:p-8 ring-1 ring-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
               >
-                <div className="text-[14px] font-semibold mb-5 text-white">Pass rate by policy</div>
-                <div className="flex flex-col gap-5">
+                <div className="text-[12px] font-bold uppercase tracking-widest mb-8 text-white">Aggregated Pass Rate</div>
+                <div className="flex flex-col gap-6">
                   {policyBars.map((b, i) => (
                     <div key={b.label}>
-                      <div className="flex justify-between text-[13px] font-medium text-[#a1a1aa] mb-2.5">
+                      <div className="flex justify-between text-[11px] font-mono text-[#71717a] mb-2.5 uppercase">
                         <span>{b.label}</span>
                         <span className="text-white">{b.pct}%</span>
                       </div>
-                      <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                      <div className="h-1.5 bg-white/[0.03] overflow-hidden rounded-full">
                         <motion.div
                           initial={{ width: 0 }}
                           whileInView={{ width: `${b.pct}%` }}
                           viewport={{ once: true }}
-                          transition={{ duration: 1, delay: i * 0.1, ease: "easeOut" }}
-                          className={`h-full rounded-full ${b.color}`}
+                          transition={{ duration: 1.2, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                          className={`h-full rounded-full ${b.color} shadow-[0_0_15px_rgba(52,211,153,0.3)]`}
                         />
                       </div>
                     </div>
@@ -328,372 +479,407 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* ── HOW IT WORKS ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        className="max-w-[720px] lg:max-w-[900px] mx-auto w-full px-6 pb-14 flex flex-col items-center text-center"
-      >
-        <div className="text-[13px] font-bold tracking-[0.1em] uppercase text-[#71717a] mb-5">
-          Workflow
-        </div>
-        <h2 className="serif font-normal text-[clamp(2.2rem,4vw,3.2rem)] tracking-tight leading-[1.1] mb-5">
-          Upload a PDF. Get a quiz.<br />See who passed.
-        </h2>
-        <p className="text-[16px] text-[#a1a1aa] max-w-[500px]">
-          No manual question-writing. No spreadsheets. CoreGrasp handles everything from document parsing to results in minutes.
-        </p>
-      </motion.div>
-
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        className="max-w-[800px] lg:max-w-5xl mx-auto w-full px-6 pb-24 grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8"
-      >
-        {steps.map(s => (
-          <motion.div
-            variants={fadeInUp}
-            whileHover={{ y: -5 }}
-            key={s.step}
-            className="bg-[#18181b] border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors"
-          >
-            <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 border border-white/10">
-              {s.icon}
-            </div>
-            <div className="text-[12px] font-bold text-[#71717a] tracking-widest uppercase mb-3">{s.step}</div>
-            <div className="text-[17px] font-semibold text-white mb-3">{s.title}</div>
-            <div className="text-[15px] text-[#a1a1aa] leading-relaxed">{s.desc}</div>
-          </motion.div>
-        ))}
-      </motion.div>
-
+      {/* ── BENTO GRID FEATURES (STRUCTURED & ALIGNED) ── */}
+      {/* ── BENTO GRID FEATURES (ENHANCED) ── */}
+      <RadialFeatures/>
+    
       {/* ── SAMPLE QUESTION ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        className="max-w-[720px] lg:max-w-[900px] mx-auto w-full px-6 pb-12 flex flex-col items-center text-center"
-      >
-        <h2 className="serif font-normal text-[clamp(2.2rem,4vw,3.2rem)] tracking-tight leading-[1.1] mb-4">
-          See a sample question
-        </h2>
-        <p className="text-[16px] text-[#a1a1aa]">
-          Generated from a real leave policy. Test your knowledge.
-        </p>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-50px" }}
-        className="max-w-[600px] lg:max-w-[720px] mx-auto w-full px-6 pb-28"
-      >
-        <div className="bg-[#18181b] border border-white/10 rounded-2xl p-8 lg:p-10">
-          <div className="flex flex-wrap items-center gap-4 mb-7">
-            <span className="text-[13px] font-semibold bg-white/5 px-3 py-1.5 rounded-md text-[#a1a1aa] border border-white/10">
-              Leave Policy · Section 4
-            </span>
-            <span className="text-[13px] font-medium text-[#71717a] flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              AI Generated
-            </span>
+      <section className="relative z-10 pb-32">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="max-w-[800px] lg:max-w-[900px] mx-auto w-full px-6 mb-16 text-center"
+        >
+          <div className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#71717a] mb-4">
+            Interactive Node
           </div>
-
-          <div className="text-[17px] lg:text-[18px] font-medium leading-relaxed mb-7 text-white">
-            An employee has used 8 of their 12 annual leave days and requests 5 more in Q4.
-            What is the maximum leave they can carry into the next year under the carryover policy?
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {options.map((o, i) => {
-              const chosen = picked === i
-              const revealed = picked !== null
-
-              const cls =
-                (chosen && o.correct) || (revealed && o.correct)
-                  ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
-                  : chosen && !o.correct
-                    ? "border-rose-500/50 bg-rose-500/10 text-rose-400"
-                    : "border-white/10 text-[#a1a1aa] hover:border-white/30 hover:bg-white/5"
-
-              return (
-                <motion.div
-                  key={o.letter}
-                  whileHover={picked === null ? { scale: 1.01, x: 4 } : {}}
-                  whileTap={picked === null ? { scale: 0.99 } : {}}
-                  onClick={() => picked === null && setPicked(i)}
-                  className={`flex items-start gap-4 px-6 py-4 rounded-xl border text-[15px] transition-colors duration-200 ${cls} ${picked === null ? "cursor-pointer" : "cursor-default"}`}
-                >
-                  <span className={`w-[26px] h-[26px] shrink-0 rounded-md border flex items-center justify-center text-[12px] font-bold mt-0.5 transition-colors ${((chosen && o.correct) || (revealed && o.correct)) ? 'border-emerald-500/50' : (chosen && !o.correct) ? 'border-rose-500/50' : 'border-white/20'}`}>
-                    {o.letter}
-                  </span>
-                  <span className="leading-relaxed pt-0.5">{o.text}</span>
-                </motion.div>
-              )
-            })}
-          </div>
-
-          <AnimatePresence>
-            {picked !== null && (
-              <motion.div
-                initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                animate={{ opacity: 1, height: "auto", marginTop: 24 }}
-                className="overflow-hidden"
-              >
-                <div className="px-6 py-5 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[14px] lg:text-[15px] text-amber-200/90 leading-relaxed">
-                  <strong className="font-semibold text-amber-400 block mb-2">Why these wrong answers work:</strong>
-                  A and D sound like real policy clauses. B invents a plausible-sounding "Q4 deferred cap" that doesn't exist. Only someone who actually read Section 4 would pick C — which is exactly the point.
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      {/* ── FEATURES ── */}
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        className="max-w-[800px] lg:max-w-5xl mx-auto w-full px-6 pb-28 grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8"
-      >
-        {features.map(f => (
-          <motion.div
-            variants={fadeInUp}
-            whileHover={{ y: -5 }}
-            key={f.title}
-            className={`bg-[#18181b] rounded-2xl p-7 lg:p-8 transition-colors hover:border-white/30 ${f.accent ? "border border-emerald-500/40 shadow-[0_0_30px_rgba(52,211,153,0.05)]" : "border border-white/10"
-              }`}
-          >
-            <div className="mb-6">{f.icon}</div>
-            <div className="text-[17px] font-semibold mb-3 text-white">{f.title}</div>
-            <div className="text-[15px] text-[#a1a1aa] leading-relaxed">{f.desc}</div>
-          </motion.div>
-        ))}
-      </motion.div>
-
-      {/* ── BULK IMPORT & SCALE SECTION ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        className="max-w-[760px] lg:max-w-5xl mx-auto w-full px-6 pb-28"
-      >
-        <div className="bg-[#121214] border border-white/10 rounded-2xl p-8 lg:p-12 relative overflow-hidden">
-
-          {/* subtle background glow */}
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
-            <div>
-              <div className="inline-flex items-center gap-2 text-[12px] font-semibold tracking-[.08em] uppercase px-3 py-1.5 rounded-full bg-white/5 text-[#a1a1aa] border border-white/10 mb-6">
-                Deploy at Scale
-              </div>
-              <h2 className="serif font-normal text-[clamp(2.2rem,4vw,3.2rem)] tracking-tight leading-[1.1] mb-5 text-white">
-                Sync your team.<br />Email everyone.
-              </h2>
-              <p className="text-[16px] text-[#a1a1aa] leading-[1.7] mb-8">
-                No manual data entry. Import your entire employee directory in seconds using a CSV file, connect directly to your HRIS database, or sync programmatically via our secure REST API.
-              </p>
-
-              <ul className="flex flex-col gap-4 text-[15px] text-[#a1a1aa]">
-                {[
-                  { label: "CSV Upload", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /> },
-                  { label: "Database Connection", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /> },
-                  { label: "REST API Sync", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /> }
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        {item.icon}
-                      </svg>
-                    </div>
-                    <span className="font-medium text-white">{item.label}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Email Dispatch Mockup UI */}
-            <div className="bg-[#18181b] border border-white/10 rounded-xl p-6 shadow-2xl shadow-black/50">
-              <div className="text-[14px] font-semibold text-white mb-4 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Bulk Quiz Dispatch
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="text-[12px] font-semibold text-[#71717a] uppercase tracking-wider block mb-1.5">To (Directory)</label>
-                  <div className="w-full bg-[#121214] border border-white/10 rounded-lg px-4 py-3 text-[14px] text-white flex justify-between items-center">
-                    <span>All Active Employees</span>
-                    <span className="text-[12px] bg-white/10 px-2 py-0.5 rounded text-[#a1a1aa]">1,248 imported</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-[12px] font-semibold text-[#71717a] uppercase tracking-wider block mb-1.5">Quiz Assignment</label>
-                  <div className="w-full bg-[#121214] border border-emerald-500/30 rounded-lg px-4 py-3 text-[14px] text-emerald-400 font-medium">
-                    Q3 IT Security Policy Update
-                  </div>
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-white text-black font-semibold text-[14px] py-3.5 rounded-lg mt-2 flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                  </svg>
-                  Email Quiz to 1,248 Employees
-                </motion.button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* ── AUTOPILOT & INTEGRATIONS SECTION ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        className="max-w-[760px] lg:max-w-5xl mx-auto w-full px-6 pb-28"
-      >
-        <div className="flex flex-col items-center text-center mb-10">
-          <div className="inline-flex items-center gap-2 text-[12px] font-semibold tracking-[.08em] uppercase px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" />
-            Put compliance on autopilot
-          </div>
-          <h2 className="serif font-normal text-[clamp(2rem,4vw,2.8rem)] tracking-tight leading-[1.1] mb-4 text-white">
-            Never chase an employee again.
+          <h2 className="serif font-normal text-[clamp(2.6rem,5vw,4.5rem)] tracking-[-0.03em] leading-[1.0] mb-6 text-white">
+            Inspect the Output
           </h2>
-          <p className="text-[16px] text-[#a1a1aa] max-w-[540px]">
-            CoreGrasp syncs with your HR software to automatically assign quizzes to new hires, and pings them in chat when they forget to take them.
+          <p className="text-[16px] text-[#a1a1aa] max-w-[480px] mx-auto font-light">
+            Generated directly from an internal knowledge base. Select the correct logic path below.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          {/* HRIS Sync Box */}
-          <div className="bg-[#18181b] border border-white/10 rounded-2xl p-8 flex flex-col justify-between hover:border-white/20 transition-colors group">
-            <div>
-              <h3 className="text-[18px] font-semibold text-white mb-2">Native HRIS Sync</h3>
-              <p className="text-[14px] text-[#a1a1aa] leading-relaxed mb-8">
-                Connect your directory once. When an employee's role or status changes in your HR system, their compliance requirements update instantly.
-              </p>
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-[700px] lg:max-w-[800px] mx-auto w-full px-6"
+        >
+          <div className="bg-black/60 backdrop-blur-2xl rounded-3xl p-8 lg:p-12 relative overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_30px_60px_rgba(0,0,0,0.8)] ring-1 ring-white/[0.03]">
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/[0.03] rounded-full blur-[100px] pointer-events-none" />
+            
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-10 relative z-10">
+              <span className="text-[10px] font-mono uppercase tracking-widest bg-white/[0.03] px-4 py-2 rounded-full text-[#a1a1aa] shadow-inner">
+                Source: Leave_Policy_v4.pdf
+              </span>
+              <span className="text-[10px] font-mono text-[#52525b] px-4 py-2 rounded-full bg-black/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] ring-1 ring-white/[0.03] flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                Llama 3.2 3B Instruct
+              </span>
             </div>
 
-            {/* Faux Integration Graphic */}
-            <div className="relative h-[120px] bg-[#121214] border border-white/5 rounded-xl flex items-center justify-center gap-4 lg:gap-8 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[11px] font-bold text-[#a1a1aa] shadow-lg relative z-10"
-              >
-                HRIS
-              </motion.div>
-
-              {/* Animated Connecting Line */}
-              <div className="h-[2px] w-12 lg:w-20 bg-white/10 relative overflow-hidden">
-                <motion.div
-                  className="absolute top-0 left-0 h-full w-[40%] bg-emerald-500 shadow-[0_0_10px_rgba(52,211,153,0.8)]"
-                  animate={{ left: ["-50%", "150%"] }}
-                  transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                />
-              </div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shadow-lg relative z-10"
-              >
-                <span className="serif text-2xl text-white">C<span className="text-emerald-400">G</span></span>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Chat Nudge Box */}
-          <div className="bg-[#18181b] border border-white/10 rounded-2xl p-8 flex flex-col justify-between hover:border-white/20 transition-colors">
-            <div className="mb-8">
-              <h3 className="text-[18px] font-semibold text-white mb-2">Automated Chat Nudges</h3>
-              <p className="text-[14px] text-[#a1a1aa] leading-relaxed">
-                Stop sending emails that get ignored. CoreGrasp automatically follows up with pending employees via direct messages in Slack or MS Teams.
-              </p>
+            <div className="text-[18px] lg:text-[20px] font-medium leading-[1.6] mb-10 text-white relative z-10 font-serif italic tracking-wide">
+              "An employee has utilized 8 of their 12 annual leave days and requests 5 more in Q4. What is the maximum leave they can carry into the next fiscal year under Section 4?"
             </div>
 
-            {/* Faux Slack Message */}
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
-              className="bg-[#121214] border border-white/10 p-5 rounded-xl shadow-2xl relative overflow-hidden"
-            >
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
-              <div className="flex gap-4">
-                <div className="w-10 h-10 shrink-0 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-white font-bold text-[14px]">CoreGrasp</span>
-                    <span className="text-[10px] font-bold tracking-widest bg-white/10 px-1.5 py-0.5 rounded text-[#a1a1aa]">APP</span>
-                    <span className="text-[#71717a] text-[12px] font-medium">10:42 AM</span>
-                  </div>
-                  <p className="text-[#a1a1aa] text-[14px] leading-relaxed mb-3">
-                    Hey Arjun! 👋 Just a quick reminder that your <strong className="text-white font-semibold">Q4 Leave Policy</strong> quiz is due tomorrow.
-                  </p>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 px-4 py-2 rounded-lg text-[13px] font-semibold transition-colors"
+            <div className="flex flex-col gap-4 relative z-10">
+              {options.map((o, i) => {
+                const chosen = picked === i
+                const revealed = picked !== null
+
+                const cls =
+                  (chosen && o.correct) || (revealed && o.correct)
+                    ? "bg-emerald-500/[0.08] text-emerald-400 shadow-[inset_0_0_0_1px_rgba(52,211,153,0.3)]"
+                    : chosen && !o.correct
+                      ? "bg-rose-500/[0.08] text-rose-400 shadow-[inset_0_0_0_1px_rgba(244,63,94,0.3)]"
+                      : "bg-white/[0.01] text-[#a1a1aa] hover:bg-white/[0.03] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+
+                return (
+                  <motion.div
+                    key={o.letter}
+                    whileHover={picked === null ? { scale: 1.01, x: 4 } : {}}
+                    whileTap={picked === null ? { scale: 0.99 } : {}}
+                    onClick={() => picked === null && setPicked(i)}
+                    className={`flex items-center gap-5 px-6 py-4 rounded-2xl text-[14px] transition-all duration-300 ${cls} ${picked === null ? "cursor-pointer" : "cursor-default"}`}
                   >
-                    Take Quiz (2 mins)
+                    <span className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center text-[10px] font-mono mt-px transition-colors ${
+                      ((chosen && o.correct) || (revealed && o.correct)) 
+                        ? 'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/30' 
+                        : (chosen && !o.correct) 
+                          ? 'bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/30' 
+                          : 'bg-black text-[#71717a] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.05]'
+                    }`}>
+                      {o.letter}
+                    </span>
+                    <span className="leading-relaxed font-light">{o.text}</span>
+                  </motion.div>
+                )
+              })}
+            </div>
+
+            <AnimatePresence>
+              {picked !== null && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: "auto", marginTop: 32 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden relative z-10"
+                >
+                  <div className="px-6 py-5 bg-black rounded-2xl text-[13px] text-[#a1a1aa] leading-relaxed font-mono shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.03]">
+                    <strong className="text-emerald-400 block mb-2 uppercase tracking-widest">Diagnostic Logic:</strong>
+                    Distractors A and D mirror generic HR terminology. B fabricates a "Q4 deferred cap" absent from the source document. C isolates the exact constraint defined in Section 4. True comprehension verified.
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ── SCALE & INTEGRATIONS ── */}
+      <section className="relative z-10 pb-32">
+        <div className="max-w-[1000px] lg:max-w-[1200px] mx-auto w-full px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#71717a] mb-4">
+              Infrastructure
+            </div>
+            <h2 className="serif font-normal text-[clamp(2.6rem,5vw,4.5rem)] tracking-[-0.03em] leading-[1.0] mb-6 text-white">
+              Distributed Dispatch
+            </h2>
+            <p className="text-[16px] text-[#a1a1aa] max-w-[580px] mx-auto leading-relaxed font-light">
+              Connect core HR systems or utilize bulk CSV ingests. Trigger automated, asynchronous testing pipelines across massive organizational charts.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Bulk Import Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-white/[0.01] backdrop-blur-xl rounded-3xl p-8 lg:p-12 relative overflow-hidden group transition-all duration-300 ring-1 ring-white/[0.03] hover:ring-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
+            >
+              <h3 className="text-[18px] font-bold uppercase tracking-widest text-white mb-4 relative z-10">Batch Operations</h3>
+              <p className="text-[14px] text-[#71717a] leading-relaxed mb-10 max-w-[400px] relative z-10 font-light">
+                Sync directories and deploy evaluation workflows to thousands of target nodes concurrently via Cloudflare Queues.
+              </p>
+
+              <div className="bg-black/50 rounded-2xl p-6 lg:p-8 relative z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] ring-1 ring-white/[0.03]">
+                <div className="flex items-center gap-3 mb-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-[11px] font-mono text-white uppercase tracking-wider">Queue Dispatch</span>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-[9px] font-mono text-[#52525b] uppercase tracking-widest block mb-2">Target Subset (JSON)</label>
+                    <div className="w-full bg-black rounded-xl px-4 py-3 text-[13px] text-white flex justify-between items-center font-mono shadow-inner ring-1 ring-white/[0.05]">
+                      <span>status: "active"</span>
+                      <span className="text-[10px] bg-white/[0.08] px-3 py-1 rounded-full text-[#a1a1aa]">1,248 Nodes</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] font-mono text-[#52525b] uppercase tracking-widest block mb-2">Payload Reference</label>
+                    <div className="w-full bg-black rounded-xl px-4 py-3 text-[13px] text-emerald-400 font-mono shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_10px_rgba(52,211,153,0.05)] ring-1 ring-emerald-500/20">
+                      id: "pol_392f_sec_update"
+                    </div>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="w-full bg-white text-black font-bold text-[12px] py-4 rounded-full uppercase tracking-widest mt-2 flex justify-center items-center gap-3 hover:bg-gray-200 transition-colors shadow-lg"
+                  >
+                    Execute Batch
                   </motion.button>
                 </div>
               </div>
             </motion.div>
-          </div>
 
+            {/* Integrations Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-white/[0.01] backdrop-blur-xl rounded-3xl p-8 lg:p-12 relative overflow-hidden group transition-all duration-300 flex flex-col ring-1 ring-white/[0.03] hover:ring-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
+            >
+              <h3 className="text-[18px] font-bold uppercase tracking-widest text-white mb-4 relative z-10">Event-Driven Architecture</h3>
+              <p className="text-[14px] text-[#71717a] leading-relaxed mb-10 relative z-10 font-light">
+                Hook into upstream identity providers. When state changes occur in the primary HRIS, the compliance graph reconciles automatically.
+              </p>
+
+              <div className="flex-1 flex flex-col gap-5 relative z-10">
+                {/* HRIS Sync */}
+                <div className="bg-black/50 rounded-2xl p-6 ring-1 ring-white/[0.03] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-white">Upstream Sync</span>
+                    <span className="text-[9px] font-mono text-emerald-400 ring-1 ring-emerald-500/20 px-3 py-1 rounded-full bg-emerald-500/5">HEALTHY</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-6 py-2">
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[10px] font-mono text-white bg-white/[0.02] ring-1 ring-white/[0.05] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+                      HRIS
+                    </div>
+                    <div className="flex-1 h-[2px] bg-white/[0.05] relative overflow-hidden max-w-[100px] rounded-full">
+                      <motion.div
+                        className="absolute top-0 left-0 h-full w-[30%] bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)]"
+                        animate={{ left: ["-50%", "150%"] }}
+                        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                      />
+                    </div>
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-black shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_20px_rgba(52,211,153,0.1)] ring-1 ring-emerald-500/20">
+                      <span className="serif text-xl text-white">C<span className="text-emerald-400">G</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chat Nudge */}
+                <div className="bg-black/50 rounded-2xl p-6 flex-1 ring-1 ring-white/[0.03] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-white">Webhook Delivery</span>
+                    <span className="text-[9px] font-mono text-emerald-400 ring-1 ring-emerald-500/20 px-3 py-1 rounded-full bg-emerald-500/5">200 OK</span>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 shrink-0 rounded-2xl bg-black flex items-center justify-center ring-1 ring-white/[0.05] shadow-inner">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-baseline gap-2 mb-2">
+                        <span className="text-white font-bold text-[12px] uppercase">CoreGrasp Bot</span>
+                      </div>
+                      <p className="text-[#a1a1aa] text-[12px] leading-relaxed mb-3 font-light">
+                        <strong className="text-white">Action Required:</strong> Q4 Leave Policy evaluation is pending. Deadline approaches in 24h.
+                      </p>
+                      <span className="inline-block bg-white text-black px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors cursor-pointer shadow-md">
+                        Init Test
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </section>
+
+      {/* ── PRICING ── */}
+      <section id="pricing" className="relative z-10 pb-32">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="max-w-[800px] lg:max-w-[1000px] mx-auto w-full px-6 mb-16 text-center"
+        >
+          <div className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#71717a] mb-4">
+            Licensing
+          </div>
+          <h2 className="serif font-normal text-[clamp(2.6rem,5vw,4.5rem)] tracking-[-0.03em] leading-[1.0] mb-6 text-white">
+            Predictable Costs.
+          </h2>
+          <p className="text-[16px] text-[#a1a1aa] max-w-[480px] mx-auto font-light">
+            Start completely free. Scale horizontally as your infrastructure demands.
+          </p>
+        </motion.div>
+
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="max-w-[1000px] lg:max-w-[1200px] mx-auto w-full px-6 grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          {pricingTiers.map((tier, i) => (
+            <motion.div
+              variants={fadeInUp}
+              whileHover={{ y: -4 }}
+              key={tier.name}
+              className={`relative rounded-3xl p-8 lg:p-10 transition-all duration-300 ${
+                tier.highlighted
+                  ? "bg-white/[0.02] backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_40px_rgba(255,255,255,0.05)] ring-1 ring-white/[0.15]"
+                  : "bg-white/[0.01] backdrop-blur-xl hover:bg-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] ring-1 ring-white/[0.03]"
+              }`}
+            >
+              {tier.highlighted && (
+                <div className="absolute -top-3 left-8">
+                  <span className="text-[9px] font-mono font-bold tracking-widest uppercase bg-white text-black px-4 py-1.5 rounded-full shadow-lg">
+                    Standard Prod
+                  </span>
+                </div>
+              )}
+              
+              <div className="mb-8">
+                <div className="text-[14px] font-bold uppercase tracking-widest text-white mb-4">{tier.name}</div>
+                <div className="flex items-baseline gap-2 mb-4">
+                  <span className="serif text-5xl text-white">{tier.price}</span>
+                  {tier.period && <span className="text-[12px] font-mono text-[#71717a] uppercase">{tier.period}</span>}
+                </div>
+                <p className="text-[13px] text-[#71717a] leading-relaxed font-light">{tier.description}</p>
+              </div>
+
+              <div className="h-[1px] bg-white/[0.05] mb-8 rounded-full" />
+
+              <ul className="flex flex-col gap-4 mb-10">
+                {tier.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-3 text-[13px] text-[#a1a1aa] font-light">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => router.push("/signin")}
+                className={`w-full py-4 rounded-full text-[12px] font-bold uppercase tracking-widest transition-colors shadow-md ${
+                  tier.highlighted
+                    ? "bg-white text-black hover:bg-gray-200"
+                    : "bg-white/[0.03] text-white hover:bg-white/[0.08] ring-1 ring-white/[0.05] hover:ring-white/[0.1]"
+                }`}
+              >
+                {tier.name === "Enterprise" ? "Contact Ops" : "Initialize"}
+              </motion.button>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
 
       {/* ── CTA ── */}
       <motion.section
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        className="max-w-[600px] mx-auto w-full px-6 pb-28 flex flex-col items-center text-center"
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7 }}
+        className="max-w-[1000px] mx-auto w-full px-6 pb-32 flex flex-col items-center text-center relative z-10"
       >
-        <h2 className="serif font-normal text-[clamp(2.2rem,4vw,3.2rem)] tracking-tight leading-[1.1] mb-6 text-white">
-          Ready to actually verify compliance?
-        </h2>
-        <p className="text-[16px] lg:text-[17px] text-[#a1a1aa] leading-[1.7] mb-10">
-          Upload your first policy PDF free. No credit card, no setup. Quizzes are ready in under 2 minutes.
-        </p>
-        <motion.button
-          onClick={() => router.push("signin")}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="text-[16px] font-semibold px-9 py-4.5 rounded-lg bg-white text-black border-none cursor-pointer hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-        >
-          Upload a policy PDF — it's free
-        </motion.button>
+        <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-[2.5rem] p-12 lg:p-20 w-full overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_20px_60px_rgba(0,0,0,0.8)] ring-1 ring-white/[0.03]">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/[0.3] to-transparent" />
+          
+          <h2 className="serif font-normal text-[clamp(2.4rem,4vw,3.5rem)] tracking-[-0.03em] leading-[1.0] mb-6 text-white">
+            Production-Ready Compliance.
+          </h2>
+          <p className="text-[16px] lg:text-[18px] text-[#a1a1aa] leading-[1.6] mb-12 max-w-[540px] mx-auto font-light">
+            Upload your first policy payload at zero cost. No credit card required. Graph extraction ready in under 120 seconds.
+          </p>
+          <motion.button
+            onClick={() => router.push("/signin")}
+            whileHover={{ scale: 1.02, boxShadow: "0 0 40px rgba(255,255,255,0.2)" }}
+            whileTap={{ scale: 0.98 }}
+            className="text-[14px] font-bold px-12 py-5 rounded-full bg-white text-black uppercase tracking-widest cursor-pointer hover:bg-gray-200 transition-all shadow-lg"
+          >
+            Upload Policy PDF
+          </motion.button>
+        </div>
       </motion.section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-white/10 px-8 py-8 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#09090b]">
-        <span className="serif text-[20px] tracking-wide text-white">CoreGrasp</span>
-        <span className="text-[13px] font-medium text-[#71717a]">Next.js · PostgreSQL · Gimini  · Resend · Docker</span>
+      <footer className="border-t border-white/[0.05] px-8 py-16 bg-[#000000] relative z-10">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.05]">
+                  <span className="serif text-sm text-white">C</span>
+                </div>
+                <span className="serif text-xl tracking-wide text-white">
+                  Core<span className="text-emerald-400">Grasp</span>
+                </span>
+              </div>
+              <p className="text-[12px] text-[#71717a] leading-relaxed font-mono">
+                Systematic extraction and compliance verification protocol for distributed org charts.
+              </p>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Protocol</span>
+              <a href="#how-it-works" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Architecture</a>
+              <a href="#features" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Capabilities</a>
+              <a href="#pricing" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Licensing</a>
+            </div>
+            <div className="flex flex-col gap-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Entity</span>
+              <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Changelog</a>
+              <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Engineering Blog</a>
+              <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Careers</a>
+            </div>
+            <div className="flex flex-col gap-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Legal</span>
+              <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Privacy</a>
+              <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Terms</a>
+              <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">SOC 2 Report</a>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-white/[0.05] flex items-center justify-between">
+            <p className="text-[11px] font-mono text-[#52525b]">
+              &copy; {new Date().getFullYear()} COREGRASP INC. ALL RIGHTS RESERVED.
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-mono text-[#71717a] uppercase">Systems Nominal</span>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   )

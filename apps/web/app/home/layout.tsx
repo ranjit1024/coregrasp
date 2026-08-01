@@ -161,22 +161,7 @@ const workspaceItems = [
   <div className="flex items-center gap-4">
     
     {/* Spotlight Search */}
-    <div className="hidden lg:flex items-center bg-[#18181B] border border-white/[0.08] rounded-md px-3 py-1.5 w-[280px] focus-within:ring-1 focus-within:ring-emerald-500/50 focus-within:border-emerald-500/50 transition-all shadow-sm">
-      <svg className="w-4 h-4 text-[#71717A] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-      <input
-        type="text"
-        placeholder="Search..."
-        aria-label="Search workspace"
-        className="bg-transparent border-none outline-none text-[13px] text-white ml-2 w-full placeholder-[#71717A]"
-      />
-      <div className="flex items-center gap-0.5 text-[#71717A] text-[10px] font-medium shrink-0">
-        <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1.5 py-0.5 shadow-sm">⌘</kbd>
-        <kbd className="font-sans border border-white/10 bg-white/5 rounded px-1.5 py-0.5 shadow-sm">K</kbd>
-      </div>
-    </div>
-
+ 
     {/* Notification Bell */}
     <button 
       aria-label="Notifications"
