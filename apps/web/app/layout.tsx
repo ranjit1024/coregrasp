@@ -8,6 +8,20 @@ const inter = Inter({
   display: "swap",
 });
 
+// layout.tsx
+import { Instrument_Serif, DM_Sans } from 'next/font/google'
+
+const instrumentSerif = Instrument_Serif({ 
+  weight: '400', 
+  subsets: ['latin'],
+  variable: '--font-serif'
+})
+
+const dmSans = DM_Sans({ 
+  subsets: ['latin'],
+  variable: '--font-sans'
+})
+
 export const metadata: Metadata = {
   title: "CoreGrasp",
   description: "Clean setup",

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { useRouter } from "next/navigation"
 import RadialFeatures from "./components/ui/feture"
+import { CoreGraspLogo } from "./components/ui/logo"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -93,6 +94,9 @@ const steps: Step[] = [
     desc: "Share a link. Your dashboard shows who passed, who failed, and who hasn't taken it yet — in real time.",
   },
 ]
+
+// Restructured Bento Grid with clean vertical separation (Media top, text bottom for precise alignment)
+
 
 const pricingTiers: PricingTier[] = [
   {
@@ -189,9 +193,8 @@ export default function Home() {
           }`}
       >
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => router.push("/")}>
-          <div className="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_15px_rgba(52,211,153,0.15)] group-hover:scale-105 transition-transform duration-300">
-            <span className="serif text-lg text-white font-normal">C</span>
-          </div>
+          
+            <CoreGraspLogo/>
           <span className="serif text-2xl tracking-wide text-white">
             Core<span className="text-emerald-400">Grasp</span>
           </span>
@@ -218,7 +221,7 @@ export default function Home() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => router.push("/signin")}
-            className="hidden md:block text-[13px] font-semibold px-6 py-2.5 rounded-md bg-white/[0.05] text-white hover:bg-white hover:text-black transition-all duration-300 cursor-pointer backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+            className="hidden md:block text-[13px] font-semibold px-6 py-2.5 rounded-full bg-white/[0.05] text-white hover:bg-white hover:text-black transition-all duration-300 cursor-pointer backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
           >
             Request Access
           </motion.button>
@@ -251,7 +254,7 @@ export default function Home() {
             ))}
             <button
               onClick={() => router.push("/signin")}
-              className="text-[14px] font-semibold px-4 py-3 mt-2 rounded-md bg-white text-black text-center cursor-pointer hover:bg-white/90 transition-all duration-300"
+              className="text-[14px] font-semibold px-4 py-3 mt-2 rounded-full bg-white text-black text-center cursor-pointer hover:bg-white/90 transition-all duration-300"
             >
               Request Access
             </button>
@@ -268,7 +271,20 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-emerald-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-[300px] bg-gradient-to-b from-emerald-500/20 via-emerald-500/5 to-transparent pointer-events-none" />
 
-   
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2.5 rounded-full bg-white/[0.02] text-emerald-400 mb-10 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_40px_rgba(52,211,153,0.08)] ring-1 ring-white/[0.06] hover:ring-emerald-500/20 transition-all duration-500 cursor-default group"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+          </span>
+          <span className="group-hover:text-emerald-300 transition-colors">Compliance Engine 2.0</span>
+          <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/20 ml-1">NEW</span>
+        </motion.div>
 
         {/* Headline */}
         <motion.h1
@@ -619,7 +635,7 @@ export default function Home() {
                       <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
                       LIVE
                     </div>
-                    <button className="w-7 h-7 rounded-md bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.06] transition-all">
+                    <button className="w-7 h-7 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.06] transition-all">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
                     </button>
                   </div>
@@ -834,9 +850,9 @@ export default function Home() {
                     whileHover={picked === null ? { scale: 1.01, x: 4 } : {}}
                     whileTap={picked === null ? { scale: 0.99 } : {}}
                     onClick={() => picked === null && setPicked(i)}
-                    className={`flex items-center gap-5 px-6 py-4 rounded-md text-[14px] transition-all duration-300 ${cls} ${picked === null ? "cursor-pointer" : "cursor-default"}`}
+                    className={`flex items-center gap-5 px-6 py-4 rounded-2xl text-[14px] transition-all duration-300 ${cls} ${picked === null ? "cursor-pointer" : "cursor-default"}`}
                   >
-                    <span className={`w-8 h-8 shrink-0 rounded-md flex items-center justify-center text-[10px] font-mono mt-px transition-colors ${((chosen && o.correct) || (revealed && o.correct))
+                    <span className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center text-[10px] font-mono mt-px transition-colors ${((chosen && o.correct) || (revealed && o.correct))
                         ? 'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/30'
                         : (chosen && !o.correct)
                           ? 'bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/30'
@@ -871,7 +887,142 @@ export default function Home() {
       </section>
 
       {/* ── SCALE & INTEGRATIONS ── */}
-       
+      <section className="relative z-10 pb-32">
+        <div className="max-w-[1000px] lg:max-w-[1200px] mx-auto w-full px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#71717a] mb-4">
+              Infrastructure
+            </div>
+            <h2 className="serif font-normal text-[clamp(2.6rem,5vw,4.5rem)] tracking-[-0.03em] leading-[1.0] mb-6 text-white">
+              Distributed Dispatch
+            </h2>
+            <p className="text-[16px] text-[#a1a1aa] max-w-[580px] mx-auto leading-relaxed font-light">
+              Connect core HR systems or utilize bulk CSV ingests. Trigger automated, asynchronous testing pipelines across massive organizational charts.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Bulk Import Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-white/[0.01] backdrop-blur-xl rounded-3xl p-8 lg:p-12 relative overflow-hidden group transition-all duration-300 ring-1 ring-white/[0.03] hover:ring-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
+            >
+              <h3 className="text-[18px] font-bold uppercase tracking-widest text-white mb-4 relative z-10">Batch Operations</h3>
+              <p className="text-[14px] text-[#71717a] leading-relaxed mb-10 max-w-[400px] relative z-10 font-light">
+                Sync directories and deploy evaluation workflows to thousands of target nodes concurrently via Cloudflare Queues.
+              </p>
+
+              <div className="bg-black/50 rounded-2xl p-6 lg:p-8 relative z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] ring-1 ring-white/[0.03]">
+                <div className="flex items-center gap-3 mb-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-[11px] font-mono text-white uppercase tracking-wider">Queue Dispatch</span>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-[9px] font-mono text-[#52525b] uppercase tracking-widest block mb-2">Target Subset (JSON)</label>
+                    <div className="w-full bg-black rounded-xl px-4 py-3 text-[13px] text-white flex justify-between items-center font-mono shadow-inner ring-1 ring-white/[0.05]">
+                      <span>status: "active"</span>
+                      <span className="text-[10px] bg-white/[0.08] px-3 py-1 rounded-full text-[#a1a1aa]">1,248 Nodes</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] font-mono text-[#52525b] uppercase tracking-widest block mb-2">Payload Reference</label>
+                    <div className="w-full bg-black rounded-xl px-4 py-3 text-[13px] text-emerald-400 font-mono shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_10px_rgba(52,211,153,0.05)] ring-1 ring-emerald-500/20">
+                      id: "pol_392f_sec_update"
+                    </div>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="w-full bg-white text-black font-bold text-[12px] py-4 rounded-full uppercase tracking-widest mt-2 flex justify-center items-center gap-3 hover:bg-gray-200 transition-colors shadow-lg"
+                  >
+                    Execute Batch
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Integrations Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-white/[0.01] backdrop-blur-xl rounded-3xl p-8 lg:p-12 relative overflow-hidden group transition-all duration-300 flex flex-col ring-1 ring-white/[0.03] hover:ring-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
+            >
+              <h3 className="text-[18px] font-bold uppercase tracking-widest text-white mb-4 relative z-10">Event-Driven Architecture</h3>
+              <p className="text-[14px] text-[#71717a] leading-relaxed mb-10 relative z-10 font-light">
+                Hook into upstream identity providers. When state changes occur in the primary HRIS, the compliance graph reconciles automatically.
+              </p>
+
+              <div className="flex-1 flex flex-col gap-5 relative z-10">
+                {/* HRIS Sync */}
+                <div className="bg-black/50 rounded-2xl p-6 ring-1 ring-white/[0.03] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-white">Upstream Sync</span>
+                    <span className="text-[9px] font-mono text-emerald-400 ring-1 ring-emerald-500/20 px-3 py-1 rounded-full bg-emerald-500/5">HEALTHY</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-6 py-2">
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[10px] font-mono text-white bg-white/[0.02] ring-1 ring-white/[0.05] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+                      HRIS
+                    </div>
+                    <div className="flex-1 h-[2px] bg-white/[0.05] relative overflow-hidden max-w-[100px] rounded-full">
+                      <motion.div
+                        className="absolute top-0 left-0 h-full w-[30%] bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)]"
+                        animate={{ left: ["-50%", "150%"] }}
+                        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                      />
+                    </div>
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-black shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_20px_rgba(52,211,153,0.1)] ring-1 ring-emerald-500/20">
+                      <span className="serif text-xl text-white">C<span className="text-emerald-400">G</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chat Nudge */}
+                <div className="bg-black/50 rounded-2xl p-6 flex-1 ring-1 ring-white/[0.03] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-white">Webhook Delivery</span>
+                    <span className="text-[9px] font-mono text-emerald-400 ring-1 ring-emerald-500/20 px-3 py-1 rounded-full bg-emerald-500/5">200 OK</span>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 shrink-0 rounded-2xl bg-black flex items-center justify-center ring-1 ring-white/[0.05] shadow-inner">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-baseline gap-2 mb-2">
+                        <span className="text-white font-bold text-[12px] uppercase">CoreGrasp Bot</span>
+                      </div>
+                      <p className="text-[#a1a1aa] text-[12px] leading-relaxed mb-3 font-light">
+                        <strong className="text-white">Action Required:</strong> Q4 Leave Policy evaluation is pending. Deadline approaches in 24h.
+                      </p>
+                      <span className="inline-block bg-white text-black px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors cursor-pointer shadow-md">
+                        Init Test
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* ── PRICING ── */}
       <section id="pricing" className="relative z-10 pb-32">
@@ -944,7 +1095,7 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => router.push("/signin")}
-                className={`w-full py-4 rounded-md text-[12px] font-bold uppercase tracking-widest transition-colors shadow-md ${tier.highlighted
+                className={`w-full py-4 rounded-full text-[12px] font-bold uppercase tracking-widest transition-colors shadow-md ${tier.highlighted
                     ? "bg-white text-black hover:bg-gray-200"
                     : "bg-white/[0.03] text-white hover:bg-white/[0.08] ring-1 ring-white/[0.05] hover:ring-white/[0.1]"
                   }`}
@@ -977,7 +1128,7 @@ export default function Home() {
             onClick={() => router.push("/signin")}
             whileHover={{ scale: 1.02, boxShadow: "0 0 40px rgba(255,255,255,0.2)" }}
             whileTap={{ scale: 0.98 }}
-            className="text-[14px] font-bold px-12 py-5 rounded-md bg-white text-black uppercase tracking-widest cursor-pointer hover:bg-gray-200 transition-all shadow-lg"
+            className="text-[14px] font-bold px-12 py-5 rounded-full bg-white text-black uppercase tracking-widest cursor-pointer hover:bg-gray-200 transition-all shadow-lg"
           >
             Upload Policy PDF
           </motion.button>
