@@ -4,13 +4,16 @@ import { motion } from "framer-motion"
 import { useState } from "react"
 
 // ── Animation Helpers ───────────────────────────────────────────────────────
-
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+    transition: { 
+      delay: i * 0.15, 
+      duration: 0.6, 
+      ease: [0.16, 1, 0.3, 1] as const 
+    }
   })
 }
 
@@ -19,7 +22,11 @@ const pulseRing = {
     scale: [1, 1.15, 1],
     opacity: [0.3, 0.1, 0.3]
   },
-  transition: { repeat: Infinity, duration: 3, ease: "easeInOut" }
+  transition: { 
+    repeat: Infinity, 
+    duration: 3, 
+    ease: "easeInOut" as const 
+  }
 }
 
 // ── Step Visuals ──────────────────────────────────────────────────────────────
