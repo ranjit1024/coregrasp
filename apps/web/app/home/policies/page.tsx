@@ -5,7 +5,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PolicyDocument, PolicyStatus, statusConfig } from "../../../lib/types";
 import { PolicyRow } from "@/app/components/ui/policy_row";
-import { FileX2, ServerCrash, ChevronRight, Loader2 } from "lucide-react";
+import { FileX2, ServerCrash, ChevronRight, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Skleton_policy_Loader from "@/app/components/ui/policy_loader";
 
@@ -93,17 +93,44 @@ export default function PolicyStatusPage() {
                 );
 
                 if (!res.ok) {
-                    throw new Error(`Failed to fetch policies (Status: ${res.status})`);
+                    // Try to parse the error message if the API sends one
+                    let errorMessage = `Failed to fetch policies (Status: ${res.status})`;
+                    try {
+                        const errData = await res.json();
+                        if (errData.error) errorMessage = errData.error;
+                        else if (errData.message) errorMessage = errData.message;
+                    } catch (e) {
+                        // Not JSON, fallback to default message
+                    }
+
+                    // Intercept "Not Found" errors and treat them as an empty list
+                    if (res.status === 404 || errorMessage.toLowerCase().includes("no policy found")) {
+                        if (isMounted) {
+                            setPolicies([]);
+                            setError(null); // Clear any error to trigger empty state
+                        }
+                        return;
+                    }
+
+                    throw new Error(errorMessage);
                 }
 
                 const data = await res.json();
                 
                 if (isMounted) {
                     setPolicies(data.policies || data.userName || []);
+                    setError(null);
                 }
             } catch (err) {
                 if (isMounted) {
-                    setError(err instanceof Error ? err.message : "An unknown error occurred.");
+                    const msg = err instanceof Error ? err.message : "An unknown error occurred.";
+                    // Final fallback check for the string just in case it was thrown
+                    if (msg.toLowerCase().includes("no policy found")) {
+                        setPolicies([]);
+                        setError(null);
+                    } else {
+                        setError(msg);
+                    }
                 }
             } finally {
                 if (isMounted) setIsLoading(false);
@@ -147,7 +174,6 @@ export default function PolicyStatusPage() {
     if (isLoading || isSessionPending) {
         return (
             <div className="min-h-screen bg-[#09090B] flex flex-col gap-4 items-center justify-center text-[#A1A1AA] text-sm">
-               
                 <Skleton_policy_Loader/>
             </div>
         );
@@ -196,7 +222,7 @@ export default function PolicyStatusPage() {
                         ))}
                     </div>
 
-                    {/* Error State */}
+                    {/* Error State (Only displays if error is NOT "no policy found") */}
                     <AnimatePresence>
                         {error && (
                             <motion.div 
@@ -233,15 +259,22 @@ export default function PolicyStatusPage() {
 
                             {/* Table Body */}
                             {policies.length === 0 && !error ? (
-                                /* Empty State */
+                                /* Empty State with Create/Upload Button */
                                 <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
                                     <div className="flex items-center justify-center w-12 h-12 bg-white/[0.02] border border-white/[0.04] rounded-full mb-4">
                                         <FileX2 className="w-6 h-6 text-zinc-600" strokeWidth={1.5} />
                                     </div>
-                                    <h3 className="text-[14px] font-medium text-zinc-300 mb-1">No policies found</h3>
-                                    <p className="text-[13px] text-zinc-500">
-                                        There are currently no policies in the registry.
+                                    <h3 className="text-[15px] font-medium text-zinc-200 mb-2">No policies found</h3>
+                                    <p className="text-[13px] text-zinc-500 max-w-sm mb-6">
+                                        Get started by creating or uploading your first compliance policy document to the registry.
                                     </p>
+                                    <button
+                                        onClick={() => router.push("/home/upload")}
+                                        className="flex items-center gap-2 px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-900 text-[13px] font-medium rounded-lg transition-colors shadow-sm"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        Upload Policy
+                                    </button>
                                 </div>
                             ) : (
                                 /* Rows */

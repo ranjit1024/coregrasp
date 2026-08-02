@@ -8,14 +8,13 @@ import {
   Users, 
   AlertCircle, 
   Inbox, 
-  FileText, 
   ChevronRight,
   RefreshCcw,
   Search,
   CheckCircle2,
   XCircle,
-  BarChart3,
-  Award
+  Award,
+  Plus
 } from "lucide-react";
 import { PolicyRow } from "@/app/components/ui/policy_row";
 
@@ -69,17 +68,44 @@ export default function Candidates() {
         );
 
         if (!res.ok) {
-          throw new Error(`Failed to fetch policies (Status: ${res.status})`);
+          // Try to parse the error message if the API sends one
+          let errorMessage = `Failed to fetch policies (Status: ${res.status})`;
+          try {
+            const errData = await res.json();
+            if (errData.error) errorMessage = errData.error;
+            else if (errData.message) errorMessage = errData.message;
+          } catch (e) {
+            // Not JSON, fallback to default message
+          }
+
+          // Intercept "Not Found" errors and treat them as an empty list
+          if (res.status === 404 || errorMessage.toLowerCase().includes("no policy found")) {
+            if (isMounted) {
+              setPolicies([]);
+              setError(null); // Clear any error to trigger empty state
+            }
+            return;
+          }
+
+          throw new Error(errorMessage);
         }
 
         const data = await res.json();
         
         if (isMounted) {
           setPolicies(data.policies || []);
+          setError(null);
         }
       } catch (err) {
         if (isMounted) {
-          setError(err instanceof Error ? err.message : "An unknown error occurred.");
+          const msg = err instanceof Error ? err.message : "An unknown error occurred.";
+          // Final fallback check for the string just in case it was thrown
+          if (msg.toLowerCase().includes("no policy found")) {
+            setPolicies([]);
+            setError(null);
+          } else {
+            setError(msg);
+          }
         }
       } finally {
         if (isMounted) setIsLoading(false);
@@ -239,7 +265,6 @@ export default function Candidates() {
             value={assessmentStats.passed} 
             icon={CheckCircle2} 
             color="emerald" 
-           
             subValue={`${assessmentStats.passRate}% rate`}
           />
           <StatsCard 
@@ -247,21 +272,18 @@ export default function Candidates() {
             value={assessmentStats.failed} 
             icon={XCircle} 
             color="rose" 
-           
           />
           <StatsCard 
             label="Total Candidates" 
             value={assessmentStats.totalCandidates} 
             icon={Users} 
             color="blue" 
-          
           />
           <StatsCard 
             label="Average Marks" 
             value={assessmentStats.averageMarks} 
             icon={Award} 
             color="amber" 
-           
           />
         </div>
 
@@ -333,14 +355,24 @@ export default function Candidates() {
                 <div className="flex items-center justify-center w-12 h-12 bg-white/[0.02] border border-white/[0.05] rounded-full mb-4">
                   <Inbox className="w-5 h-5 text-zinc-600" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-[14px] font-medium text-zinc-300 mb-1">
+                <h3 className="text-[15px] font-medium text-zinc-200 mb-2">
                   {searchQuery || statusFilter !== "ALL" ? "No matching policies" : "No assessments yet"}
                 </h3>
-                <p className="text-[13px] text-zinc-500 max-w-[280px] leading-relaxed">
+                <p className="text-[13px] text-zinc-500 max-w-[280px] leading-relaxed mb-6">
                   {searchQuery || statusFilter !== "ALL"
                     ? "Try adjusting your search or filters." 
                     : "Deploy a policy to start collecting candidate responses."}
                 </p>
+                {/* Show create button only on true empty state */}
+                {!(searchQuery || statusFilter !== "ALL") && (
+                  <button
+                    onClick={() => router.push("/home/upload")}
+                    className="flex items-center gap-2 px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-900 text-[13px] font-medium rounded-lg transition-colors shadow-sm"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Deploy Policy
+                  </button>
+                )}
               </motion.div>
             ) : (
               <motion.div 
