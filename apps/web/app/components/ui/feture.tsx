@@ -1,16 +1,16 @@
-"use client";
+"client";
 
 import { motion } from "framer-motion";
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
-} as const
-
-const staggerContainer = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } }
-};
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } 
+  }
+} as const;
 
 const features = [
   {
@@ -137,82 +137,73 @@ const features = [
       </div>
     )
   },
- {
-  size: "large",
-  gradient: "from-rose-500/[0.08] via-transparent to-transparent",
-  icon: "📊",
-  title: "Auto-Evaluation",
-  desc: "Instant scoring with AI-powered answer analysis. Detects policy comprehension gaps and flags high-risk candidates automatically.",
-  tags: ["AI-Graded", "Risk-Flags"],
-  visual: (
-    <div className="relative h-full w-full min-h-[140px] flex items-center gap-5 px-2">
-      {/* Left: Score Ring */}
-     
-
-      {/* Right: Bar Chart + Scan */}
-      <div className="flex-1 flex flex-col justify-center gap-3">
-        {/* Chart header */}
-        <div className="flex items-center justify-between">
-          <span className="text-[9px] uppercase tracking-wider text-white/30 font-medium">Comprehension</span>
-          <div className="flex items-center gap-1.5">
-            <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[9px] text-emerald-400/60 font-medium">Live</span>
+  {
+    size: "large",
+    gradient: "from-rose-500/[0.08] via-transparent to-transparent",
+    icon: "📊",
+    title: "Auto-Evaluation",
+    desc: "Instant scoring with AI-powered answer analysis. Detects policy comprehension gaps and flags high-risk candidates automatically.",
+    tags: ["AI-Graded", "Risk-Flags"],
+    visual: (
+      <div className="relative h-full w-full min-h-[140px] flex items-center gap-5 px-2">
+        <div className="flex-1 flex flex-col justify-center gap-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[9px] uppercase tracking-wider text-white/30 font-medium">Comprehension</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[9px] text-emerald-400/60 font-medium">Live</span>
+            </div>
           </div>
-        </div>
 
-        {/* Bars */}
-        <div className="flex items-end gap-[3px] h-16">
-          {[85, 62, 94, 78, 55, 88, 72, 100, 45, 82, 91, 67].map((h, i) => {
-            const isRisk = h < 60;
-            return (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1 group/bar">
-                <div className="relative w-full">
-                  <div 
-                    className={`w-full rounded-t-sm transition-all duration-700 ${
-                      isRisk 
-                        ? 'bg-gradient-to-t from-rose-500/40 to-rose-400/10 group-hover/bar:from-rose-500/60' 
-                        : 'bg-gradient-to-t from-rose-500/20 to-rose-400/5 group-hover/bar:from-rose-500/30'
-                    }`}
-                    style={{ height: `${h * 0.6}px` }}
-                  />
-                  {/* Risk indicator */}
-                  {isRisk && (
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7px] opacity-0 group-hover/bar:opacity-100 transition-opacity">
-                      ⚠️
-                    </div>
-                  )}
+          <div className="flex items-end gap-[3px] h-16">
+            {[85, 62, 94, 78, 55, 88, 72, 100, 45, 82, 91, 67].map((h, i) => {
+              const isRisk = h < 60;
+              return (
+                <div key={i} className="flex-1 flex flex-col items-center gap-1 group/bar">
+                  <div className="relative w-full">
+                    <div 
+                      className={`w-full rounded-t-sm transition-all duration-700 ${
+                        isRisk 
+                          ? 'bg-gradient-to-t from-rose-500/40 to-rose-400/10 group-hover/bar:from-rose-500/60' 
+                          : 'bg-gradient-to-t from-rose-500/20 to-rose-400/5 group-hover/bar:from-rose-500/30'
+                      }`}
+                      style={{ height: `${h * 0.6}px` }}
+                    />
+                    {isRisk && (
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7px] opacity-0 group-hover/bar:opacity-100 transition-opacity">
+                        ⚠️
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Scan line effect */}
-        <div className="relative h-[1px] bg-white/[0.04] overflow-hidden rounded-full">
-          <div className="absolute top-0 left-0 h-full w-1/3 bg-gradient-to-r from-transparent via-rose-400/30 to-transparent animate-[scan_2.5s_ease-in-out_infinite]" />
-        </div>
-
-        {/* Bottom metrics */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-2">
-            <span className="text-[9px] text-white/20 font-mono">Avg: 76.4</span>
-            <span className="text-[9px] text-rose-400/40 font-mono">● 2 flagged</span>
+              );
+            })}
           </div>
-          <div className="h-1 w-12 bg-white/[0.04] rounded-full overflow-hidden">
-            <div className="h-full w-3/4 bg-gradient-to-r from-rose-500/40 to-rose-400/20 rounded-full" />
+
+          <div className="relative h-[1px] bg-white/[0.04] overflow-hidden rounded-full">
+            <div className="absolute top-0 left-0 h-full w-1/3 bg-gradient-to-r from-transparent via-rose-400/30 to-transparent animate-[scan_2.5s_ease-in-out_infinite]" />
+          </div>
+
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] text-white/20 font-mono">Avg: 76.4</span>
+              <span className="text-[9px] text-rose-400/40 font-mono">● 2 flagged</span>
+            </div>
+            <div className="h-1 w-12 bg-white/[0.04] rounded-full overflow-hidden">
+              <div className="h-full w-3/4 bg-gradient-to-r from-rose-500/40 to-rose-400/20 rounded-full" />
+            </div>
           </div>
         </div>
+
+        <style jsx>{`
+          @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(400%); }
+          }
+        `}</style>
       </div>
-
-      <style jsx>{`
-        @keyframes scan {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(400%); }
-        }
-      `}</style>
-    </div>
-  )
-},
+    )
+  },
   {
     size: "default",
     gradient: "from-cyan-500/[0.08] via-transparent to-transparent",
@@ -234,106 +225,88 @@ const features = [
     )
   },
   {
-  size: "large",
-  gradient: "from-white/[0.02] via-transparent to-transparent",
-  icon: "◈",
-  title: "Analytics",
-  desc: "Completion trends, score distributions, and audit-ready exports. Quietly observe how comprehension evolves across your organization.",
-  tags: ["Export", "Compliance"],
-  visual: (
-    <div className="h-full w-full flex flex-col relative">
-      
-      {/* Central Gauge Composition */}
-      <div className="flex-1 flex items-center justify-center relative">
-        
-        {/* Outer decorative ring */}
-        <div className="absolute w-40 h-40 rounded-full border border-white/[0.04] animate-[spin_60s_linear_infinite]" />
-        <div className="absolute w-40 h-40 rounded-full border border-dashed border-white/[0.03] animate-[spin_40s_linear_infinite_reverse]" />
-        
-        {/* Main circular progress */}
-        <div className="relative w-32 h-32">
-          <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-            {/* Track */}
-            <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
-            {/* Progress arc — 94% */}
-            <circle 
-              cx="50" cy="50" r="44" fill="none" 
-              stroke="rgba(255,255,255,0.15)" strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeDasharray="276.5" 
-              strokeDashoffset="16.6"
-              className="transition-all duration-1000 group-hover:stroke-white/25"
-            />
-            {/* Secondary arc — score */}
-            <circle 
-              cx="50" cy="50" r="36" fill="none" 
-              stroke="rgba(255,255,255,0.08)" strokeWidth="1"
-              strokeLinecap="round"
-              strokeDasharray="226.2" 
-              strokeDashoffset="36.2"
-            />
-          </svg>
+    size: "large",
+    gradient: "from-white/[0.02] via-transparent to-transparent",
+    icon: "◈",
+    title: "Analytics",
+    desc: "Completion trends, score distributions, and audit-ready exports. Quietly observe how comprehension evolves across your organization.",
+    tags: ["Export", "Compliance"],
+    visual: (
+      <div className="h-full w-full flex flex-col relative">
+        <div className="flex-1 flex items-center justify-center relative">
+          <div className="absolute w-40 h-40 rounded-full border border-white/[0.04] animate-[spin_60s_linear_infinite]" />
+          <div className="absolute w-40 h-40 rounded-full border border-dashed border-white/[0.03] animate-[spin_40s_linear_infinite_reverse]" />
           
-          {/* Center content */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-[10px] text-zinc-600 uppercase tracking-[0.3em] mb-1">Completed</span>
-            <span className="text-3xl font-extralight text-white/90 tracking-tight">94</span>
-            <span className="text-sm text-zinc-500 font-light -mt-1">%</span>
+          <div className="relative w-32 h-32">
+            <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+              <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
+              <circle 
+                cx="50" cy="50" r="44" fill="none" 
+                stroke="rgba(255,255,255,0.15)" strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeDasharray="276.5" 
+                strokeDashoffset="16.6"
+                className="transition-all duration-1000 group-hover:stroke-white/25"
+              />
+              <circle 
+                cx="50" cy="50" r="36" fill="none" 
+                stroke="rgba(255,255,255,0.08)" strokeWidth="1"
+                strokeLinecap="round"
+                strokeDasharray="226.2" 
+                strokeDashoffset="36.2"
+              />
+            </svg>
+            
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-[10px] text-zinc-600 uppercase tracking-[0.3em] mb-1">Completed</span>
+              <span className="text-3xl font-extralight text-white/90 tracking-tight">94</span>
+              <span className="text-sm text-zinc-500 font-light -mt-1">%</span>
+            </div>
+          </div>
+
+          <div className="absolute inset-0">
+            <div className="absolute top-2 right-4 text-right">
+              <div className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mb-1">Mean</div>
+              <div className="text-xl font-extralight text-white/80">8.4</div>
+              <div className="text-[9px] text-zinc-600 font-mono mt-0.5">of 10</div>
+            </div>
+            
+            <div className="absolute bottom-4 left-4">
+              <div className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mb-1">Time</div>
+              <div className="text-xl font-extralight text-white/80">42<span className="text-sm text-zinc-500 ml-0.5">s</span></div>
+              <div className="text-[9px] text-zinc-600 font-mono mt-0.5">per question</div>
+            </div>
           </div>
         </div>
 
-        {/* Orbiting metric satellites */}
-        <div className="absolute inset-0">
-          {/* Top right satellite */}
-          <div className="absolute top-2 right-4 text-right group/sat">
-            <div className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mb-1">Mean</div>
-            <div className="text-xl font-extralight text-white/80">8.4</div>
-            <div className="text-[9px] text-zinc-600 font-mono mt-0.5">of 10</div>
-            {/* Connector line */}
-            <div className="absolute -left-8 top-1/2 w-6 h-[1px] bg-gradient-to-l from-white/10 to-transparent" />
+        <div className="flex items-center justify-between px-2 pt-4 border-t border-white/[0.04]">
+          <div className="flex items-center gap-3">
+            <span className="w-1 h-1 rounded-full bg-white/40 animate-pulse" />
+            <span className="text-[9px] text-zinc-600 font-mono uppercase tracking-wider">Last updated 2m ago</span>
           </div>
-          
-          {/* Bottom left satellite */}
-          <div className="absolute bottom-4 left-4 group/sat">
-            <div className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mb-1">Time</div>
-            <div className="text-xl font-extralight text-white/80">42<span className="text-sm text-zinc-500 ml-0.5">s</span></div>
-            <div className="text-[9px] text-zinc-600 font-mono mt-0.5">per question</div>
-            {/* Connector line */}
-            <div className="absolute -right-8 top-1/2 w-6 h-[1px] bg-gradient-to-r from-white/10 to-transparent" />
+          <div className="flex items-center gap-4">
+            <span className="text-[9px] text-zinc-600 font-mono">312 active</span>
+            <span className="text-[9px] text-zinc-700">|</span>
+            <span className="text-[9px] text-zinc-600 font-mono">19 pending</span>
           </div>
         </div>
       </div>
-
-      {/* Bottom micro-bar */}
-      <div className="flex items-center justify-between px-2 pt-4 border-t border-white/[0.04]">
-        <div className="flex items-center gap-3">
-          <span className="w-1 h-1 rounded-full bg-white/40 animate-pulse" />
-          <span className="text-[9px] text-zinc-600 font-mono uppercase tracking-wider">Last updated 2m ago</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-[9px] text-zinc-600 font-mono">312 active</span>
-          <span className="text-[9px] text-zinc-700">|</span>
-          <span className="text-[9px] text-zinc-600 font-mono">19 pending</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
+    )
+  }
 ];
 
 export default function HRBentoFeatures() {
   return (
-    <section id="features" className="relative z-10 pb-32 overflow-hidden ">
+    <section id="features" className="relative z-10 pb-32 overflow-hidden">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 
-        min-w-8xl   bg-indigo-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
+        w-[600px] h-[600px] bg-indigo-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
-        className="min-w-8xl  mx-auto w-full px-6 mb-20 text-center"
+        className="max-w-[1200px] mx-auto w-full px-6 mb-20 text-center"
       >
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full 
           bg-white/[0.03] border border-white/[0.06] mb-6">
@@ -350,16 +323,11 @@ export default function HRBentoFeatures() {
         </p>
       </motion.div>
 
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        className="max-w-[1200px] mx-auto w-full px-6 
-          grid grid-cols-1 md:grid-cols-4 gap-5 
-          auto-rows-[300px] grid-flow-dense h-full"
+      <div className="max-w-[1200px] mx-auto w-full px-6 
+        grid grid-cols-1 md:grid-cols-4 gap-5 
+        auto-rows-[300px] grid-flow-dense h-full"
       >
-        {features.map((f, i) => {
+        {features.map((f) => {
           const gridClass = 
             f.size === "hero" ? "md:col-span-3 md:row-span-2" :
             f.size === "full" ? "md:col-span-4" :
@@ -370,12 +338,15 @@ export default function HRBentoFeatures() {
 
           return (
             <motion.div
-              variants={fadeInUp}
-              whileHover={{ y: -6, scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
               key={f.title}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className={`relative bg-white/[0.01] backdrop-blur-2xl rounded-[28px] 
-                p-7 lg:p-9 transition-all duration-700 overflow-hidden group 
+                p-7 lg:p-9 transition-colors duration-700 overflow-hidden group 
                 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] 
                 ring-1 ring-white/[0.04] hover:ring-white/[0.12] hover:bg-white/[0.025] 
                 flex flex-col justify-between ${gridClass}`}
@@ -422,7 +393,7 @@ export default function HRBentoFeatures() {
             </motion.div>
           );
         })}
-      </motion.div>
+      </div>
     </section>
   );
 }
