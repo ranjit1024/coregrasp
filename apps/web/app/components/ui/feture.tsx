@@ -234,37 +234,91 @@ const features = [
     )
   },
   {
-    size: "large",
-    gradient: "from-indigo-500/[0.08] via-transparent to-transparent",
-    icon: "📈",
-    title: "Analytics Dashboard",
-    desc: "Track completion rates, average scores, time-per-question, and policy comprehension heatmaps. Export detailed reports for compliance audits.",
-    tags: ["Export", "Compliance", "Insights"],
-    visual: (
-      <div className="h-full w-full flex flex-col justify-center gap-4 p-2">
-        <div className="flex items-end justify-between gap-2 h-24">
-          {[100, 82, 45, 90, 78, 95, 60, 88].map((h, i) => (
-            <div key={i} className="flex-1 flex flex-col items-center gap-1">
-              <div className="w-full bg-gradient-to-t from-indigo-500/25 to-indigo-400/5 rounded-t-md" style={{ height: `${h}%` }} />
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-between text-[9px] text-white/30 font-mono px-1">
-          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span><span>Mon</span>
-        </div>
-        <div className="flex gap-3 mt-2">
-          <div className="flex-1 bg-white/[0.03] rounded-lg p-2 border border-white/[0.05]">
-            <div className="text-[10px] text-white/40 mb-1">Completion</div>
-            <div className="text-lg font-bold text-white">94%</div>
+  size: "large",
+  gradient: "from-white/[0.02] via-transparent to-transparent",
+  icon: "◈",
+  title: "Analytics",
+  desc: "Completion trends, score distributions, and audit-ready exports. Quietly observe how comprehension evolves across your organization.",
+  tags: ["Export", "Compliance"],
+  visual: (
+    <div className="h-full w-full flex flex-col relative">
+      
+      {/* Central Gauge Composition */}
+      <div className="flex-1 flex items-center justify-center relative">
+        
+        {/* Outer decorative ring */}
+        <div className="absolute w-40 h-40 rounded-full border border-white/[0.04] animate-[spin_60s_linear_infinite]" />
+        <div className="absolute w-40 h-40 rounded-full border border-dashed border-white/[0.03] animate-[spin_40s_linear_infinite_reverse]" />
+        
+        {/* Main circular progress */}
+        <div className="relative w-32 h-32">
+          <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+            {/* Track */}
+            <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
+            {/* Progress arc — 94% */}
+            <circle 
+              cx="50" cy="50" r="44" fill="none" 
+              stroke="rgba(255,255,255,0.15)" strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeDasharray="276.5" 
+              strokeDashoffset="16.6"
+              className="transition-all duration-1000 group-hover:stroke-white/25"
+            />
+            {/* Secondary arc — score */}
+            <circle 
+              cx="50" cy="50" r="36" fill="none" 
+              stroke="rgba(255,255,255,0.08)" strokeWidth="1"
+              strokeLinecap="round"
+              strokeDasharray="226.2" 
+              strokeDashoffset="36.2"
+            />
+          </svg>
+          
+          {/* Center content */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-[10px] text-zinc-600 uppercase tracking-[0.3em] mb-1">Completed</span>
+            <span className="text-3xl font-extralight text-white/90 tracking-tight">94</span>
+            <span className="text-sm text-zinc-500 font-light -mt-1">%</span>
           </div>
-          <div className="flex-1 bg-white/[0.03] rounded-lg p-2 border border-white/[0.05]">
-            <div className="text-[10px] text-white/40 mb-1">Avg Score</div>
-            <div className="text-lg font-bold text-emerald-400">8.4</div>
+        </div>
+
+        {/* Orbiting metric satellites */}
+        <div className="absolute inset-0">
+          {/* Top right satellite */}
+          <div className="absolute top-2 right-4 text-right group/sat">
+            <div className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mb-1">Mean</div>
+            <div className="text-xl font-extralight text-white/80">8.4</div>
+            <div className="text-[9px] text-zinc-600 font-mono mt-0.5">of 10</div>
+            {/* Connector line */}
+            <div className="absolute -left-8 top-1/2 w-6 h-[1px] bg-gradient-to-l from-white/10 to-transparent" />
+          </div>
+          
+          {/* Bottom left satellite */}
+          <div className="absolute bottom-4 left-4 group/sat">
+            <div className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mb-1">Time</div>
+            <div className="text-xl font-extralight text-white/80">42<span className="text-sm text-zinc-500 ml-0.5">s</span></div>
+            <div className="text-[9px] text-zinc-600 font-mono mt-0.5">per question</div>
+            {/* Connector line */}
+            <div className="absolute -right-8 top-1/2 w-6 h-[1px] bg-gradient-to-r from-white/10 to-transparent" />
           </div>
         </div>
       </div>
-    )
-  },
+
+      {/* Bottom micro-bar */}
+      <div className="flex items-center justify-between px-2 pt-4 border-t border-white/[0.04]">
+        <div className="flex items-center gap-3">
+          <span className="w-1 h-1 rounded-full bg-white/40 animate-pulse" />
+          <span className="text-[9px] text-zinc-600 font-mono uppercase tracking-wider">Last updated 2m ago</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="text-[9px] text-zinc-600 font-mono">312 active</span>
+          <span className="text-[9px] text-zinc-700">|</span>
+          <span className="text-[9px] text-zinc-600 font-mono">19 pending</span>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 ];
 
