@@ -94,9 +94,6 @@ const steps: Step[] = [
   },
 ]
 
-// Restructured Bento Grid with clean vertical separation (Media top, text bottom for precise alignment)
-
-
 const pricingTiers: PricingTier[] = [
   {
     name: "Starter",
@@ -221,7 +218,7 @@ export default function Home() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => router.push("/signin")}
-            className="hidden md:block text-[13px] font-semibold px-6 py-2.5 rounded-full bg-white/[0.05] text-white hover:bg-white hover:text-black transition-all duration-300 cursor-pointer backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+            className="hidden md:block text-[13px] font-semibold px-6 py-2.5 rounded-md bg-white/[0.05] text-white hover:bg-white hover:text-black transition-all duration-300 cursor-pointer backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
           >
             Request Access
           </motion.button>
@@ -254,7 +251,7 @@ export default function Home() {
             ))}
             <button
               onClick={() => router.push("/signin")}
-              className="text-[14px] font-semibold px-4 py-3 mt-2 rounded-full bg-white text-black text-center cursor-pointer hover:bg-white/90 transition-all duration-300"
+              className="text-[14px] font-semibold px-4 py-3 mt-2 rounded-md bg-white text-black text-center cursor-pointer hover:bg-white/90 transition-all duration-300"
             >
               Request Access
             </button>
@@ -309,7 +306,7 @@ export default function Home() {
             whileHover={{ scale: 1.03, boxShadow: "0 0 50px rgba(255,255,255,0.15)" }}
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push("/signin")}
-            className="group relative text-[13px] font-bold px-10 py-4 rounded-2xl bg-white text-black cursor-pointer hover:bg-gray-50 transition-all duration-300 w-full sm:w-auto uppercase tracking-[0.15em] overflow-hidden"
+            className="group relative text-[13px] font-bold px-10 py-4 rounded-md bg-white text-black cursor-pointer hover:bg-gray-50 transition-all duration-300 w-full sm:w-auto uppercase tracking-[0.15em] overflow-hidden"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
               Deploy Free Quiz
@@ -322,7 +319,7 @@ export default function Home() {
           <motion.button
             whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.06)" }}
             whileTap={{ scale: 0.97 }}
-            className="group text-[13px] font-semibold px-10 py-4 rounded-2xl bg-white/[0.02] text-white cursor-pointer transition-all backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-white/[0.06] hover:ring-white/[0.12] w-full sm:w-auto uppercase tracking-[0.15em] flex items-center justify-center gap-2"
+            className="group text-[13px] font-semibold px-10 py-4 rounded-md bg-white/[0.02] text-white cursor-pointer transition-all backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-white/[0.06] hover:ring-white/[0.12] w-full sm:w-auto uppercase tracking-[0.15em] flex items-center justify-center gap-2"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-white/50 group-hover:text-white/80 transition-colors">
               <polygon points="5 3 19 12 5 21 5 3" />
@@ -622,7 +619,7 @@ export default function Home() {
                       <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
                       LIVE
                     </div>
-                    <button className="w-7 h-7 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.06] transition-all">
+                    <button className="w-7 h-7 rounded-md bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.06] transition-all">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
                     </button>
                   </div>
@@ -837,9 +834,9 @@ export default function Home() {
                     whileHover={picked === null ? { scale: 1.01, x: 4 } : {}}
                     whileTap={picked === null ? { scale: 0.99 } : {}}
                     onClick={() => picked === null && setPicked(i)}
-                    className={`flex items-center gap-5 px-6 py-4 rounded-2xl text-[14px] transition-all duration-300 ${cls} ${picked === null ? "cursor-pointer" : "cursor-default"}`}
+                    className={`flex items-center gap-5 px-6 py-4 rounded-md text-[14px] transition-all duration-300 ${cls} ${picked === null ? "cursor-pointer" : "cursor-default"}`}
                   >
-                    <span className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center text-[10px] font-mono mt-px transition-colors ${((chosen && o.correct) || (revealed && o.correct))
+                    <span className={`w-8 h-8 shrink-0 rounded-md flex items-center justify-center text-[10px] font-mono mt-px transition-colors ${((chosen && o.correct) || (revealed && o.correct))
                         ? 'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/30'
                         : (chosen && !o.correct)
                           ? 'bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/30'
@@ -947,7 +944,7 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => router.push("/signin")}
-                className={`w-full py-4 rounded-full text-[12px] font-bold uppercase tracking-widest transition-colors shadow-md ${tier.highlighted
+                className={`w-full py-4 rounded-md text-[12px] font-bold uppercase tracking-widest transition-colors shadow-md ${tier.highlighted
                     ? "bg-white text-black hover:bg-gray-200"
                     : "bg-white/[0.03] text-white hover:bg-white/[0.08] ring-1 ring-white/[0.05] hover:ring-white/[0.1]"
                   }`}
@@ -980,7 +977,7 @@ export default function Home() {
             onClick={() => router.push("/signin")}
             whileHover={{ scale: 1.02, boxShadow: "0 0 40px rgba(255,255,255,0.2)" }}
             whileTap={{ scale: 0.98 }}
-            className="text-[14px] font-bold px-12 py-5 rounded-full bg-white text-black uppercase tracking-widest cursor-pointer hover:bg-gray-200 transition-all shadow-lg"
+            className="text-[14px] font-bold px-12 py-5 rounded-md bg-white text-black uppercase tracking-widest cursor-pointer hover:bg-gray-200 transition-all shadow-lg"
           >
             Upload Policy PDF
           </motion.button>
