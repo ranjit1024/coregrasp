@@ -59,11 +59,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
     { name: "Analytics", href: "/home/analytics", icon: BarChart3, disabled: true, badge: "Soon" },
   ];
   
-  const settingsItems = [
-    { name: "Integrations", href: "/home/settings/integrations" },
-    { name: "Organization", href: "/home/settings/organization" },
-    { name: "Billing", href: "/home/settings/billing" },
-  ];
+
 
   // Helper function to get user initials
   const getInitials = (name?: string) => {
@@ -144,32 +140,8 @@ export default function RootLayout({children}:{children:React.ReactNode}){
             );
           })}
 
-          <div className="text-[11px] font-semibold text-[#71717A] uppercase tracking-wider mt-8 mb-2 px-2">
-            Settings
-          </div>
-          {settingsItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <button
-                key={item.name}
-                onClick={() => router.push(item.href)}
-                className={`flex items-center gap-3 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors duration-200 relative group text-left ${
-                  isActive
-                    ? "text-white bg-[#18181B]"
-                    : "text-[#A1A1AA] hover:text-white hover:bg-white/[0.04]"
-                }`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute left-0 w-0.5 h-4 bg-emerald-500 rounded-r-full"
-                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                  />
-                )}
-                {item.name}
-              </button>
-            )
-          })}
+          
+      
         </nav>
 
         {/* ── ACTUAL USER PROFILE SECTION WITH POPUP ── */}
