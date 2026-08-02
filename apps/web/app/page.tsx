@@ -265,219 +265,532 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <motion.section
-        style={{ opacity: heroOpacity, y: heroY }}
-        className="relative max-w-[800px] lg:max-w-[1000px] mx-auto w-full px-6 pt-[140px] pb-24 flex flex-col items-center text-center z-10"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2.5 rounded-full bg-white/[0.02] text-emerald-400 mb-10 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_30px_rgba(52,211,153,0.1)] ring-1 ring-white/[0.03]"
-        >
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
-          </span>
-          Compliance Engine 2.0
-        </motion.div>
+  style={{ opacity: heroOpacity, y: heroY }}
+  className="relative max-w-[1100px] mx-auto w-full px-6 pt-[120px] md:pt-[160px] pb-20 flex flex-col items-center text-center z-10 overflow-hidden"
+>
+  {/* Ambient background glow behind hero */}
+  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-emerald-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-[300px] bg-gradient-to-b from-emerald-500/20 via-emerald-500/5 to-transparent pointer-events-none" />
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="serif font-normal leading-[1.0] tracking-[-0.03em] text-[clamp(3.2rem,7vw,6.5rem)] mb-8 text-white drop-shadow-2xl"
-        >
-          Turn a policy PDF into
-          <br />
-          <em className="text-emerald-400 not-italic">a verifiable mandate.</em>
-        </motion.h1>
+  {/* Badge */}
+  <motion.div
+    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+    className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2.5 rounded-full bg-white/[0.02] text-emerald-400 mb-10 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_40px_rgba(52,211,153,0.08)] ring-1 ring-white/[0.06] hover:ring-emerald-500/20 transition-all duration-500 cursor-default group"
+  >
+    <span className="relative flex h-2 w-2">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+    </span>
+    <span className="group-hover:text-emerald-300 transition-colors">Compliance Engine 2.0</span>
+    <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/20 ml-1">NEW</span>
+  </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="text-[17px] lg:text-[19px] text-[#a1a1aa] leading-[1.6] max-w-[620px] mb-10 font-light"
-        >
-          Upload any internal policy document. CoreGrasp uses AI to parse it, generate rigorous assessments, and deploy them instantly so you know who actually understands the rules.
-        </motion.p>
+  {/* Headline */}
+  <motion.h1
+    initial={{ opacity: 0, y: 40 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+    className="serif font-normal leading-[1.05] tracking-[-0.03em] text-[clamp(2.8rem,7vw,6.5rem)] mb-6 text-white max-w-[900px]"
+  >
+    Turn a policy PDF into
+    <br />
+    <span className="relative inline-block mt-2">
+      <em className="text-emerald-400 not-italic font-medium">a verifiable mandate.</em>
+      <svg className="absolute -bottom-2 left-0 w-full h-[6px] text-emerald-500/30" viewBox="0 0 300 6" preserveAspectRatio="none">
+        <path d="M0,3 Q75,0 150,3 T300,3" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+      </svg>
+    </span>
+  </motion.h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-          className="flex flex-col sm:flex-row justify-center gap-4 mb-20 w-full sm:w-auto"
-        >
-          <motion.button
-            whileHover={{ scale: 1.02, boxShadow: "0 0 40px rgba(255,255,255,0.2)" }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => router.push("/signin")}
-            className="text-[14px] font-bold px-10 py-4 rounded-full bg-white text-black cursor-pointer hover:bg-gray-100 transition-all duration-300 w-full sm:w-auto uppercase tracking-widest"
-          >
-            Deploy Free Quiz
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.06)" }}
-            whileTap={{ scale: 0.98 }}
-            className="text-[14px] font-semibold px-10 py-4 rounded-full bg-white/[0.03] text-white cursor-pointer transition-all backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.03] w-full sm:w-auto uppercase tracking-widest"
-          >
-            View Architecture
-          </motion.button>
-        </motion.div>
+  {/* Subheadline */}
+  <motion.p
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: 0.35 }}
+    className="text-[16px] md:text-[18px] text-[#a1a1aa] leading-[1.7] max-w-[560px] mb-12 font-light"
+  >
+    Upload any internal policy. CoreGrasp parses it with AI, generates rigorous assessments, and deploys them instantly — so you know who actually understands the rules.
+  </motion.p>
 
-        {/* Social Proof */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col items-center gap-6 w-full"
-        >
-          <div className="h-[1px] w-24 bg-white/[0.1] mb-2 rounded-full" />
-          <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#71717a]">
-            Infrastructure Trusted By
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-10 lg:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-700">
-            {companyLogos.map((logo) => (
-              <span key={logo} className="serif text-[22px] text-white font-normal tracking-wide">
-                {logo}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-      </motion.section>
+  {/* CTAs */}
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: 0.45 }}
+    className="flex flex-col sm:flex-row justify-center gap-3 mb-16 w-full sm:w-auto"
+  >
+    <motion.button
+      whileHover={{ scale: 1.03, boxShadow: "0 0 50px rgba(255,255,255,0.15)" }}
+      whileTap={{ scale: 0.97 }}
+      onClick={() => router.push("/signin")}
+      className="group relative text-[13px] font-bold px-10 py-4 rounded-full bg-white text-black cursor-pointer hover:bg-gray-50 transition-all duration-300 w-full sm:w-auto uppercase tracking-[0.15em] overflow-hidden"
+    >
+      <span className="relative z-10 flex items-center justify-center gap-2">
+        Deploy Free Quiz
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-0.5">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </span>
+    </motion.button>
 
-      {/* ── DASHBOARD MOCKUP ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 80 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-[1000px] lg:max-w-[1200px] mx-auto w-full px-6 pb-32 z-10"
-      >
-        <div className="bg-black/40 backdrop-blur-2xl rounded-3xl overflow-hidden shadow-[0_30px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/[0.03] relative group">
-          {/* Top-bar Glass effect */}
-          <div className="bg-white/[0.01] px-6 py-4 flex items-center gap-4 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.02)]">
-            <div className="flex gap-2">
-              <span className="w-3 h-3 rounded-full bg-white/[0.1] shadow-inner" />
-              <span className="w-3 h-3 rounded-full bg-white/[0.1] shadow-inner" />
-              <span className="w-3 h-3 rounded-full bg-white/[0.1] shadow-inner" />
-            </div>
-            <div className="flex-1 flex justify-center">
-              <span className="text-[11px] font-mono font-medium text-[#71717a] bg-white/[0.03] px-4 py-1.5 rounded-full ring-1 ring-white/[0.02]">
-                acme-corp.coregrasp.com/dashboard
-              </span>
-            </div>
-          </div>
+    <motion.button
+      whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.06)" }}
+      whileTap={{ scale: 0.97 }}
+      className="group text-[13px] font-semibold px-10 py-4 rounded-full bg-white/[0.02] text-white cursor-pointer transition-all backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-white/[0.06] hover:ring-white/[0.12] w-full sm:w-auto uppercase tracking-[0.15em] flex items-center justify-center gap-2"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-white/50 group-hover:text-white/80 transition-colors">
+        <polygon points="5 3 19 12 5 21 5 3" />
+      </svg>
+      See How It Works
+    </motion.button>
+  </motion.div>
 
-          <div className="p-6 lg:p-10 relative">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
-              {[
-                { label: "Active Policies", val: "04", sub: "Leave, Conduct, IT", subColor: "text-emerald-400", trend: "+1 WTD" },
-                { label: "Employees Sync'd", val: "312", sub: "↑ 24 WTD", subColor: "text-emerald-400", trend: "92% CPL" },
-                { label: "Mandate Gaps", val: "38", sub: "Reminders active", subColor: "text-rose-400", trend: "↓ 12% MTD" },
-              ].map((s, i) => (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  key={i}
-                  className="bg-white/[0.02] rounded-2xl p-6 lg:p-8 flex flex-col justify-between hover:bg-white/[0.03] transition-all duration-300 ring-1 ring-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
-                >
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="text-[10px] font-bold text-[#71717a] uppercase tracking-widest">{s.label}</div>
-                    <div className="text-[9px] font-mono text-[#52525b] ring-1 ring-white/[0.03] px-2 py-0.5 rounded-full bg-black/50">{s.trend}</div>
-                  </div>
-                  <div className={`serif text-5xl lg:text-6xl mb-2 tracking-tight ${i === 2 ? "text-rose-400" : "text-white"}`}>{s.val}</div>
-                  <div className={`text-[11px] font-mono uppercase tracking-wider ${s.subColor}`}>{s.sub}</div>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-5">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-white/[0.02] rounded-2xl p-6 lg:p-8 ring-1 ring-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
-              >
-                <div className="flex justify-between items-center mb-6">
-                  <div className="text-[12px] font-bold uppercase tracking-widest text-white">Latest Attempts // Leave Policy</div>
-                  <div className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full ring-1 ring-emerald-500/20 shadow-[0_0_10px_rgba(52,211,153,0.1)] flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" /> LIVE
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  {candidates.map((c, i) => (
-                    <motion.div
-                      key={c.name}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.05 }}
-                      className="flex justify-between items-center py-3 px-4 rounded-xl hover:bg-white/[0.03] transition-colors group/row"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center text-[10px] font-mono text-[#a1a1aa] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.05]">
-                          {c.avatar}
-                        </div>
-                        <span className="text-[13px] text-[#a1a1aa] font-medium group-hover/row:text-white transition-colors">{c.name}</span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="w-28 h-1.5 bg-white/[0.03] overflow-hidden hidden sm:block rounded-full">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: c.score }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, delay: 0.3 + i * 0.1, ease: "easeOut" }}
-                            className={`h-full rounded-full ${c.pass ? "bg-emerald-400" : "bg-rose-400"}`}
-                          />
-                        </div>
-                        <span className={`text-[11px] font-mono px-3 py-1 rounded-full ring-1 ${
-                          c.pass
-                            ? "bg-emerald-500/10 text-emerald-400 ring-emerald-500/20"
-                            : "bg-rose-500/10 text-rose-400 ring-rose-500/20"
-                        }`}>
-                          {c.score}
-                        </span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-white/[0.02] rounded-2xl p-6 lg:p-8 ring-1 ring-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
-              >
-                <div className="text-[12px] font-bold uppercase tracking-widest mb-8 text-white">Aggregated Pass Rate</div>
-                <div className="flex flex-col gap-6">
-                  {policyBars.map((b, i) => (
-                    <div key={b.label}>
-                      <div className="flex justify-between text-[11px] font-mono text-[#71717a] mb-2.5 uppercase">
-                        <span>{b.label}</span>
-                        <span className="text-white">{b.pct}%</span>
-                      </div>
-                      <div className="h-1.5 bg-white/[0.03] overflow-hidden rounded-full">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${b.pct}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                          className={`h-full rounded-full ${b.color} shadow-[0_0_15px_rgba(52,211,153,0.3)]`}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
+  {/* ─── LIVE PRODUCT PREVIEW ─── */}
+  <motion.div
+    initial={{ opacity: 0, y: 60, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    className="relative w-full max-w-[800px] mb-20 group"
+  >
+    {/* Glow behind preview */}
+    <div className="absolute -inset-4 bg-gradient-to-b from-emerald-500/[0.07] to-transparent rounded-[32px] blur-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
+    
+    <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-3xl border border-white/[0.06] p-1 shadow-[0_0_60px_rgba(0,0,0,0.4)] overflow-hidden">
+      {/* Browser chrome */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.04]">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.08]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.08]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.08]" />
+        </div>
+        <div className="flex-1 flex justify-center">
+          <div className="px-3 py-1 rounded-md bg-white/[0.03] border border-white/[0.05] text-[10px] text-white/20 font-mono">
+            app.coregrasp.io/dashboard
           </div>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Preview content */}
+      <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Step 1: Upload */}
+        <div className="relative bg-white/[0.02] rounded-2xl p-5 border border-white/[0.05] hover:border-white/[0.1] transition-all duration-500">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-xs">1</div>
+            <span className="text-[11px] font-bold text-white/60 uppercase tracking-wider">Upload Policy</span>
+          </div>
+          <div className="space-y-2">
+            <div className="h-2 bg-white/[0.06] rounded-full w-full" />
+            <div className="h-2 bg-white/[0.04] rounded-full w-4/5" />
+            <div className="h-2 bg-white/[0.04] rounded-full w-3/5" />
+          </div>
+          <div className="mt-4 flex items-center gap-2">
+            <div className="px-2 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[9px] text-emerald-400 font-medium">✓ Parsed</div>
+            <div className="text-[9px] text-white/20 font-mono">42 clauses</div>
+          </div>
+        </div>
+
+        {/* Step 2: Generate */}
+        <div className="relative bg-white/[0.02] rounded-2xl p-5 border border-white/[0.05] hover:border-white/[0.1] transition-all duration-500">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-xs">2</div>
+            <span className="text-[11px] font-bold text-white/60 uppercase tracking-wider">Generate Quiz</span>
+          </div>
+          <div className="flex items-center gap-1.5 mb-3">
+            {["A", "B", "C", "D"].map((opt) => (
+              <div key={opt} className="flex-1 h-8 rounded-md bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-[10px] text-white/30 font-bold">{opt}</div>
+            ))}
+          </div>
+          <div className="h-2 bg-blue-500/10 rounded-full w-full overflow-hidden">
+            <motion.div 
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 2, delay: 1.2, ease: "easeInOut" }}
+              className="h-full bg-gradient-to-r from-blue-500/40 to-blue-400/20 rounded-full" 
+            />
+          </div>
+          <div className="mt-2 text-[9px] text-blue-400/60 font-mono">Generating 12 questions...</div>
+        </div>
+
+        {/* Step 3: Deploy */}
+        <div className="relative bg-white/[0.02] rounded-2xl p-5 border border-white/[0.05] hover:border-white/[0.1] transition-all duration-500">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xs">3</div>
+            <span className="text-[11px] font-bold text-white/60 uppercase tracking-wider">Send & Track</span>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex -space-x-1.5">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="w-5 h-5 rounded-full bg-white/[0.08] border border-white/[0.1] flex items-center justify-center text-[7px] text-white/40">{String.fromCharCode(65+i)}</div>
+              ))}
+            </div>
+            <span className="text-[9px] text-white/30">+243 more</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[9px] text-emerald-400/60">Sent • 89% opened</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+
+  {/* ─── SOCIAL PROOF ─── */}
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8, delay: 0.9 }}
+    className="flex flex-col items-center gap-5 w-full"
+  >
+    <div className="flex items-center gap-4 w-full max-w-md">
+      <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/[0.1]" />
+      <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#71717a] whitespace-nowrap">
+        Trusted by compliance teams at
+      </p>
+      <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/[0.1]" />
+    </div>
+
+    <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-40 hover:opacity-70 transition-all duration-700">
+      {companyLogos.map((logo, i) => (
+        <motion.span 
+          key={logo} 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 + i * 0.1 }}
+          className="serif text-[18px] md:text-[20px] text-white font-normal tracking-wide hover:text-white/80 transition-colors cursor-default"
+        >
+          {logo}
+        </motion.span>
+      ))}
+    </div>
+
+    {/* Trust micro-bar */}
+    <div className="flex items-center gap-6 mt-2">
+      <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400/60"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        SOC 2 Compliant
+      </div>
+      <div className="w-[1px] h-3 bg-white/[0.08]" />
+      <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400/60"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        End-to-End Encrypted
+      </div>
+      <div className="w-[1px] h-3 bg-white/[0.08]" />
+      <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400/60"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        GDPR Ready
+      </div>
+    </div>
+  </motion.div>
+</motion.section>
+
+      {/* ── DASHBOARD MOCKUP ── */}
+  
+  <motion.div
+  initial={{ opacity: 0, y: 80 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, margin: "-100px" }}
+  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+  className="max-w-[1000px] lg:max-w-[1200px] mx-auto w-full px-6 pb-32 z-10"
+>
+  <div className="relative bg-black/40 backdrop-blur-2xl rounded-[32px] overflow-hidden shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/[0.04] group">
+    
+    {/* Subtle grid background */}
+    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] pointer-events-none" />
+    
+    {/* Ambient top glow */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] bg-emerald-500/[0.04] rounded-full blur-[80px] pointer-events-none group-hover:bg-emerald-500/[0.06] transition-all duration-1000" />
+
+    {/* Browser chrome */}
+    <div className="relative bg-white/[0.015] px-6 py-4 flex items-center gap-4 backdrop-blur-xl border-b border-white/[0.04]">
+      <div className="flex gap-2">
+        <span className="w-3 h-3 rounded-full bg-rose-500/20 ring-1 ring-rose-500/30" />
+        <span className="w-3 h-3 rounded-full bg-amber-500/20 ring-1 ring-amber-500/30" />
+        <span className="w-3 h-3 rounded-full bg-emerald-500/20 ring-1 ring-emerald-500/30" />
+      </div>
+      <div className="flex-1 flex justify-center">
+        <div className="flex items-center gap-2 text-[11px] font-mono text-[#52525b] bg-white/[0.03] px-4 py-1.5 rounded-full ring-1 ring-white/[0.04]">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-emerald-500/40"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          acme-corp.coregrasp.com/dashboard
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+        <span className="text-[9px] text-emerald-400/60 font-mono uppercase tracking-wider">Live</span>
+      </div>
+    </div>
+
+    <div className="p-6 lg:p-10 relative">
+      {/* ─── STATS ROW ─── */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        {[
+          { 
+            label: "Active Policies", 
+            val: "04", 
+            sub: "Leave, Conduct, IT, Security", 
+            subColor: "text-emerald-400", 
+            trend: "+1 this week",
+            trendUp: true,
+            icon: "📄",
+            sparkline: [40, 55, 45, 60, 52, 68, 72]
+          },
+          { 
+            label: "Employees Sync'd", 
+            val: "312", 
+            sub: "↑ 24 this week", 
+            subColor: "text-emerald-400", 
+            trend: "92% complete",
+            trendUp: true,
+            icon: "👥",
+            sparkline: [200, 220, 245, 260, 280, 300, 312]
+          },
+          { 
+            label: "Mandate Gaps", 
+            val: "38", 
+            sub: "Reminders queued", 
+            subColor: "text-amber-400", 
+            trend: "↓ 12% vs last month",
+            trendUp: false,
+            icon: "⚠️",
+            sparkline: [55, 52, 48, 50, 45, 42, 38]
+          },
+        ].map((s, i) => (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+            key={i}
+            className="relative bg-white/[0.02] rounded-2xl p-6 lg:p-7 flex flex-col justify-between hover:bg-white/[0.035] transition-all duration-500 ring-1 ring-white/[0.03] hover:ring-white/[0.08] group/stat overflow-hidden"
+          >
+            {/* Hover glow */}
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/[0.03] rounded-full blur-[40px] opacity-0 group-hover/stat:opacity-100 transition-opacity duration-700" />
+            
+            <div className="flex justify-between items-start mb-4 relative z-10">
+              <div className="flex items-center gap-2.5">
+                <span className="text-lg opacity-60">{s.icon}</span>
+                <span className="text-[10px] font-bold text-[#71717a] uppercase tracking-[0.2em]">{s.label}</span>
+              </div>
+              <div className={`text-[9px] font-mono px-2.5 py-1 rounded-full ring-1 flex items-center gap-1 ${
+                s.trendUp 
+                  ? "bg-emerald-500/5 text-emerald-400/70 ring-emerald-500/10" 
+                  : "bg-amber-500/5 text-amber-400/70 ring-amber-500/10"
+              }`}>
+                {s.trendUp ? "↑" : "↓"} {s.trend}
+              </div>
+            </div>
+
+            <div className="flex items-end justify-between relative z-10">
+              <div>
+                <div className={`serif text-4xl lg:text-5xl tracking-tight mb-1.5 ${i === 2 ? "text-amber-400" : "text-white"}`}>
+                  {s.val}
+                </div>
+                <div className={`text-[10px] font-mono uppercase tracking-wider ${s.subColor} opacity-80`}>
+                  {s.sub}
+                </div>
+              </div>
+              
+              {/* Mini sparkline */}
+              <svg width="60" height="30" viewBox="0 0 60 30" className="opacity-40 group-hover/stat:opacity-70 transition-opacity">
+                <defs>
+                  <linearGradient id={`spark-${i}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={i === 2 ? "#f59e0b" : "#34d399"} stopOpacity="0.3" />
+                    <stop offset="100%" stopColor={i === 2 ? "#f59e0b" : "#34d399"} stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d={`M0,${30 - (s.sparkline[0]/Math.max(...s.sparkline))*30} ${s.sparkline.slice(1).map((v, j) => `L${(j+1)*(60/(s.sparkline.length-1))},${30 - (v/Math.max(...s.sparkline))*30}`).join(" ")}`}
+                  fill="none"
+                  stroke={i === 2 ? "#f59e0b" : "#34d399"}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d={`M0,${30 - (s.sparkline[0]/Math.max(...s.sparkline))*30} ${s.sparkline.slice(1).map((v, j) => `L${(j+1)*(60/(s.sparkline.length-1))},${30 - (v/Math.max(...s.sparkline))*30}`).join(" ")} V30 H0 Z`}
+                  fill={`url(#spark-${i})`}
+                  opacity="0.2"
+                />
+              </svg>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ─── MAIN DASHBOARD GRID ─── */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
+        
+        {/* Left: Latest Attempts */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="relative bg-white/[0.02] rounded-2xl p-6 lg:p-8 ring-1 ring-white/[0.03] hover:ring-white/[0.06] transition-all duration-500"
+        >
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <div className="text-[12px] font-bold uppercase tracking-[0.15em] text-white mb-1">Latest Attempts</div>
+              <div className="text-[10px] text-[#71717a] font-mono">Leave Policy • Last 24h</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(52,211,153,0.08)] flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                LIVE
+              </div>
+              <button className="w-7 h-7 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.06] transition-all">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Table header */}
+          <div className="flex items-center px-4 pb-3 mb-2 border-b border-white/[0.03]">
+            <div className="flex-1 text-[9px] font-bold text-[#52525b] uppercase tracking-[0.2em]">Candidate</div>
+            <div className="w-24 text-[9px] font-bold text-[#52525b] uppercase tracking-[0.2em] text-right hidden sm:block">Progress</div>
+            <div className="w-20 text-[9px] font-bold text-[#52525b] uppercase tracking-[0.2em] text-right">Score</div>
+            <div className="w-16 text-[9px] font-bold text-[#52525b] uppercase tracking-[0.2em] text-right hidden md:block">Time</div>
+          </div>
+
+          <div className="space-y-1">
+            {candidates.map((c, i) => (
+              <motion.div
+                key={c.name}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 + i * 0.06 }}
+                className="flex items-center py-3 px-4 rounded-xl hover:bg-white/[0.03] transition-all duration-300 group/row cursor-default"
+              >
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold ring-1 ${
+                    c.pass ? "bg-emerald-500/10 text-emerald-400 ring-emerald-500/20" : "bg-rose-500/10 text-rose-400 ring-rose-500/20"
+                  }`}>
+                    {c.avatar}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[12px] text-[#a1a1aa] font-medium group-hover/row:text-white transition-colors truncate">{c.name}</div>
+                    <div className="text-[9px] text-[#52525b] font-mono">{c.role || "Engineering"}</div>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="w-24 hidden sm:block">
+                  <div className="h-1 bg-white/[0.04] rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: c.score }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: 0.5 + i * 0.08, ease: "easeOut" }}
+                      className={`h-full rounded-full ${c.pass ? "bg-emerald-400" : "bg-rose-400"} shadow-[0_0_8px_rgba(52,211,153,0.2)]`}
+                    />
+                  </div>
+                </div>
+
+                {/* Score badge */}
+                <div className="w-20 text-right">
+                  <span className={`inline-flex items-center gap-1 text-[11px] font-mono px-2.5 py-1 rounded-lg ring-1 ${
+                    c.pass
+                      ? "bg-emerald-500/[0.08] text-emerald-400 ring-emerald-500/15"
+                      : "bg-rose-500/[0.08] text-rose-400 ring-rose-500/15"
+                  }`}>
+                    {c.pass ? "✓" : "✕"} {c.score}
+                  </span>
+                </div>
+
+                {/* Time */}
+                <div className="w-16 text-right hidden md:block">
+                  <span className="text-[10px] text-[#52525b] font-mono">{c.time || "2m ago"}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div className="mt-4 pt-4 border-t border-white/[0.03] flex justify-between items-center">
+            <span className="text-[10px] text-[#52525b]">Showing 5 of 312 employees</span>
+            <button className="text-[10px] font-bold text-emerald-400/70 hover:text-emerald-400 uppercase tracking-wider transition-colors">
+              View All →
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Right: Analytics Column */}
+        <div className="flex flex-col gap-4">
+          {/* Pass Rate Bars */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="relative bg-white/[0.02] rounded-2xl p-6 lg:p-8 ring-1 ring-white/[0.03] hover:ring-white/[0.06] transition-all duration-500 flex-1"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <div className="text-[12px] font-bold uppercase tracking-[0.15em] text-white">Pass Rate by Policy</div>
+                <div className="text-[10px] text-[#71717a] font-mono mt-1">Last 30 days</div>
+              </div>
+              <div className="text-[10px] font-mono text-white/30 bg-white/[0.03] px-2 py-1 rounded-md">Avg: 78%</div>
+            </div>
+
+            <div className="flex flex-col gap-5">
+              {policyBars.map((b, i) => (
+                <div key={b.label}>
+                  <div className="flex justify-between text-[10px] mb-2">
+                    <span className="text-[#a1a1aa] font-medium uppercase tracking-wider">{b.label}</span>
+                    <span className="text-white font-mono font-bold">{b.pct}%</span>
+                  </div>
+                  <div className="h-2 bg-white/[0.03] overflow-hidden rounded-full ring-1 ring-white/[0.02]">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${b.pct}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.2, delay: 0.4 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                      className={`h-full rounded-full ${b.color} relative`}
+                    >
+                      <div className={`absolute inset-0 rounded-full ${b.color} opacity-50 blur-sm`} />
+                      <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-1 h-3 ${b.color} rounded-full`} />
+                    </motion.div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Mini Activity Feed */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="relative bg-white/[0.02] rounded-2xl p-6 ring-1 ring-white/[0.03] hover:ring-white/[0.06] transition-all duration-500"
+          >
+            <div className="text-[12px] font-bold uppercase tracking-[0.15em] text-white mb-4">Recent Activity</div>
+            <div className="space-y-3">
+              {[
+                { icon: "📤", text: "Quiz sent to 24 candidates", time: "2m ago", color: "text-blue-400" },
+                { icon: "✓", text: "Sarah Chen passed IT Policy", time: "5m ago", color: "text-emerald-400" },
+                { icon: "📝", text: "New policy uploaded", time: "12m ago", color: "text-amber-400" },
+                { icon: "⚠️", text: "3 reminders triggered", time: "1h ago", color: "text-rose-400" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 group/item">
+                  <div className={`w-6 h-6 rounded-md bg-white/[0.03] border border-white/[0.05] flex items-center justify-center text-xs ${item.color}`}>
+                    {item.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[11px] text-[#a1a1aa] group-hover/item:text-white transition-colors truncate">{item.text}</div>
+                  </div>
+                  <div className="text-[9px] text-[#52525b] font-mono shrink-0">{item.time}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  </div>
+</motion.div>
 
       {/* ── BENTO GRID FEATURES (STRUCTURED & ALIGNED) ── */}
       {/* ── BENTO GRID FEATURES (ENHANCED) ── */}
