@@ -303,7 +303,7 @@ export default function Home() {
   {/* Line 2 + 3 with glow and gradient */}
   <span className="relative mt-2 block sm:mt-3">
     {/* Ambient Glow - softer, more diffuse */}
-    <span className="absolute left-1/2 top-1/3 -z-10 h-[100%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/15 blur-[80px] sm:blur-[120px]" />
+    <span className="absolute left-1/2 top-1/3 -z-10 h-[1%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/15 blur-[80px] sm:blur-[120px]" />
 
     {/* Gradient Text */}
     <span className="block w-[30vw] bg-gradient-to-b from-emerald-50 via-emerald-200 to-emerald-400 bg-clip-text font-serif text-[clamp(2.5rem,6vw,5.5rem)] serif leading-[1.1] tracking-[-0.04em] text-transparent">
