@@ -288,19 +288,24 @@ export default function Home() {
         </motion.div>
 
         {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="serif font-normal leading-[1.05] tracking-[-0.03em] text-[clamp(2.8rem,7vw,6.5rem)] mb-6 text-white max-w-[900px]"
-        >
-          Turn a policy PDF into
-          <br />
-          <span className="relative inline-block mt-2">
-            <em className="text-emerald-400 not-italic font-medium">a verifiable mandate.</em>
-           
-          </span>
-        </motion.h1>
+        {/* Headline */}
+<motion.h1
+  initial={{ opacity: 0, y: 40 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+  className="serif font-normal leading-[1.08] tracking-[-0.03em] text-[clamp(2.5rem,6vw,5.2rem)] mb-8 text-white max-w-[850px]"
+  style={{ textWrap: "balance" }}
+>
+  <span>Upload any policy. </span>
+  <span className="relative inline-block mt-1 sm:mt-2">
+    {/* Glow */}
+    <span className="absolute -inset-4 bg-emerald-500/15 blur-[45px] rounded-full pointer-events-none -z-10" />
+    {/* Gradient text */}
+    <em className="not-italic font-medium bg-gradient-to-r from-emerald-200 via-emerald-400 to-emerald-500 bg-clip-text text-transparent">
+      Quiz your team. See who gets it.
+    </em>
+  </span>
+</motion.h1>
 
         {/* Subheadline */}
         <motion.p
