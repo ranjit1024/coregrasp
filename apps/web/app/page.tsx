@@ -1020,7 +1020,7 @@ export default function Home() {
             <div className="md:col-span-1">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-white/[0.05]">
-                  <span className="serif text-sm text-white">C</span>
+                  <CoreGraspLogo/>
                 </div>
                 <span className="serif text-xl tracking-wide text-white">
                   Core<span className="text-emerald-400">Grasp</span>
@@ -1041,7 +1041,7 @@ export default function Home() {
               <span className="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Entity</span>
               <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Changelog</a>
               <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Engineering Blog</a>
-              <a href="#" className="text-[13px] text-[#71717a] hover:text-white transition-colors font-light">Careers</a>
+            
             </div>
             <div className="flex flex-col gap-3">
               <span className="text-[10px] font-bold uppercase tracking-widest text-white mb-3">Legal</span>
