@@ -293,17 +293,25 @@ export default function Home() {
   initial={{ opacity: 0, y: 40 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-  className="serif font-normal leading-[1.08] tracking-[-0.03em] text-[clamp(2.5rem,6vw,5.2rem)] mb-8 text-white max-w-[850px]"
-  style={{ textWrap: "balance" }}
+  className="relative z-10 mx-auto max-w-[1000px] text-center"
 >
-  <span>Upload any policy. </span>
-  <span className="relative inline-block mt-1 sm:mt-2">
-    {/* Glow */}
-    <span className="absolute -inset-4 bg-emerald-500/15 blur-[45px] rounded-full pointer-events-none -z-10" />
-    {/* Gradient text */}
-    <em className="not-italic font-medium bg-gradient-to-r from-emerald-200 via-emerald-400 to-emerald-500 bg-clip-text text-transparent">
-      Quiz your team. See who gets it.
-    </em>
+  {/* Line 1 */}
+  <span className="block serif text-[clamp(2.5rem,6vw,5.5rem)] font-normal leading-[1.1] tracking-[-0.04em] text-white/90">
+    Upload any policy.
+  </span>
+
+  {/* Line 2 + 3 with glow and gradient */}
+  <span className="relative mt-2 block sm:mt-3">
+    {/* Ambient Glow - softer, more diffuse */}
+    <span className="absolute left-1/2 top-1/3 -z-10 h-[100%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/15 blur-[80px] sm:blur-[120px]" />
+
+    {/* Gradient Text */}
+    <span className="block w-[30vw] bg-gradient-to-b from-emerald-50 via-emerald-200 to-emerald-400 bg-clip-text font-serif text-[clamp(2.5rem,6vw,5.5rem)] serif leading-[1.1] tracking-[-0.04em] text-transparent">
+      <span className="block sarif">
+        Know who <em className="serif">actually</em>
+      </span>
+      <span className="block ">read it.</span>
+    </span>
   </span>
 </motion.h1>
 
@@ -312,7 +320,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="text-[16px] md:text-[18px] text-[#a1a1aa] leading-[1.7] max-w-[560px] mb-12 font-light"
+          className="text-[16px] md:text-[18px] text-[#a1a1aa] leading-[1.7] max-w-[660px] mb-12 mt-4 font-light"
         >
           Upload any internal policy. CoreGrasp parses it with AI, generates rigorous assessments, and deploys them instantly — so you know who actually understands the rules.
         </motion.p>
