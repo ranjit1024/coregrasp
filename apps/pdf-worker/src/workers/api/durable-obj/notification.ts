@@ -1,33 +1,34 @@
 import { Env } from "hono";
 
 export class NotificationHub {
-  constructor(private state: DurableObjectState, private env: Env) {}
+	constructor(private state: DurableObjectState, private env: Env) { }
 
-  async fetch(req: Request) {
-    const upgrade = req.headers.get("Upgrade");
-    if (upgrade === "websocket") {
-      const pair = new WebSocketPair();
-      const [client, server] = Object.values(pair);
-      this.state.acceptWebSocket(server);
-      return new Response(null, { status: 101, webSocket: client });
-    } console
+	async fetch(req: Request) {
 
-    if (req.method === "POST") {
-      const notif = await req.json();
-      for (const ws of this.state.getWebSockets()) {
-        ws.send(JSON.stringify(notif));
-      }
-      return new Response("ok");
-    }
+		const upgrade = req.headers.get("Upgrade");
+		if (upgrade === "websocket") {
+			const pair = new WebSocketPair();
+			const [client, server] = Object.values(pair);
+			this.state.acceptWebSocket(server);
+			return new Response(null, { status: 101, webSocket: client });
+		} console
 
-    return new Response("not found", { status: 404 });
-  }
+		if (req.method === "POST") {
+			const notif = await req.json();
+			for (const ws of this.state.getWebSockets()) {
+				ws.send(JSON.stringify(notif));
+			}
+			return new Response("ok");
+		}
 
-  async webSocketMessage(ws: WebSocket, msg: string) {
-    if (msg === "ping") ws.send("pong");
-  }
+		return new Response("not found", { status: 404 });
+	}
 
-  async webSocketClose(ws: WebSocket) {
-    ws.close();
-  }
+	async webSocketMessage(ws: WebSocket, msg: string) {
+		if (msg === "ping") ws.send("pong");
+	}
+
+	async webSocketClose(ws: WebSocket) {
+		ws.close();
+	}
 }
