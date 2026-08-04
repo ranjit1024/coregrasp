@@ -16,10 +16,10 @@ export type PdfJob = {
 
 export interface MCQ {
     question: string;
-    options: string[]; 
-    correctIndex: number; 
+    options: string[];
+    correctIndex: number;
     explanation?: string;
-   
+
 }
 
 export interface MCQResult {
@@ -27,3 +27,4 @@ export interface MCQResult {
     raw: string;
     category:string
 }
+console.log("Data base is import ")
