@@ -320,13 +320,13 @@ export default function Home() {
           transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="relative z-10 mx-auto max-w-[900px] text-center mb-8"
         >
-          <h1 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] font-normal leading-[1.05] tracking-[-0.03em] text-white">
+          <h1 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] font-mono leading-[1.05] tracking-[-0.03em] text-white">
             Upload any policy.
           </h1>
 
           <div className="relative mt-3 sm:mt-4">
             <span className="absolute left-1/2 top-1/2 -z-10 h-[80%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/10 blur-[100px]" />
-            <h1 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] font-normal leading-[1.05] tracking-[-0.03em]">
+            <h1 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] font-mono leading-[1.05] tracking-[-0.03em]">
               <span className="bg-gradient-to-b from-white via-emerald-100 to-emerald-400 bg-clip-text text-transparent">
                 Know who <em className="italic">actually</em>
               </span>
@@ -470,57 +470,7 @@ export default function Home() {
         </motion.div>
 
         {/* ─── SOCIAL PROOF ─── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
-          className="flex flex-col items-center gap-6 w-full"
-        >
-          <div className="flex items-center gap-4 w-full max-w-md">
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/[0.08]" />
-            <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#52525b] whitespace-nowrap">
-              Trusted by compliance teams at
-            </p>
-            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/[0.08]" />
-          </div>
-
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 opacity-30 hover:opacity-60 transition-all duration-700">
-            {companyLogos.map((logo, i) => (
-              <motion.span
-                key={logo}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 + i * 0.1 }}
-                className="font-display text-[17px] md:text-[19px] text-white font-normal tracking-wide hover:text-white/80 transition-colors cursor-default"
-              >
-                {logo}
-              </motion.span>
-            ))}
-          </div>
-
-          {/* Trust badges */}
-          <div className="flex items-center gap-6 mt-2">
-            {[
-              { icon: "M22 11.08V12a10 10 0 1 1-5.93-9.14;22 4 12 14.01 9 11.01", text: "SOC 2 Compliant" },
-              { icon: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z", text: "GDPR Ready" },
-              { icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z", text: "End-to-End Encrypted" },
-            ].map((badge, i) => (
-              <div key={i} className="flex items-center gap-1.5 text-[10px] text-white/25">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400/50">
-                  {badge.icon.includes(';') ? (
-                    <>
-                      <path d={badge.icon.split(';')[0]} />
-                      <polyline points={badge.icon.split(';')[1]} />
-                    </>
-                  ) : (
-                    <path d={badge.icon} />
-                  )}
-                </svg>
-                {badge.text}
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        
       </motion.section>
 
       {/* ═══════════════════════════════════════════════════════════════════════
@@ -537,7 +487,7 @@ export default function Home() {
           {/* Section header */}
           <div className="text-center mb-16">
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#52525b] mb-4 block">Live Dashboard</span>
-            <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-4">
+            <h2 className="font-mono text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-4">
               Real-time compliance intelligence
             </h2>
             <p className="text-[15px] text-[#71717a] max-w-[500px] mx-auto font-light leading-relaxed">
@@ -859,7 +809,7 @@ export default function Home() {
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#52525b] mb-4 block">
               Interactive Demo
             </span>
-            <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-5">
+            <h2 className="font-mono text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-5">
               Inspect the Output
             </h2>
             <p className="text-[15px] text-[#71717a] max-w-[480px] mx-auto font-light leading-relaxed">
@@ -886,7 +836,7 @@ export default function Home() {
               </span>
             </div>
 
-            <div className="text-[18px] lg:text-[21px] font-medium leading-[1.7] mb-12 text-white relative z-10 font-display italic tracking-wide">
+            <div className="text-[18px] font-mono lg:text-[21px] font-medium leading-[1.7] mb-12 text-white relative z-10 italic tracking-wide">
               "An employee has utilized 8 of their 12 annual leave days and requests 5 more in Q4. What is the maximum leave they can carry into the next fiscal year under Section 4?"
             </div>
 
@@ -960,7 +910,7 @@ export default function Home() {
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#52525b] mb-4 block">
               Licensing
             </span>
-            <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-5">
+            <h2 className="font-mono text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-5">
               Predictable Costs
             </h2>
             <p className="text-[15px] text-[#71717a] max-w-[480px] mx-auto font-light leading-relaxed">
