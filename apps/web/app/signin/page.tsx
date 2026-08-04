@@ -34,10 +34,10 @@ export default function AuthPage() {
 
       {/* ── NAV ── */}
       <nav className="absolute top-0 w-full px-6 md:px-10 py-6 flex justify-between items-center z-20">
-         <div className="flex items-center gap-3 cursor-pointer group" >
+         <div className="flex font-mono items-center gap-3 cursor-pointer group" >
           
             <CoreGraspLogo/>
-          <span className="serif text-2xl tracking-wide text-white">
+          <span className="serif text-2xl font-mono tracking-wide text-white">
             Core<span className="text-emerald-400">Grasp</span>
           </span>
         </div>
@@ -89,7 +89,7 @@ export default function AuthPage() {
                 <div className="flex flex-col gap-2.5 mb-6">
                   <button 
                     onClick={() => authClient.signIn.social({ provider: "google", callbackURL: "/home/dashboard" })}
-                    className="flex items-center justify-center gap-3 w-full bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.14] text-white text-[13px] font-medium py-2.5 rounded-xl transition-all duration-300 active:scale-[0.98]"
+                    className="flex hover:cursor-pointer items-center justify-center gap-3 w-full bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.14] text-white text-[13px] font-medium py-2.5 rounded-xl transition-all duration-300 active:scale-[0.98]"
                   >
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
                       <path fill="#EA4335" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -100,15 +100,7 @@ export default function AuthPage() {
                     Continue with Google
                   </button>
                   
-                  <button className="flex items-center justify-center gap-3 w-full bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.14] text-white text-[13px] font-medium py-2.5 rounded-xl transition-all duration-300 active:scale-[0.98]">
-                    <svg className="w-4 h-4" viewBox="0 0 21 21">
-                      <path fill="currentColor" d="M0 0h10v10H0z" className="text-white/70" />
-                      <path fill="currentColor" d="M11 0h10v10H11z" className="text-white/50" />
-                      <path fill="currentColor" d="M0 11h10v10H0z" className="text-white/50" />
-                      <path fill="currentColor" d="M11 11h10v10H11z" className="text-white/70" />
-                    </svg>
-                    Continue with Microsoft
-                  </button>
+                 
                 </div>
 
                 {/* Divider */}

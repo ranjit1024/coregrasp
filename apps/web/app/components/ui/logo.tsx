@@ -1,4 +1,4 @@
-export function CoreGraspLogo({ className = "w-8 h-8 text-emerald-400" }: { className?: string }) {
+export function CoreGraspLogo({ className = "w-8 h-8 font-mono text-emerald-400" }: { className?: string }) {
   return (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
