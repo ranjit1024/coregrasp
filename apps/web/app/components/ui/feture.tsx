@@ -1,4 +1,4 @@
-"client";
+"use client";
 
 import { motion } from "framer-motion";
 
@@ -21,12 +21,12 @@ const features = [
     desc: "Upload your company handbook, code of conduct, or compliance docs. Our AI parses PDF, DOCX, and TXT files to extract key policies and generate contextual assessment questions automatically.",
     tags: ["PDF", "DOCX", "Auto-parse"],
     visual: (
-      <div className="relative h-full w-full flex items-center justify-center">
+      <div className="relative h-full w-full flex items-center justify-center py-4 md:py-0">
         <div className="relative w-full max-w-[320px]">
           {/* Document stack effect */}
           <div className="absolute top-2 left-2 right-2 h-full bg-white/[0.03] rounded-xl border border-white/[0.06] transform rotate-1" />
           <div className="absolute top-1 left-1 right-1 h-full bg-white/[0.04] rounded-xl border border-white/[0.08] transform -rotate-1" />
-          <div className="relative bg-white/[0.05] rounded-xl border border-white/[0.1] p-5 backdrop-blur-sm">
+          <div className="relative bg-white/[0.05] rounded-xl border border-white/[0.1] p-4 sm:p-5 backdrop-blur-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-lg">📄</div>
               <div className="flex-1">
@@ -41,7 +41,7 @@ const features = [
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex items-center gap-2">
+            <div className="mt-4 flex flex-wrap items-center gap-2">
               <div className="px-2 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[9px] text-emerald-400 font-medium">✓ Parsed</div>
               <div className="px-2 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-[9px] text-blue-400 font-medium">42 Clauses</div>
             </div>
@@ -109,15 +109,15 @@ const features = [
     desc: "Send personalized assessment links via email or SMS. Schedule reminders, set deadlines, and track delivery status in real-time.",
     tags: ["Email", "SMS", "Tracking"],
     visual: (
-      <div className="relative h-24 w-full flex items-center px-4">
-        <div className="flex items-center gap-4 w-full">
+      <div className="relative min-h-[96px] h-full w-full flex items-center justify-center py-4">
+        <div className="flex flex-wrap items-center justify-center sm:justify-between gap-2 sm:gap-4 w-full">
           {[
             { icon: "📝", label: "Draft", done: true },
             { icon: "📤", label: "Send", done: true },
             { icon: "✉️", label: "Delivered", active: true },
             { icon: "✓", label: "Complete", done: false }
           ].map((step, i) => (
-            <div key={i} className="flex-1 flex flex-col items-center gap-2 relative">
+            <div key={i} className="flex-1 min-w-[60px] flex flex-col items-center gap-2 relative">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm border transition-all duration-500 ${
                 step.done ? 'bg-amber-500/15 border-amber-500/30 text-amber-300' :
                 step.active ? 'bg-amber-500/20 border-amber-400 text-amber-200 shadow-[0_0_16px_rgba(251,191,36,0.15)]' :
@@ -125,11 +125,11 @@ const features = [
               }`}>
                 {step.icon}
               </div>
-              <span className={`text-[9px] uppercase tracking-wider font-medium ${step.done || step.active ? 'text-white/50' : 'text-white/20'}`}>
+              <span className={`text-[8px] sm:text-[9px] uppercase tracking-wider font-medium text-center ${step.done || step.active ? 'text-white/50' : 'text-white/20'}`}>
                 {step.label}
               </span>
               {i < 3 && (
-                <div className="absolute top-5 left-[60%] w-full h-[1px] bg-gradient-to-r from-amber-500/20 to-transparent" />
+                <div className="hidden sm:block absolute top-5 left-[60%] w-full h-[1px] bg-gradient-to-r from-amber-500/20 to-transparent" />
               )}
             </div>
           ))}
@@ -145,7 +145,7 @@ const features = [
     desc: "Instant scoring with AI-powered answer analysis. Detects policy comprehension gaps and flags high-risk candidates automatically.",
     tags: ["AI-Graded", "Risk-Flags"],
     visual: (
-      <div className="relative h-full w-full min-h-[140px] flex items-center gap-5 px-2">
+      <div className="relative h-full w-full min-h-[140px] flex items-center gap-5 px-2 py-4">
         <div className="flex-1 flex flex-col justify-center gap-3">
           <div className="flex items-center justify-between">
             <span className="text-[9px] uppercase tracking-wider text-white/30 font-medium">Comprehension</span>
@@ -184,7 +184,7 @@ const features = [
             <div className="absolute top-0 left-0 h-full w-1/3 bg-gradient-to-r from-transparent via-rose-400/30 to-transparent animate-[scan_2.5s_ease-in-out_infinite]" />
           </div>
 
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex flex-wrap items-center justify-between pt-1 gap-2">
             <div className="flex items-center gap-2">
               <span className="text-[9px] text-white/20 font-mono">Avg: 76.4</span>
               <span className="text-[9px] text-rose-400/40 font-mono">● 2 flagged</span>
@@ -232,12 +232,12 @@ const features = [
     desc: "Completion trends, score distributions, and audit-ready exports. Quietly observe how comprehension evolves across your organization.",
     tags: ["Export", "Compliance"],
     visual: (
-      <div className="h-full w-full flex flex-col relative">
-        <div className="flex-1 flex items-center justify-center relative">
-          <div className="absolute w-40 h-40 rounded-full border border-white/[0.04] animate-[spin_60s_linear_infinite]" />
-          <div className="absolute w-40 h-40 rounded-full border border-dashed border-white/[0.03] animate-[spin_40s_linear_infinite_reverse]" />
+      <div className="h-full w-full flex flex-col relative py-4">
+        <div className="flex-1 flex items-center justify-center relative min-h-[160px]">
+          <div className="absolute w-32 h-32 sm:w-40 sm:h-40 rounded-full border border-white/[0.04] animate-[spin_60s_linear_infinite]" />
+          <div className="absolute w-32 h-32 sm:w-40 sm:h-40 rounded-full border border-dashed border-white/[0.03] animate-[spin_40s_linear_infinite_reverse]" />
           
-          <div className="relative w-32 h-32">
+          <div className="relative w-24 h-24 sm:w-32 sm:h-32">
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
               <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
               <circle 
@@ -258,13 +258,13 @@ const features = [
             </svg>
             
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-[10px] text-zinc-600 uppercase tracking-[0.3em] mb-1">Completed</span>
-              <span className="text-3xl font-extralight text-white/90 tracking-tight">94</span>
-              <span className="text-sm text-zinc-500 font-light -mt-1">%</span>
+              <span className="text-[8px] sm:text-[10px] text-zinc-600 uppercase tracking-[0.3em] mb-1">Completed</span>
+              <span className="text-2xl sm:text-3xl font-extralight text-white/90 tracking-tight">94</span>
+              <span className="text-xs sm:text-sm text-zinc-500 font-light -mt-1">%</span>
             </div>
           </div>
 
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 hidden sm:block">
             <div className="absolute top-2 right-4 text-right">
               <div className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mb-1">Mean</div>
               <div className="text-xl font-extralight text-white/80">8.4</div>
@@ -279,15 +279,15 @@ const features = [
           </div>
         </div>
 
-        <div className="flex items-center justify-between px-2 pt-4 border-t border-white/[0.04]">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-between px-2 pt-4 mt-2 border-t border-white/[0.04] gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
             <span className="w-1 h-1 rounded-full bg-white/40 animate-pulse" />
-            <span className="text-[9px] text-zinc-600 font-mono uppercase tracking-wider">Last updated 2m ago</span>
+            <span className="text-[8px] sm:text-[9px] text-zinc-600 font-mono uppercase tracking-wider">Last updated 2m ago</span>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-[9px] text-zinc-600 font-mono">312 active</span>
-            <span className="text-[9px] text-zinc-700">|</span>
-            <span className="text-[9px] text-zinc-600 font-mono">19 pending</span>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <span className="text-[8px] sm:text-[9px] text-zinc-600 font-mono">312 active</span>
+            <span className="text-[8px] sm:text-[9px] text-zinc-700">|</span>
+            <span className="text-[8px] sm:text-[9px] text-zinc-600 font-mono">19 pending</span>
           </div>
         </div>
       </div>
@@ -306,7 +306,7 @@ export default function HRBentoFeatures() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
-        className="max-w-[1200px] mx-auto w-full px-6 mb-20 text-center"
+        className="max-w-[1200px] mx-auto w-full px-6 mb-12 sm:mb-20 text-center"
       >
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full 
           bg-white/[0.03] border border-white/[0.06] mb-6">
@@ -315,17 +315,17 @@ export default function HRBentoFeatures() {
             Platform
           </span>
         </div>
-        <h2 className="serif font-normal text-[clamp(2.4rem,5vw,4.5rem)] tracking-[-0.03em] leading-[1.0] mb-6 text-white">
+        <h2 className="serif font-normal text-[clamp(2rem,5vw,4.5rem)] tracking-[-0.03em] leading-[1.1] sm:leading-[1.0] mb-6 text-white">
           Assess Smarter
         </h2>
-        <p className="text-[#71717a] text-lg max-w-[500px] mx-auto leading-relaxed">
+        <p className="text-[#71717a] text-base sm:text-lg max-w-[500px] mx-auto leading-relaxed">
           Upload policies, generate quizzes, and evaluate candidates — all in one intelligent platform.
         </p>
       </motion.div>
 
-      <div className="max-w-[1200px] mx-auto w-full px-6 
-        grid grid-cols-1 md:grid-cols-4 gap-5 
-        auto-rows-[300px] grid-flow-dense h-full"
+      <div className="max-w-[1200px] mx-auto w-full px-4 sm:px-6 
+        grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-5 
+        auto-rows-auto md:auto-rows-[300px] grid-flow-dense"
       >
         {features.map((f) => {
           const gridClass = 
@@ -333,7 +333,7 @@ export default function HRBentoFeatures() {
             f.size === "full" ? "md:col-span-4" :
             f.size === "large" ? "md:col-span-2 md:row-span-2" :
             f.size === "wide" ? "md:col-span-2" :
-            f.size === "tall" ? "md:row-span-2" : 
+            f.size === "tall" ? "md:row-span-2 md:col-span-1" : 
             "md:col-span-1";
 
           return (
@@ -345,11 +345,11 @@ export default function HRBentoFeatures() {
               viewport={{ once: true, margin: "-50px" }}
               whileHover={{ y: -6, scale: 1.01 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative bg-white/[0.01] backdrop-blur-2xl rounded-[28px] 
-                p-7 lg:p-9 transition-colors duration-700 overflow-hidden group 
+              className={`relative bg-white/[0.01] backdrop-blur-2xl rounded-[24px] sm:rounded-[28px] 
+                p-6 lg:p-9 transition-colors duration-700 overflow-hidden group 
                 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] 
                 ring-1 ring-white/[0.04] hover:ring-white/[0.12] hover:bg-white/[0.025] 
-                flex flex-col justify-between ${gridClass}`}
+                flex flex-col justify-between min-h-[320px] md:min-h-0 ${gridClass}`}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${f.gradient} 
                 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none`} />
@@ -358,29 +358,29 @@ export default function HRBentoFeatures() {
                 from-white/[0.03] to-transparent rounded-bl-full opacity-0 
                 group-hover:opacity-100 transition-opacity duration-700" />
 
-              <div className="relative z-10 flex-1 w-full opacity-70 group-hover:opacity-100 
-                transition-all duration-700 group-hover:scale-[1.02] origin-top-left">
+              <div className="relative z-10 flex-1 w-full opacity-90 sm:opacity-70 group-hover:opacity-100 
+                transition-all duration-700 group-hover:scale-[1.02] origin-top-left flex flex-col justify-center">
                 {f.visual}
               </div>
 
               <div className="relative z-10 mt-auto pt-6">
                 <div className="flex items-center gap-2.5 mb-3">
                   <span className="flex items-center justify-center w-7 h-7 rounded-lg 
-                    bg-white/[0.04] border border-white/[0.06] text-white/70 text-xs">
+                    bg-white/[0.04] border border-white/[0.06] text-white/70 text-xs shrink-0">
                     {f.icon}
                   </span>
-                  <h3 className="text-[14px] font-bold text-white uppercase tracking-wider">
+                  <h3 className="text-[13px] sm:text-[14px] font-bold text-white uppercase tracking-wider">
                     {f.title}
                   </h3>
                 </div>
-                <p className="text-[13px] text-[#a1a1aa] leading-[1.7] font-light">
+                <p className="text-[12px] sm:text-[13px] text-[#a1a1aa] leading-[1.7] font-light">
                   {f.desc}
                 </p>
                 
                 {f.tags && (
                   <div className="flex flex-wrap gap-2 mt-4">
                     {f.tags.map(tag => (
-                      <span key={tag} className="px-2.5 py-1 rounded-full text-[10px] 
+                      <span key={tag} className="px-2 sm:px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] 
                         font-medium bg-white/[0.04] text-[#71717a] border border-white/[0.05] 
                         group-hover:border-white/[0.1] group-hover:text-[#a1a1aa] 
                         transition-colors duration-500">

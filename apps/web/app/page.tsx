@@ -476,16 +476,16 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════════════════════
           DASHBOARD MOCKUP
           ═══════════════════════════════════════════════════════════════════════ */}
-      <section className="relative z-10 py-24 lg:py-32">
+      <section className="relative z-10 py-24 lg:py-32 max-md:hidden">
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-[1100px] lg:max-w-[1200px] mx-auto w-full px-6"
+          className="max-w-[1100px] lg:max-w-[1200px]  mx-auto w-full px-6"
         >
           {/* Section header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 ">
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#52525b] mb-4 block">Live Dashboard</span>
             <h2 className="font-mono text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-4">
               Real-time compliance intelligence
