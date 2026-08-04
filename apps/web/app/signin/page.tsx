@@ -14,7 +14,6 @@ export default function AuthPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    await new Promise(r => setTimeout(r, 1500))
     setIsLoading(false)
   }
 
@@ -63,7 +62,7 @@ export default function AuthPage() {
         >
           <div className="relative bg-white/[0.02] backdrop-blur-2xl border border-white/[0.06] rounded-3xl p-8 md:p-10 shadow-[0_0_60px_rgba(0,0,0,0.5)] overflow-hidden group">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200px] h-[100px] bg-white/[0.02] rounded-full blur-[60px] pointer-events-none" />
-
+            
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={isLogin ? "login" : "signup"}
