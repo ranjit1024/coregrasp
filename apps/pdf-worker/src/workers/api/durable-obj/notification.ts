@@ -11,7 +11,7 @@ export class NotificationHub {
 			const [client, server] = Object.values(pair);
 			this.state.acceptWebSocket(server);
 			return new Response(null, { status: 101, webSocket: client });
-		} console
+		}
 
 		if (req.method === "POST") {
 			const notif = await req.json();

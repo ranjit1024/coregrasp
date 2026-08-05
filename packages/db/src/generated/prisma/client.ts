@@ -68,3 +68,8 @@ export type Candidate = Prisma.CandidateModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
