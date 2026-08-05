@@ -28,6 +28,7 @@ export class NotificationHub {
 		if (msg === "ping") ws.send("pong");
 	}
 
+
 	async webSocketClose(ws: WebSocket) {
 		ws.close();
 	}
