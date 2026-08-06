@@ -11,14 +11,6 @@
 	"observability": {
 		"enabled": true
 	},
- "durable_objects": {
-    "bindings": [
-      { "name": "NOTIF_HUB", "class_name": "NotificationHub" }
-    ]
-  },
-  "migrations": [
-    { "tag": "v1", "new_sqlite_classes": ["NotificationHub"] }
-  ],
 	"upload_source_maps": true,
 	"compatibility_flags": [
 		"nodejs_compat"

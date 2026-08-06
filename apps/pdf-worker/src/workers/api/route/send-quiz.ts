@@ -48,6 +48,6 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
 
     return c.json({
         sent: true,
-        quizUrl: `http://localhost:3000/assessment/${encodeURIComponent(policyUrl)}`,
+        quizUrl: `https://coregrasp.vercel.app/assessment/${encodeURIComponent(policyUrl)}`,
     });
 }
