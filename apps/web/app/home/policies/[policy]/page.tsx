@@ -11,8 +11,8 @@ interface PolicyDetailsProps {
 export default function PolicyDetails({ params }: PolicyDetailsProps) {
     const { policy } = use(params);
     const { url } = use(params);
-    
-    const [data, setData] = useState<any>(null); 
+
+    const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +32,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
 
                 const json = await response.json();
                 const mcqData = json?.result?.finalResult?.mcq?.questions;
-               
+
                 if (mcqData) {
                     setData(mcqData);
                 } else {
@@ -46,13 +46,13 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
         };
 
         fetchPolicyData();
-    }, [policy]); 
+    }, [policy]);
 
     if (loading) return <div className="p-6 text-center text-zinc-500"><QuizReviewLayout/></div>;
     if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
 
     return (
-        <div className="p-4">
+        <div className="max-md:p-0 p-4">
             {data ? <MCQList questions={data} policyUrl={policy} /> : <p>No questions found.</p>}
         </div>
     );

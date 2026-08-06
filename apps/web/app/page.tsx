@@ -802,7 +802,7 @@ export default function Home() {
                 >
                   <div className="px-6 py-5 bg-[#0a0a0a] rounded-2xl text-[13px] text-[#a1a1aa] leading-relaxed font-mono border border-white/[0.04]">
                     <strong className="text-emerald-400 block mb-2 uppercase tracking-widest text-[11px]">Diagnostic Logic:</strong>
-                    Distractors A and D mirror generic HR terminology. B fabricates a "Q4 deferred cap" absent from the source document. C isolates the exact constraint defined in Section 4. True comprehension verified.
+                    Distractors A and D mirror generic HR terminology. B fabricates a Q4 deferred cap absent from the source document. C isolates the exact constraint defined in Section 4. True comprehension verified.
                   </div>
                 </motion.div>
               )}

@@ -14,21 +14,21 @@ export function AttemptStatus({ attempted, notAttempted }: Props) {
   const notAttemptedPct = Math.round((notAttempted / total) * 100);
 
   return (
-    <div className="flex flex-col rounded-xl bg-[#09090B] border border-white/[0.04] p-6 shadow-sm overflow-hidden">
+    <div className="relative z-10 flex flex-col rounded-xl bg-[#09090B] border border-white/[0.04] p-4 sm:p-6 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="mb-7 flex items-center justify-between">
-        <h2 className="text-[14px] font-medium text-zinc-100">Attempt Status</h2>
-        <span className="text-[12px] text-zinc-500">Overall completion</span>
+      <div className="mb-5 sm:mb-7 flex items-center justify-between">
+        <h2 className="text-[13px] sm:text-[14px] font-medium text-zinc-100">Attempt Status</h2>
+        <span className="text-[11px] sm:text-[12px] text-zinc-500">Overall completion</span>
       </div>
-      
-      <div className="space-y-6">
+
+      <div className="space-y-5 sm:space-y-6">
         {/* Attempted Bar */}
         <div className="group">
           <div className="mb-2 flex justify-between items-end">
-            <span className="text-[13px] font-medium text-zinc-300">Attempted</span>
+            <span className="text-[12px] sm:text-[13px] font-medium text-zinc-300">Attempted</span>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-[14px] font-semibold text-emerald-400">{attempted}</span>
-              <span className="text-[11px] font-medium text-zinc-500">({attemptedPct}%)</span>
+              <span className="text-[13px] sm:text-[14px] font-semibold text-emerald-400">{attempted}</span>
+              <span className="text-[10px] sm:text-[11px] font-medium text-zinc-500">({attemptedPct}%)</span>
             </div>
           </div>
           {/* Track */}
@@ -46,10 +46,10 @@ export function AttemptStatus({ attempted, notAttempted }: Props) {
         {/* Not Attempted Bar */}
         <div className="group">
           <div className="mb-2 flex justify-between items-end">
-            <span className="text-[13px] font-medium text-zinc-300">Not Attempted</span>
+            <span className="text-[12px] sm:text-[13px] font-medium text-zinc-300">Not Attempted</span>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-[14px] font-semibold text-orange-400">{notAttempted}</span>
-              <span className="text-[11px] font-medium text-zinc-500">({notAttemptedPct}%)</span>
+              <span className="text-[13px] sm:text-[14px] font-semibold text-orange-400">{notAttempted}</span>
+              <span className="text-[10px] sm:text-[11px] font-medium text-zinc-500">({notAttemptedPct}%)</span>
             </div>
           </div>
           {/* Track */}

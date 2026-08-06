@@ -45,7 +45,7 @@ export function RecentCandidates({ candidates }: Props) {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#18181B] border border-white/[0.08] text-zinc-500 group-hover:text-zinc-300 transition-colors">
                   <Mail className="h-4 w-4" strokeWidth={2} />
                 </div>
-                
+
                 {/* Details */}
                 <div className="flex flex-col min-w-0 gap-1.5">
                   <span className="truncate text-[13px] font-medium text-zinc-200">

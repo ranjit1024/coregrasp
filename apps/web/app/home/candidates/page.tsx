@@ -4,10 +4,10 @@ import { useSession } from "@/lib/auth-client";
 import { PolicyDocument } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
-import { 
-  Users, 
-  AlertCircle, 
-  Inbox, 
+import {
+  Users,
+  AlertCircle,
+  Inbox,
   ChevronRight,
   RefreshCcw,
   Search,
@@ -21,7 +21,7 @@ import { PolicyRow } from "@/app/components/ui/policy_row";
 import { motion, AnimatePresence } from "framer-motion";
 import { StatsCard } from "@/app/components/ui/candita_state";
 
-/* 
+/*
   Extend this interface based on your actual API response.
   Assumes candidates have: status ("PASSED" | "FAILED"), score/marks: number
 */
@@ -91,7 +91,7 @@ export default function Candidates() {
         }
 
         const data = await res.json();
-        
+
         if (isMounted) {
           setPolicies(data.policies || []);
           setError(null);
@@ -155,12 +155,12 @@ export default function Candidates() {
       });
     });
 
-    const averageMarks = scoredCandidates > 0 
-      ? (totalScore / scoredCandidates).toFixed(1) 
+    const averageMarks = scoredCandidates > 0
+      ? (totalScore / scoredCandidates).toFixed(1)
       : "0";
 
-    const passRate = totalCandidates > 0 
-      ? Math.round((passed / totalCandidates) * 100) 
+    const passRate = totalCandidates > 0
+      ? Math.round((passed / totalCandidates) * 100)
       : 0;
 
     return {
@@ -195,9 +195,9 @@ export default function Candidates() {
 
   if (isLoading || isSessionPending) {
     return (
-      <div className="min-h-screen bg-[#09090B] p-6 md:p-10 w-full flex flex-col">
-        <div className="max-w-8xl mx-auto w-full space-y-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="min-h-screen bg-[#09090B] p-4 sm:p-6 md:p-10 w-full flex flex-col">
+        <div className="max-w-8xl mx-auto w-full space-y-6 sm:space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-28 bg-white/[0.02] border border-white/[0.04] rounded-xl animate-pulse" />
             ))}
@@ -213,18 +213,18 @@ export default function Candidates() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#09090B] flex items-center justify-center p-6">
-        <motion.div 
+      <div className="min-h-screen bg-[#09090B] flex items-center justify-center p-4 sm:p-6">
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center justify-center py-12 px-6 bg-rose-500/[0.07] border border-rose-500/20 rounded-2xl text-center max-w-md w-full shadow-lg backdrop-blur-sm"
+          className="flex flex-col items-center justify-center py-10 sm:py-12 px-6 bg-rose-500/[0.07] border border-rose-500/20 rounded-2xl text-center max-w-md w-full shadow-lg backdrop-blur-sm mx-auto"
         >
           <div className="bg-rose-500/15 p-3 rounded-full mb-4 ring-1 ring-rose-500/25">
             <AlertCircle className="w-6 h-6 text-rose-400" />
           </div>
           <h3 className="text-[15px] font-semibold text-rose-200 mb-2">Failed to load assessments</h3>
           <p className="text-[13px] text-rose-400/70 mb-6 leading-relaxed">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="flex items-center gap-2 px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 rounded-lg text-[13px] font-medium transition-colors border border-rose-500/25"
           >
@@ -239,18 +239,18 @@ export default function Candidates() {
   // ─── Main Render ───────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[#09090B] text-zinc-300 font-sans selection:bg-white/20 pb-20">
-      
-      {/* Ambient lighting */}
-      <div className="fixed top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent z-50 pointer-events-none" />
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-white/[0.015] blur-[120px] rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-[#09090B] text-zinc-300 font-sans selection:bg-white/20 pb-16 sm:pb-20 relative">
 
-      <main className="max-w-8xl mx-auto p-6 md:p-10 w-full flex flex-col gap-8">
-        
+      {/* Ambient lighting - Reduced z-index to avoid overlap issues on mobile */}
+      <div className="fixed top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent z-0 pointer-events-none" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[600px] h-[200px] bg-white/[0.015] blur-[120px] rounded-full pointer-events-none -z-10" />
+
+      <main className="max-w-8xl mx-auto p-4 sm:p-6 md:p-10 w-full flex flex-col gap-6 sm:gap-8 relative z-10">
+
         {/* Breadcrumbs */}
-        <motion.nav 
-          initial={{ opacity: 0, y: -10 }} 
-          animate={{ opacity: 1, y: 0 }} 
+        <motion.nav
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-2 text-[11px] font-medium text-zinc-600"
         >
           <a href="#" className="hover:text-zinc-400 transition-colors">Workspace</a>
@@ -259,39 +259,39 @@ export default function Candidates() {
         </motion.nav>
 
         {/* ─── Assessment Stats Grid ────────────────────────────────────── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <StatsCard
-            label="Passed" 
-            value={assessmentStats.passed} 
-            icon={CheckCircle2} 
-            color="emerald" 
+            label="Passed"
+            value={assessmentStats.passed}
+            icon={CheckCircle2}
+            color="emerald"
             subValue={`${assessmentStats.passRate}% rate`}
           />
-          <StatsCard 
-            label="Failed" 
-            value={assessmentStats.failed} 
-            icon={XCircle} 
-            color="rose" 
+          <StatsCard
+            label="Failed"
+            value={assessmentStats.failed}
+            icon={XCircle}
+            color="rose"
           />
-          <StatsCard 
-            label="Total Candidates" 
-            value={assessmentStats.totalCandidates} 
-            icon={Users} 
-            color="blue" 
+          <StatsCard
+            label="Total Candidates"
+            value={assessmentStats.totalCandidates}
+            icon={Users}
+            color="blue"
           />
-          <StatsCard 
-            label="Average Marks" 
-            value={assessmentStats.averageMarks} 
-            icon={Award} 
-            color="amber" 
+          <StatsCard
+            label="Average Marks"
+            value={assessmentStats.averageMarks}
+            icon={Award}
+            color="amber"
           />
         </div>
 
-        <motion.div 
-          variants={containerVariants} 
-          initial="hidden" 
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
           animate="show"
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-5 sm:gap-6"
         >
           {/* Header + Filter Row */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -299,28 +299,28 @@ export default function Candidates() {
               <h1 className="text-xl sm:text-2xl font-semibold text-zinc-100 tracking-tight">
                 Active Assessments
               </h1>
-              <p className="text-[13px] text-zinc-500 leading-relaxed">
+              <p className="text-[12px] sm:text-[13px] text-zinc-500 leading-relaxed">
                 Track comprehension and participation across deployed policies.
               </p>
             </div>
 
-            {/* Status Filter Pills */}
-            <div className="flex items-center gap-1 bg-[#121214] border border-white/[0.04] p-1 rounded-xl">
+            {/* Status Filter Pills - Added flex-wrap for smaller screens */}
+            <div className="flex flex-wrap items-center gap-1 bg-[#121214] border border-white/[0.04] p-1 rounded-xl">
               {filters.map((f) => (
                 <button
                   key={f.value}
                   onClick={() => setStatusFilter(f.value)}
                   className={`
-                    relative px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider transition-all duration-200
-                    ${statusFilter === f.value 
-                      ? "text-zinc-100 bg-white/[0.06] shadow-sm" 
+                    relative px-3 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider transition-all duration-200 flex-1 sm:flex-none text-center
+                    ${statusFilter === f.value
+                      ? "text-zinc-100 bg-white/[0.06] shadow-sm"
                       : "text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.02]"
                     }
                   `}
                 >
                   {f.label}
                   <span className={`
-                    ml-1.5 text-[10px] tabular-nums
+                    ml-1.5 text-[9px] sm:text-[10px] tabular-nums
                     ${statusFilter === f.value ? "text-zinc-400" : "text-zinc-700"}
                   `}>
                     {f.count}
@@ -338,36 +338,36 @@ export default function Candidates() {
               placeholder="Search policies by name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#121214] border border-white/[0.04] rounded-xl pl-11 pr-4 py-3 text-[13px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-white/[0.1] focus:bg-white/[0.02] transition-all shadow-sm"
+              className="w-full bg-[#121214] border border-white/[0.04] rounded-xl pl-11 pr-4 py-2.5 sm:py-3 text-[13px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-white/[0.1] focus:bg-white/[0.02] transition-all shadow-sm"
             />
           </motion.div>
 
           {/* Policy List */}
           <AnimatePresence mode="wait">
             {filteredPolicies.length === 0 ? (
-              <motion.div 
+              <motion.div
                 key="empty"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="flex flex-col items-center justify-center py-20 px-4 text-center bg-[#121214] border border-dashed border-white/[0.06] rounded-xl"
+                className="flex flex-col items-center justify-center py-16 sm:py-20 px-4 text-center bg-[#121214] border border-dashed border-white/[0.06] rounded-xl"
               >
-                <div className="flex items-center justify-center w-12 h-12 bg-white/[0.02] border border-white/[0.05] rounded-full mb-4">
+                <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/[0.02] border border-white/[0.05] rounded-full mb-4">
                   <Inbox className="w-5 h-5 text-zinc-600" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-[15px] font-medium text-zinc-200 mb-2">
+                <h3 className="text-[14px] sm:text-[15px] font-medium text-zinc-200 mb-2">
                   {searchQuery || statusFilter !== "ALL" ? "No matching policies" : "No assessments yet"}
                 </h3>
-                <p className="text-[13px] text-zinc-500 max-w-[280px] leading-relaxed mb-6">
+                <p className="text-[12px] sm:text-[13px] text-zinc-500 max-w-[280px] leading-relaxed mb-6">
                   {searchQuery || statusFilter !== "ALL"
-                    ? "Try adjusting your search or filters." 
+                    ? "Try adjusting your search or filters."
                     : "Deploy a policy to start collecting candidate responses."}
                 </p>
                 {/* Show create button only on true empty state */}
                 {!(searchQuery || statusFilter !== "ALL") && (
                   <button
                     onClick={() => router.push("/home/upload")}
-                    className="flex items-center gap-2 px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-900 text-[13px] font-medium rounded-lg transition-colors shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 sm:py-2.5 bg-zinc-100 hover:bg-white text-zinc-900 text-[12px] sm:text-[13px] font-medium rounded-lg transition-colors shadow-sm"
                   >
                     <Plus className="w-4 h-4" />
                     Deploy Policy
@@ -375,36 +375,41 @@ export default function Candidates() {
                 )}
               </motion.div>
             ) : (
-              <motion.div 
-                key="list" 
+              <motion.div
+                key="list"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="bg-[#121214] border border-white/[0.04] rounded-xl overflow-hidden shadow-sm"
               >
-                {/* Table Header */}
-                <PolicyRow showHeader policy={{} as PolicyDocument} />
-                
-                {/* Rows */}
-                <div className="flex flex-col">
-                  {filteredPolicies.map((policy, idx) => {
-                    const count = policy.candidateCount ?? (Array.isArray(policy.candidates) ? policy.candidates.length : 0);
+                {/* Responsive wrapper for table-like rows */}
+                <div className="overflow-x-auto">
+                  <div className="min-w-[600px] lg:min-w-full">
+                    {/* Table Header */}
+                    <PolicyRow showHeader policy={{} as PolicyDocument} />
 
-                    return (
-                      <motion.div
-                        key={policy.id}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.03, duration: 0.3 }}
-                      >
-                        <PolicyRow 
-                          policy={policy} 
-                          candidateCount={count}
-                          onClick={() => router.push(`/home/candidates/${policy.url}`)}
-                        />
-                      </motion.div>
-                    );
-                  })}
+                    {/* Rows */}
+                    <div className="flex flex-col">
+                      {filteredPolicies.map((policy, idx) => {
+                        const count = policy.candidateCount ?? (Array.isArray(policy.candidates) ? policy.candidates.length : 0);
+
+                        return (
+                          <motion.div
+                            key={policy.id}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.03, duration: 0.3 }}
+                          >
+                            <PolicyRow
+                              policy={policy}
+                              candidateCount={count}
+                              onClick={() => router.push(`/home/candidates/${policy.url}`)}
+                            />
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}

@@ -5,15 +5,17 @@ import { CoreGraspLogo } from "../components/ui/logo";
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter, usePathname } from "next/navigation";
-import { 
-  BarChart3, 
-  LayoutDashboard, 
-  ShieldCheck, 
+import {
+  BarChart3,
+  LayoutDashboard,
+  ShieldCheck,
   Users,
   LogOut,
   Settings,
   User as UserIcon,
-  ChevronUp
+  ChevronUp,
+  Menu,
+  X
 } from "lucide-react";
 
 import { useSession } from "@/lib/auth-client"; // Adjust based on your auth client
@@ -22,11 +24,12 @@ import { useSession } from "@/lib/auth-client"; // Adjust based on your auth cli
 export default function RootLayout({children}:{children:React.ReactNode}){
   const router = useRouter();
   const pathname = usePathname();
-  
+
   // User & Menu State
   const { data: session, isPending } = useSession();
   const user = session?.user;
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Mobile sidebar state
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Close user menu when clicking outside
@@ -40,12 +43,14 @@ export default function RootLayout({children}:{children:React.ReactNode}){
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   const handleSignOut = async () => {
     try {
-      // Replace with your actual sign out method from Better Auth
       // await authClient.signOut();
-      
-      // Redirect to sign in page
       router.push("/signin");
     } catch (error) {
       console.error("Failed to sign out", error);
@@ -58,10 +63,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
     { name: "Candidates", href: "/home/candidates", icon: Users },
     { name: "Analytics", href: "/home/analytics", icon: BarChart3, disabled: true, badge: "Soon" },
   ];
-  
 
-
-  // Helper function to get user initials
   const getInitials = (name?: string) => {
     if (!name) return "U";
     return name
@@ -85,21 +87,43 @@ export default function RootLayout({children}:{children:React.ReactNode}){
         ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
       `}</style>
 
-      {/* ── SIDEBAR (static, no re-render on route change) ── */}
-      <aside className="w-[250px] flex-shrink-0 bg-[#09090B] border-r border-white/[0.08] hidden md:flex flex-col z-20 relative">
-        <div
-          onClick={() => router.push("/home/dashboard")}
-          className="h-[68px] px-5 flex items-center gap-2.5 cursor-pointer group"
-        >
-          <div className="transition-transform duration-300 ease-out group-hover:scale-105">
-            <CoreGraspLogo />
+      {/* ── MOBILE OVERLAY ── */}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-100 md:hidden transition-opacity duration-300 ${
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      {/* ── SIDEBAR ── */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-100 w-[250px] flex-shrink-0 bg-[#09090B] border-r border-white/[0.08] flex flex-col transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="h-[68px] px-5 flex items-center justify-between">
+          <div
+            onClick={() => router.push("/home/dashboard")}
+            className="flex items-center gap-2.5 cursor-pointer group"
+          >
+            <div className="transition-transform duration-300 ease-out group-hover:scale-105">
+              <CoreGraspLogo />
+            </div>
+            <span className="text-[16px] font-bold tracking-tight text-white mt-0.5">
+              CoreGrasp
+            </span>
           </div>
-          <span className="text-[16px] font-bold tracking-tight text-white mt-0.5">
-            CoreGrasp
-          </span>
+
+          {/* Mobile Close Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="md:hidden text-zinc-400 hover:text-white transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        <nav className="flex-1 px-3 py-6 flex flex-col gap-1">
+        <nav className="flex-1 px-3 py-6 flex flex-col gap-1 overflow-y-auto">
           <div className="text-[11px] font-semibold text-[#71717A] uppercase tracking-wider mb-2 px-2">
             Workspace
           </div>
@@ -114,19 +138,19 @@ export default function RootLayout({children}:{children:React.ReactNode}){
                 href={item.disabled ? "#" : item.href}
                 className={`
                   flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
-                  ${isActive 
-                    ? "bg-zinc-800/50 text-zinc-100" 
+                  ${isActive
+                    ? "bg-zinc-800/50 text-zinc-100"
                     : item.disabled
-                      ? "text-zinc-600 cursor-not-allowed" 
-                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30 active:scale-[0.98]" 
+                      ? "text-zinc-600 cursor-not-allowed"
+                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30 active:scale-[0.98]"
                   }
                 `}
                 onClick={(e) => item.disabled && e.preventDefault()}
               >
                 <div className="flex items-center gap-3">
-                  <Icon 
-                    className={`w-4 h-4 ${isActive ? "text-zinc-100" : item.disabled ? "text-zinc-700" : "text-zinc-500"}`} 
-                    strokeWidth={isActive ? 2.5 : 2} 
+                  <Icon
+                    className={`w-4 h-4 ${isActive ? "text-zinc-100" : item.disabled ? "text-zinc-700" : "text-zinc-500"}`}
+                    strokeWidth={isActive ? 2.5 : 2}
                   />
                   {item.name}
                 </div>
@@ -139,14 +163,11 @@ export default function RootLayout({children}:{children:React.ReactNode}){
               </Link>
             );
           })}
-
-          
-      
         </nav>
 
         {/* ── ACTUAL USER PROFILE SECTION WITH POPUP ── */}
         <div className="relative mx-3 mb-3" ref={userMenuRef}>
-          
+
           {/* Popup Menu */}
           <AnimatePresence>
             {isUserMenuOpen && !isPending && (
@@ -168,28 +189,28 @@ export default function RootLayout({children}:{children:React.ReactNode}){
                 </div>
 
                 <div className="px-1.5 flex flex-col gap-0.5">
-                  <button onClick={()=>router.push('/home/profile')} className="w-full text-left px-2 py-1.5 rounded-md text-[12px] font-medium text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors flex items-center gap-2.5">
-                    <UserIcon className="w-3.5 h-3.5 text-zinc-400" /> 
+                  <button onClick={()=> { setIsUserMenuOpen(false); router.push('/home/profile'); }} className="w-full text-left px-2 py-1.5 rounded-md text-[12px] font-medium text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors flex items-center gap-2.5">
+                    <UserIcon className="w-3.5 h-3.5 text-zinc-400" />
                     Profile
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       setIsUserMenuOpen(false);
                       router.push("/home/settings/organization");
                     }}
                     className="w-full text-left px-2 py-1.5 rounded-md text-[12px] font-medium text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors flex items-center gap-2.5"
                   >
-                    <Settings className="w-3.5 h-3.5 text-zinc-400" /> 
+                    <Settings className="w-3.5 h-3.5 text-zinc-400" />
                     Settings
                   </button>
                 </div>
-                
+
                 <div className="mt-1 px-1.5 pt-1 border-t border-white/[0.04]">
-                  <button 
+                  <button
                     onClick={handleSignOut}
                     className="w-full text-left px-2 py-1.5 rounded-md text-[12px] font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors flex items-center gap-2.5"
                   >
-                    <LogOut className="w-3.5 h-3.5" /> 
+                    <LogOut className="w-3.5 h-3.5" />
                     Sign out
                   </button>
                 </div>
@@ -212,15 +233,15 @@ export default function RootLayout({children}:{children:React.ReactNode}){
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               className={`w-full text-left p-3 border rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 ${
-                isUserMenuOpen 
-                  ? "bg-[#18181B] border-white/[0.14]" 
+                isUserMenuOpen
+                  ? "bg-[#18181B] border-white/[0.14]"
                   : "bg-[#0E0E11] border-white/[0.08] hover:bg-[#18181B] hover:border-white/[0.14]"
               }`}
             >
               {user?.image ? (
-                <img 
-                  src={user.image} 
-                  alt={user.name || "User avatar"} 
+                <img
+                  src={user.image}
+                  alt={user.name || "User avatar"}
                   className="w-8 h-8 rounded object-cover shadow-sm shrink-0"
                 />
               ) : (
@@ -237,32 +258,40 @@ export default function RootLayout({children}:{children:React.ReactNode}){
                   {user?.email || "No email available"}
                 </div>
               </div>
-              
-              <ChevronUp 
-                className={`w-4 h-4 text-[#71717A] shrink-0 transition-transform duration-200 ${isUserMenuOpen ? "rotate-180" : ""}`} 
+
+              <ChevronUp
+                className={`w-4 h-4 text-[#71717A] shrink-0 transition-transform duration-200 ${isUserMenuOpen ? "rotate-180" : ""}`}
               />
             </button>
           )}
         </div>
       </aside>
 
-      <div className="w-full h-full overflow-y-auto relative">
+      <div className="flex-1 w-full  h-full overflow-y-auto relative flex flex-col min-w-0 ">
         <AnimatePresence mode="wait">
-          <motion.div>
-            <header className="h-[68px] w-full px-8 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-10 sticky top-0">
-              
-              {/* Left side - Breadcrumb/Title */}
-              <div className="text-[14px] font-medium text-zinc-400 capitalize">
-                {pathname.split("/")[2] || "Home"}
+          <motion.div className="flex flex-col min-h-full">
+            <header className="h-[100px] w-full px-4 md:px-8 py-3 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-100 sticky top-0">
+
+              {/* Left side - Menu Toggle & Breadcrumb */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="md:hidden text-zinc-400 hover:text-white transition-colors p-1"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="text-[14px] font-medium text-zinc-400 capitalize truncate max-w-[120px] sm:max-w-none">
+                  {pathname.split("/")[2] || "Home"}
+                </div>
               </div>
 
               {/* Right Side Actions */}
-              <div className="flex items-center gap-4">
-                
+              <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+
                 {/* Notification Bell */}
-                <button 
+                <button
                   aria-label="Notifications"
-                  className="relative w-8 h-8 rounded-md flex items-center justify-center text-[#A1A1AA] hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 transition-all"
+                  className="relative w-8 h-8 rounded-md flex items-center justify-center text-[#A1A1AA] hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 transition-all shrink-0"
                 >
                   <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full ring-2 ring-[#09090B]" />
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -273,19 +302,21 @@ export default function RootLayout({children}:{children:React.ReactNode}){
                 {/* Primary Action Button */}
                 <button
                   onClick={() => router.push("/home/upload")}
-                  className="bg-white text-zinc-900 hover:bg-zinc-200 active:bg-zinc-300 font-medium text-[13px] px-4 py-1.5 rounded-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                  className="bg-white text-zinc-900 hover:bg-zinc-200 active:bg-zinc-300 font-medium text-[13px] px-3 py-1.5 sm:px-4 rounded-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] shrink-0"
                 >
                   <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  New Policy
+                  <span className="hidden sm:inline">New Policy</span>
                 </button>
 
               </div>
             </header>
-            
-            {children}
-            
+
+            <main className="flex-1">
+              {children}
+            </main>
+
           </motion.div>
         </AnimatePresence>
       </div>

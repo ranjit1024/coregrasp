@@ -5,9 +5,9 @@ export default function QuizReviewSkeleton() {
   const skeletonCards = Array.from({ length: 2 });
 
   return (
-    <div className="min-h-screen bg-[#09090b] p-8 font-sans antialiased">
+    <div className="min-h-screen bg-[#09090b] max-md:p-0 font-sans antialiased">
       <div className="max-w-full  mx-auto">
-        
+
         {/* --- Header Skeleton --- */}
         <div className="flex justify-between items-start mb-10 animate-pulse">
           <div className="space-y-3">
@@ -26,8 +26,8 @@ export default function QuizReviewSkeleton() {
         {/* --- Cards Container --- */}
         <div className="space-y-6">
           {skeletonCards.map((_, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="bg-[#121214] border border-gray-800/80 rounded-xl p-6 shadow-md animate-pulse"
             >
               {/* Card Header Skeleton */}
@@ -49,8 +49,8 @@ export default function QuizReviewSkeleton() {
               <div className="space-y-2 mb-6">
                 {/* Simulating 4 options */}
                 {Array.from({ length: 4 }).map((_, optIndex) => (
-                  <div 
-                    key={optIndex} 
+                  <div
+                    key={optIndex}
                     className="w-full flex items-center px-4 h-12 rounded-lg bg-[#18181b] border border-gray-800/60"
                   >
                     {/* Option Letter Circle */}
@@ -78,7 +78,7 @@ export default function QuizReviewSkeleton() {
             </div>
           ))}
         </div>
-        
+
       </div>
     </div>
   );
