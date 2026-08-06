@@ -10,7 +10,6 @@ export type Bindings = {
 	NOTIF_HUB: DurableObjectNamespace;
 };
 
-
 export type PdfJob = {
   key: string;
   uploadedAt: string;
