@@ -10,6 +10,7 @@ export type Bindings = {
 	NOTIF_HUB: DurableObjectNamespace;
 };
 
+
 export type PdfJob = {
   key: string;
   uploadedAt: string;
@@ -28,4 +29,3 @@ export interface MCQResult {
     raw: string;
     category:string
 }
-console.log("Data base is import ")

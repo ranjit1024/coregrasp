@@ -9,10 +9,10 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { 
-      delay: i * 0.15, 
-      duration: 0.6, 
-      ease: [0.16, 1, 0.3, 1] as const 
+    transition: {
+      delay: i * 0.15,
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1] as const
     }
   })
 }
@@ -22,10 +22,10 @@ const pulseRing = {
     scale: [1, 1.15, 1],
     opacity: [0.3, 0.1, 0.3]
   },
-  transition: { 
-    repeat: Infinity, 
-    duration: 3, 
-    ease: "easeInOut" as const 
+  transition: {
+    repeat: Infinity,
+    duration: 3,
+    ease: "easeInOut" as const
   }
 }
 
@@ -33,7 +33,7 @@ const pulseRing = {
 
 function UploadVisual() {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -85,7 +85,7 @@ function AIGenerationVisual() {
   const [sparkles] = useState([0, 1, 2, 3, 4])
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -164,7 +164,7 @@ function AIGenerationVisual() {
 
 function SendVisual() {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -201,8 +201,8 @@ function SendVisual() {
             viewport={{ once: true }}
             transition={{ delay: 0.3 + i * 0.1 }}
             className={`w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-black ${
-              i === 3 
-                ? "bg-white/[0.04] text-white/40" 
+              i === 3
+                ? "bg-white/[0.04] text-white/40"
                 : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
             }`}
           >
@@ -229,7 +229,7 @@ function AnalyticsVisual() {
   ]
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -305,7 +305,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative z-10 py-32 overflow-hidden">
+    <section id="how-it-works" className="relative z-10  overflow-hidden">
       {/* Ambient background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[600px] bg-emerald-500/[0.02] rounded-full blur-[140px]" />

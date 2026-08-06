@@ -180,11 +180,11 @@ export default function Home() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
-        .font-display { 
-          font-family: 'Playfair Display', Georgia, serif; 
+        .font-display {
+          font-family: 'Playfair Display', Georgia, serif;
         }
-        .font-body { 
-          font-family: 'Inter', system-ui, sans-serif; 
+        .font-body {
+          font-family: 'Inter', system-ui, sans-serif;
         }
 
         html { scroll-behavior: smooth; }
@@ -382,100 +382,24 @@ export default function Home() {
         </motion.div>
 
         {/* ─── LIVE PRODUCT PREVIEW ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 60, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-[800px] mb-24 group"
-        >
-          <div className="absolute -inset-3 bg-gradient-to-b from-emerald-500/[0.06] to-transparent rounded-[28px] blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
 
-          <div className="relative bg-white/[0.015] backdrop-blur-2xl rounded-2xl border border-white/[0.06] p-1 shadow-[0_0_80px_rgba(0,0,0,0.5)] overflow-hidden">
-            {/* Browser chrome */}
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.04]">
-              <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-rose-500/20 border border-rose-500/30" />
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/20 border border-amber-500/30" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/20 border border-emerald-500/30" />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <div className="px-3 py-1 rounded-md bg-white/[0.03] border border-white/[0.05] text-[10px] text-white/25 font-mono">
-                  app.coregrasp.io/dashboard
-                </div>
-              </div>
-            </div>
-
-            {/* Preview content */}
-            <div className="p-5 md:p-7 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Step 1: Upload */}
-              <div className="relative bg-white/[0.02] rounded-xl p-5 border border-white/[0.05] hover:border-white/[0.1] transition-all duration-500">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-[11px] font-medium text-emerald-400">1</div>
-                  <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Upload Policy</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-2 bg-white/[0.06] rounded-full w-full" />
-                  <div className="h-2 bg-white/[0.04] rounded-full w-4/5" />
-                  <div className="h-2 bg-white/[0.04] rounded-full w-3/5" />
-                </div>
-                <div className="mt-4 flex items-center gap-2">
-                  <div className="px-2 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[9px] text-emerald-400 font-medium">✓ Parsed</div>
-                  <div className="text-[9px] text-white/20 font-mono">42 clauses</div>
-                </div>
-              </div>
-
-              {/* Step 2: Generate */}
-              <div className="relative bg-white/[0.02] rounded-xl p-5 border border-white/[0.05] hover:border-white/[0.1] transition-all duration-500">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[11px] font-medium text-blue-400">2</div>
-                  <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Generate Quiz</span>
-                </div>
-                <div className="flex items-center gap-1.5 mb-3">
-                  {["A", "B", "C", "D"].map((opt) => (
-                    <div key={opt} className="flex-1 h-8 rounded-md bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-[10px] text-white/30 font-bold">{opt}</div>
-                  ))}
-                </div>
-                <div className="h-2 bg-blue-500/10 rounded-full w-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: "0%" }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 2.5, delay: 1.5, ease: "easeInOut" }}
-                    className="h-full bg-gradient-to-r from-blue-500/40 to-blue-400/20 rounded-full"
-                  />
-                </div>
-                <div className="mt-2 text-[9px] text-blue-400/60 font-mono">Generating 12 questions...</div>
-              </div>
-
-              {/* Step 3: Deploy */}
-              <div className="relative bg-white/[0.02] rounded-xl p-5 border border-white/[0.05] hover:border-white/[0.1] transition-all duration-500">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-[11px] font-medium text-amber-400">3</div>
-                  <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Send & Track</span>
-                </div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex -space-x-1.5">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="w-5 h-5 rounded-full bg-white/[0.08] border border-white/[0.1] flex items-center justify-center text-[7px] text-white/40">{String.fromCharCode(65 + i)}</div>
-                    ))}
-                  </div>
-                  <span className="text-[9px] text-white/30">+243 more</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[9px] text-emerald-400/60">Sent • 89% opened</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
 
         {/* ─── SOCIAL PROOF ─── */}
-        
+
       </motion.section>
 
       {/* ═══════════════════════════════════════════════════════════════════════
           DASHBOARD MOCKUP
           ═══════════════════════════════════════════════════════════════════════ */}
+
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          HOW IT WORKS
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="how-it-works" className="relative z-10 py-24 lg:py-32">
+        <HowItWorks />
+      </section>
+
       <section className="relative z-10 py-24 lg:py-32 max-md:hidden">
         <motion.div
           initial={{ opacity: 0, y: 80 }}
@@ -780,13 +704,6 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════════
-          HOW IT WORKS
-          ═══════════════════════════════════════════════════════════════════════ */}
-      <section id="how-it-works" className="relative z-10 py-24 lg:py-32">
-        <HowItWorks />
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════════
           BENTO GRID FEATURES
           ═══════════════════════════════════════════════════════════════════════ */}
       <section id="features" className="relative z-10 py-24 lg:py-32">
@@ -837,7 +754,7 @@ export default function Home() {
             </div>
 
             <div className="text-[18px] font-mono lg:text-[21px] font-medium leading-[1.7] mb-12 text-white relative z-10 italic tracking-wide">
-              "An employee has utilized 8 of their 12 annual leave days and requests 5 more in Q4. What is the maximum leave they can carry into the next fiscal year under Section 4?"
+              An employee has utilized 8 of their 12 annual leave days and requests 5 more in Q4. What is the maximum leave they can carry into the next fiscal year under Section 4?
             </div>
 
             <div className="flex flex-col gap-3 relative z-10">
@@ -897,90 +814,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════════════════════
           PRICING
           ═══════════════════════════════════════════════════════════════════════ */}
-      <section id="pricing" className="relative z-10 py-24 lg:py-32">
-        <div className="max-w-[1000px] lg:max-w-[1200px] mx-auto w-full px-6">
-          {/* Section header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7 }}
-            className="text-center mb-16"
-          >
-            <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#52525b] mb-4 block">
-              Licensing
-            </span>
-            <h2 className="font-mono text-[clamp(2rem,4vw,3.5rem)] font-normal tracking-[-0.02em] leading-[1.1] text-white mb-5">
-              Predictable Costs
-            </h2>
-            <p className="text-[15px] text-[#71717a] max-w-[480px] mx-auto font-light leading-relaxed">
-              Start completely free. Scale horizontally as your infrastructure demands.
-            </p>
-          </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
-          >
-            {pricingTiers.map((tier, i) => (
-              <motion.div
-                variants={fadeInUp}
-                whileHover={{ y: -6 }}
-                key={tier.name}
-                className={`relative rounded-3xl p-8 lg:p-10 transition-all duration-500 ${tier.highlighted
-                    ? "bg-white/[0.02] backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_60px_rgba(255,255,255,0.03)] border border-white/[0.1]"
-                    : "bg-white/[0.01] backdrop-blur-xl hover:bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08]"
-                  }`}
-              >
-                {tier.highlighted && (
-                  <div className="absolute -top-3 left-8">
-                    <span className="text-[9px] font-mono font-bold tracking-widest uppercase bg-white text-black px-4 py-1.5 rounded-full shadow-lg border border-white/20">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-
-                <div className="mb-8">
-                  <div className="text-[13px] font-bold uppercase tracking-[0.15em] text-white mb-5">{tier.name}</div>
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-display text-[3.5rem] text-white leading-none">{tier.price}</span>
-                    {tier.period && <span className="text-[12px] font-mono text-[#52525b] uppercase tracking-wider">{tier.period}</span>}
-                  </div>
-                  <p className="text-[13px] text-[#71717a] leading-relaxed font-light">{tier.description}</p>
-                </div>
-
-                <div className="h-[1px] bg-white/[0.04] mb-8" />
-
-                <ul className="flex flex-col gap-4 mb-10">
-                  {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-[13px] text-[#a1a1aa] font-light">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-400/70 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => router.push("/signin")}
-                  className={`w-full py-4 rounded-xl text-[12px] font-bold uppercase tracking-[0.12em] transition-colors shadow-md ${tier.highlighted
-                      ? "bg-white text-black hover:bg-gray-100 border border-white/20"
-                      : "bg-white/[0.03] text-white hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/[0.12]"
-                    }`}
-                >
-                  {tier.name === "Enterprise" ? "Contact Sales" : "Get Started"}
-                </motion.button>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════════════════════════════
           CTA
