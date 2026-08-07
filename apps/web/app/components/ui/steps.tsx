@@ -400,12 +400,7 @@ export default function HowItWorks() {
           transition={{ delay: 0.6 }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-white/[0.02] border border-white/[0.05] text-[13px] text-[#71717a]">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400/60">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Average time from upload to first result: <span className="text-emerald-400 font-mono">under 2 minutes</span>
-          </div>
+
         </motion.div>
       </div>
     </section>
