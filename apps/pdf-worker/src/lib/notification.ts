@@ -1,6 +1,6 @@
 
-import { createPrismaClient, PrismaClient } from "@revisly/db";
-import { Env } from "hono";
+import {PrismaClient } from "@revisly/db";
+
 import { Bindings } from "../shared/types";
 
 export async function pushNotification( env: Bindings,

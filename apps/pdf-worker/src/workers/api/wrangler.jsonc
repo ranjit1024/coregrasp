@@ -7,7 +7,22 @@
 	"name": "api",
 	"main": "index.ts",
 	"compatibility_date": "2026-06-20",
-
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "NOTIF_HUB",
+				"class_name": "NotificationHub"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"NotificationHub"
+			]
+		}
+	],
 	"observability": {
 		"enabled": true
 	},
@@ -15,28 +30,26 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
-	  "hyperdrive": [
-    {
-      "binding": "HYPERDRIVE",
-      "id": "74472c8e2bae47c3ab9b6fdaddab56c9",
-    }
-  ],
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "74472c8e2bae47c3ab9b6fdaddab56c9",
+		}
+	],
 	"r2_buckets": [
 		{
 			"binding": "PDF_BUCKET",
 			"bucket_name": "pdf-uploads"
 		}
-
 	],
 	"queues": {
-    "producers": [
-      {
-        "binding": "PDF_QUEUE",
-        "queue": "pdf-processing-queue"
-      }
-    ]
-  },
-
+		"producers": [
+			{
+				"binding": "PDF_QUEUE",
+				"queue": "pdf-processing-queue"
+			}
+		]
+	},
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

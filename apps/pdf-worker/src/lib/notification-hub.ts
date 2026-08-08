@@ -1,6 +1,6 @@
 import { Bindings } from "../shared/types";
 
-export class NOTIF_HUB {
+export class NotificationHub {
     constructor(private state:DurableObjectState, private env: Bindings){};
     async fetch(req:Request){
         const upgrade = req.headers.get("Upgrade");
