@@ -275,7 +275,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <motion.div className="flex flex-col min-h-full">
             <header className="h-[100px] w-full px-4 md:px-8 py-3 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-100 sticky top-0">
 
-              {/* Left side - Menu Toggle & Breadcrumb */}
+    
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setIsMobileMenuOpen(true)}
@@ -288,13 +288,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
 
-              {/* Right Side Actions */}
+              
               <div className="flex items-center gap-3 sm:gap-4 shrink-0">
 
-                {/* Notification Bell */}
+
                 <NotificationBell/>
 
-                {/* Primary Action Button */}
+            
                 <button
                   onClick={() => router.push("/home/upload")}
                   className="bg-white text-zinc-900 hover:bg-zinc-200 active:bg-zinc-300 font-medium text-[13px] px-3 py-1.5 sm:px-4 rounded-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] shrink-0"

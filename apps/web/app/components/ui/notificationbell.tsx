@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, JSX } from "react";
 import { useNotifications } from "../hooks/notification";
+import { getuserId } from "@/lib/userId";
 
 export interface AppNotification {
   id: string;
@@ -10,7 +11,6 @@ export interface AppNotification {
   read: boolean;
 }
 
-// 1. Map notification types to specific UI treatments (Icons & Colors)
 const notificationConfig: Record<string, { label: string; icon: JSX.Element; colorClass: string }> = {
   QUIZ_COMPLETED: {
     label: "Quiz completed",
@@ -42,9 +42,21 @@ function timeAgo(dateStr: string) {
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [userId, setUserId] = useState<string>();
   
-  const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "wss://your-worker-domain.workers.dev/notifications/ws";
-  const { notifications, unreadCount, markRead } = useNotifications(wsUrl);
+      useEffect(() => {
+          async function loadEmail() {
+              try {
+                  const result = await getuserId();
+                  if (result?.id) setUserId(result.id);
+              } catch (error) {
+                  console.error("Failed to fetch user ID:", error);
+              }
+          }
+          loadEmail();
+      }, []);
+
+  const { notifications, unreadCount, markRead } = useNotifications(`wss://api.ranjitdas2048.workers.dev/notifications/ws?userId=${userId}`)
 
   // Mark all as read handler (mock implementation)
   const handleMarkAllRead = (e: React.MouseEvent) => {

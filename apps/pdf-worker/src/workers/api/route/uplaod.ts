@@ -27,9 +27,9 @@ export const uplaod_Route = async (c: Context<{ Bindings: Bindings }>) => {
 
   await c.env.PDF_QUEUE.send({ key, policyId: policy.id, uploaded_at: new Date().toISOString() });
   await pushNotification(c.env, policy.userId,{
-    type: "UPLOAD",
+    type: "UPLOAD_DONE",
     payload: {status:"done"}
   });
-  
+
   return c.json({ policyId: policy.id, key });
 };

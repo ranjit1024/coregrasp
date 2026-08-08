@@ -2,6 +2,7 @@ import { Context } from "hono";
 import { createPrismaClient } from "../lib/db";
 import { sendQuizEmail } from "../lib/email";
 import { Bindings } from "../../../shared/types";
+import { pushNotification } from "../../../lib/notification";
 
 export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
     const { userId, policyUrl, recipientEmail } = await c.req.json<{
@@ -40,6 +41,10 @@ export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
             update: { score: 0, attempt: false, userId },
             create: { email: recipientEmail, score: 0, userId, attempt: false, policyId: policy.id },
         });
+         await pushNotification(c.env, userId,{
+            type: "QUIZ_SEND",
+            payload: {status:"done"}
+          });
     } catch (e) {
         console.error("sendQuizEmail failed:", e instanceof Error ? e.message : String(e));
         return c.json({ error: "Failed to send email", detail: e instanceof Error ? e.message : String(e) }, 502);
