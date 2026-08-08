@@ -106,9 +106,22 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#09090b] text-[#fafafa] selection:bg-emerald-500/30 selection:text-emerald-100">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-        .serif { font-family: 'Instrument Serif', serif; }
+          <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+        .font-display {
+          font-family: 'Playfair Display', Georgia, serif;
+        }
+        .font-body {
+          font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
       `}</style>
       
       {/* ── AMBIENT BACKGROUND ── */}
@@ -119,7 +132,7 @@ export default function AuthPage() {
 
       {/* ── NAV ── */}
       <nav className="absolute top-0 w-full px-6 md:px-10 py-6 flex justify-between items-center z-20">
-         <div className="flex font-mono items-center gap-3 cursor-pointer group" >
+         <div className="flex font-display items-center gap-3 cursor-pointer group" >
             <CoreGraspLogo/>
           <span className="serif text-2xl font-mono tracking-wide text-white">
             Core<span className="text-emerald-400">Grasp</span>
