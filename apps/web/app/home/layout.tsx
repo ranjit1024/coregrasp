@@ -19,14 +19,20 @@ import {
 } from "lucide-react";
 
 import { useSession } from "@/lib/auth-client"; // Adjust based on your auth client
+import { useNotifications } from "../components/hooks/notification";
+import { NotificationBell } from "../components/ui/notificationbell";
 // import { authClient } from "@/lib/auth-client"; // If you need this for signout
 
-export default function RootLayout({children}:{children:React.ReactNode}){
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
   // User & Menu State
   const { data: session, isPending } = useSession();
+  const { notifications, unreadCount } = useNotifications(
+    `wss://api.ranjitdas2048.workers.dev/notifications/ws`
+  );
+
   const user = session?.user;
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Mobile sidebar state
@@ -89,17 +95,15 @@ export default function RootLayout({children}:{children:React.ReactNode}){
 
       {/* ── MOBILE OVERLAY ── */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-100 md:hidden transition-opacity duration-300 ${
-          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-100 md:hidden transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         onClick={() => setIsMobileMenuOpen(false)}
       />
 
       {/* ── SIDEBAR ── */}
       <aside
-        className={`fixed inset-y-0 left-0 z-100 w-[250px] flex-shrink-0 bg-[#09090B] border-r border-white/[0.08] flex flex-col transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-100 w-[250px] flex-shrink-0 bg-[#09090B] border-r border-white/[0.08] flex flex-col transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="h-[68px] px-5 flex items-center justify-between">
           <div
@@ -189,7 +193,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
                 </div>
 
                 <div className="px-1.5 flex flex-col gap-0.5">
-                  <button onClick={()=> { setIsUserMenuOpen(false); router.push('/home/profile'); }} className="w-full text-left px-2 py-1.5 rounded-md text-[12px] font-medium text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors flex items-center gap-2.5">
+                  <button onClick={() => { setIsUserMenuOpen(false); router.push('/home/profile'); }} className="w-full text-left px-2 py-1.5 rounded-md text-[12px] font-medium text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors flex items-center gap-2.5">
                     <UserIcon className="w-3.5 h-3.5 text-zinc-400" />
                     Profile
                   </button>
@@ -232,11 +236,10 @@ export default function RootLayout({children}:{children:React.ReactNode}){
             // Loaded User Profile Trigger
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className={`w-full text-left p-3 border rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 ${
-                isUserMenuOpen
+              className={`w-full text-left p-3 border rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 ${isUserMenuOpen
                   ? "bg-[#18181B] border-white/[0.14]"
                   : "bg-[#0E0E11] border-white/[0.08] hover:bg-[#18181B] hover:border-white/[0.14]"
-              }`}
+                }`}
             >
               {user?.image ? (
                 <img
@@ -289,15 +292,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
               <div className="flex items-center gap-3 sm:gap-4 shrink-0">
 
                 {/* Notification Bell */}
-                <button
-                  aria-label="Notifications"
-                  className="relative w-8 h-8 rounded-md flex items-center justify-center text-[#A1A1AA] hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 transition-all shrink-0"
-                >
-                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full ring-2 ring-[#09090B]" />
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                  </svg>
-                </button>
+                <NotificationBell/>
 
                 {/* Primary Action Button */}
                 <button

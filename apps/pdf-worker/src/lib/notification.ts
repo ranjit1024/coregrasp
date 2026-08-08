@@ -2,12 +2,13 @@
 import {PrismaClient } from "@revisly/db";
 
 import { Bindings } from "../shared/types";
+import { createPrismaClient } from "../workers/api/lib/db";
 
 export async function pushNotification( env: Bindings,
- prisma: PrismaClient,
  userId: string,
  notif: { type: string; payload: unknown })
 {
+	  const prisma = createPrismaClient(env.HYPERDRIVE.connectionString);
 	const record = await prisma.notification.create({
 		data: {
 			userId, type: notif.type, payload: notif.payload as any

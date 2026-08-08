@@ -44,5 +44,20 @@ export function useNotifications(wsUrl: string) {
     };
   }, [wsUrl]);
 
-  return { notifications, unreadCount, setUnreadCount };
+  // add to hooks/useNotifications.ts, inside the hook, before the return
+async function markRead(id: string) {
+  setNotifications((prev) =>
+    prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+  );
+  setUnreadCount((c) => Math.max(0, c - 1));
+
+  await fetch(`/api/notifications/${id}/read`, {
+    method: "POST",
+    credentials: "include",
+  });
+}
+
+return { notifications, unreadCount, markRead };
+
+
 }

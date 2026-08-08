@@ -2,6 +2,7 @@ import { createPrismaClient } from "@revisly/db";
 import { MAX_FILE_SIZE } from "../../../shared/constants";
 import { Context } from "hono";
 import { Bindings } from "../../../shared/types";
+import { pushNotification } from "../../../lib/notification";
 
 export const uplaod_Route = async (c: Context<{ Bindings: Bindings }>) => {
   const formData = await c.req.formData();
@@ -25,6 +26,10 @@ export const uplaod_Route = async (c: Context<{ Bindings: Bindings }>) => {
   });
 
   await c.env.PDF_QUEUE.send({ key, policyId: policy.id, uploaded_at: new Date().toISOString() });
-
+  await pushNotification(c.env, policy.userId,{
+    type: "UPLOAD",
+    payload: {status:"done"}
+  });
+  
   return c.json({ policyId: policy.id, key });
 };
