@@ -247,7 +247,7 @@ export default function Home() {
 
           <div className="relative mt-2 md:mt-4">
             <span className="absolute left-1/2 top-1/2 -z-10 h-[80%] w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/10 blur-[60px] md:blur-[100px]" />
-            <h1 className="font-mono text-[clamp(2.5rem,7vw,5.5rem)] w-full font-mono leading-[1.1]  md:leading-[1.05] tracking-[-0.03em]">
+            <h1 className="font-mono text-[clamp(2.5rem,7vw,5.5rem)]  font-mono leading-[1.1]  md:leading-[1.05] tracking-[-0.03em]">
               <span className="bg-gradient-to-b from-white via-emerald-100 to-emerald-400  bg-clip-text text-transparent">
                 Know who <em >actually</em>
               </span>

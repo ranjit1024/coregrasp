@@ -7,7 +7,7 @@ export async function sendQuizEmail(
   quizUrl: string,
   title: string
 ) {
-  const baseUrl = "http://localhost:3000";
+  const baseUrl = "https://coregrasp.vercel.app";
   const link = `${baseUrl}/assessment/${encodeURIComponent(quizUrl)}`;
   const from = "Coregrasp <quiz@quiz.coregrasp.online>";
   const subject = `Quiz Ready: ${title}`;
