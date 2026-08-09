@@ -273,7 +273,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <div className="flex-1 w-full  h-full overflow-y-auto relative flex flex-col min-w-0 ">
         <AnimatePresence mode="wait">
           <motion.div className="flex flex-col min-h-full">
-            <header className="h-[100px] w-full px-4 md:px-8 py-3 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-100 sticky top-0">
+            <header className="h-[60px] w-full px-4 md:px-1 py-3 border-b border-white/[0.08] flex items-center justify-between bg-[#09090B]/90 backdrop-blur-md z-100 sticky top-0">
 
     
               <div className="flex items-center gap-3">

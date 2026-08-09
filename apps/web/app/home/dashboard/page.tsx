@@ -86,7 +86,7 @@ async function DashboardContent() {
           </p>
 
           <Link
-            href="/home/policies/new"
+            href="/home/upload"
             className="group relative flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 bg-zinc-100 hover:bg-white text-zinc-900 text-[13px] sm:text-[14px] font-semibold rounded-xl transition-all shadow-[0_0_30px_6px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_10px_rgba(255,255,255,0.15)] active:scale-[0.98]"
           >
             <Plus className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />

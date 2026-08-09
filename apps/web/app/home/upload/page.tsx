@@ -19,7 +19,7 @@ function formatBytes(bytes: number): string {
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 
-const DesktopPdfUpload: React.FC = () => {
+const ResponsivePdfUpload: React.FC = () => {
   const { data: session, isPending } = useSession();
   
   const [dragActive, setDragActive] = useState(false);
@@ -142,7 +142,7 @@ const DesktopPdfUpload: React.FC = () => {
   const isDone = uploadState === "done";
 
   return (
-    <div className="min-h-[90vh] -[#0A0A0C] flex items-center justify-center p-8 font-sans antialiased selection:bg-[#00E676]/30">
+    <div className="min-h-[90vh] bg-[#0A0A0C] flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans antialiased selection:bg-[#00E676]/30">
       <div className="w-full max-w-5xl">
         <div className="mb-6">
           <p className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wider mb-1.5">
@@ -152,8 +152,8 @@ const DesktopPdfUpload: React.FC = () => {
         </div>
 
         <div className="bg-[#141416] border border-neutral-800/80 rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
-          <div className="flex divide-x divide-neutral-800/80 min-h-[380px]">
-            <div className="flex-1 p-8 flex flex-col justify-between gap-8">
+          <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-neutral-800/80 min-h-[380px]">
+            <div className="flex-1 p-5 sm:p-6 lg:p-8 flex flex-col justify-between gap-6 lg:gap-8">
               <div>
                 <p className="text-sm text-neutral-400 leading-relaxed">
                   Attach your updated company documentation below. The file contents will instantly version change logs, sync with active workflows, and issue alerts across integrated systems.
@@ -165,8 +165,8 @@ const DesktopPdfUpload: React.FC = () => {
                     { label: "Strict maximum ceiling threshold of 10 MB", path: "M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5" },
                     { label: "End-to-end AES-256 payload encryption", path: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" }
                   ].map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-xs text-neutral-400">
-                      <svg className="w-4 h-4 text-neutral-600 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <li key={idx} className="flex items-start sm:items-center gap-3 text-xs text-neutral-400">
+                      <svg className="w-4 h-4 mt-0.5 sm:mt-0 text-neutral-600 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d={item.path} />
                       </svg>
                       {item.label}
@@ -185,7 +185,7 @@ const DesktopPdfUpload: React.FC = () => {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                         <p className="text-sm font-semibold text-neutral-200 truncate">
                           {selectedFile.name}
                         </p>
@@ -203,11 +203,11 @@ const DesktopPdfUpload: React.FC = () => {
                         />
                       </div>
 
-                      <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs font-medium text-neutral-400">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-2 gap-1 sm:gap-0">
+                        <p className="text-[11px] sm:text-xs font-medium text-neutral-400">
                           {isDone ? "Document synced successfully" : isUploading ? "Streaming blocks to server..." : "Staged payload ready"}
                         </p>
-                        <p className="text-xs font-semibold text-neutral-300">
+                        <p className="text-[11px] sm:text-xs font-semibold text-neutral-300">
                           {isDone ? "100%" : isUploading ? `${progress}%` : "Pending"}
                         </p>
                       </div>
@@ -237,18 +237,18 @@ const DesktopPdfUpload: React.FC = () => {
                 </div>
               )}
 
-              <div className="flex gap-3 mt-auto">
+              <div className="flex gap-3 mt-auto pt-4 lg:pt-0">
                 <button
                   onClick={handleClear}
                   disabled={isUploading}
-                  className="flex-1 py-2.5 text-xs font-bold uppercase tracking-wider text-neutral-400 border border-neutral-800 rounded-xl hover:bg-neutral-900 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex-1 py-2.5 sm:py-3 lg:py-2.5 px-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-neutral-400 border border-neutral-800 rounded-xl hover:bg-neutral-900 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleUpload}
                   disabled={!isSelected || isUploading || isDone || isPending}
-                  className={`flex-[2] py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg ${
+                  className={`flex-[2] py-2.5 sm:py-3 lg:py-2.5 px-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg ${
                     isDone
                       ? "bg-[#00E676]/10 text-[#00E676] border border-[#00E676]/20 shadow-none cursor-default"
                       : isSelected && !isPending
@@ -258,14 +258,14 @@ const DesktopPdfUpload: React.FC = () => {
                 >
                   {isDone ? (
                     <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                       Success
                     </>
                   ) : isUploading ? (
                     <>
-                      <svg className="animate-spin w-4 h-4 text-black" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin w-4 h-4 text-black flex-shrink-0" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
@@ -273,7 +273,7 @@ const DesktopPdfUpload: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                       </svg>
                       Execute Upload
@@ -283,7 +283,7 @@ const DesktopPdfUpload: React.FC = () => {
               </div>
             </div>
 
-            <div className="w-90 flex-shrink-0 p-8 flex flex-col items-stretch justify-center bg-[#18181B]/40">
+            <div className="w-full lg:w-[340px] xl:w-96 flex-shrink-0 p-5 sm:p-6 lg:p-8 flex flex-col items-stretch justify-center bg-[#18181B]/40">
               <input
                 ref={inputRef}
                 type="file"
@@ -309,8 +309,8 @@ const DesktopPdfUpload: React.FC = () => {
                 onDragLeave={handleDrag}
                 onDrop={handleDrop}
                 className={`
-                  w-full h-full min-h-[280px] rounded-2xl border border-dashed
-                  flex flex-col items-center justify-center gap-4 text-center px-6
+                  w-full h-full min-h-[220px] lg:min-h-[280px] rounded-2xl border border-dashed
+                  flex flex-col items-center justify-center gap-4 text-center px-4 sm:px-6 py-8 lg:py-0
                   transition-all duration-200 select-none
                   ${isUploading ? "cursor-not-allowed border-neutral-800 bg-neutral-900/10 opacity-50" : ""}
                   ${dragActive
@@ -358,7 +358,7 @@ const DesktopPdfUpload: React.FC = () => {
                       <p className="text-sm font-semibold text-neutral-200 tracking-tight">
                         {dragActive ? "Release item here" : "Drop PDF configuration"}
                       </p>
-                      <p className="text-xs text-neutral-500 mt-1">or click to scan files</p>
+                      <p className="text-xs text-neutral-500 mt-1">or tap to scan files</p>
                     </div>
                     <div className="flex gap-1.5 mt-1">
                       <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-neutral-900 text-neutral-400 border border-neutral-800 font-mono">
@@ -379,4 +379,4 @@ const DesktopPdfUpload: React.FC = () => {
   );
 };
 
-export default DesktopPdfUpload;
+export default ResponsivePdfUpload;
