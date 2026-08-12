@@ -119,6 +119,7 @@ const ResponsivePdfUpload: React.FC = () => {
           reject();
         }
       });
+      
 
       xhr.addEventListener("error", () => {
         setErrorMsg("Network Error - Upload failed");
