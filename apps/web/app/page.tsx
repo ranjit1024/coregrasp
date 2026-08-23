@@ -143,7 +143,7 @@ export default function Home() {
       >
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => router.push("/")}>
           <CoreGraspLogo />
-          <span className="font-display text-[20px] md:text-[22px] tracking-tight text-white font-medium">
+          <span className="font-mono text-[20px] md:text-[22px] tracking-tight text-white font-medium">
             Core<span className="text-emerald-400">Grasp</span>
           </span>
         </div>

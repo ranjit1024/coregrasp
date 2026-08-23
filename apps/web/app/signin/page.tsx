@@ -132,10 +132,10 @@ export default function AuthPage() {
 
       {/* ── NAV ── */}
       <nav className="absolute top-0 w-full px-6 md:px-10 py-6 flex justify-between items-center z-20">
-         <div className="flex font-display items-center gap-3 cursor-pointer group" >
+         <div className="flex font-mono items-center gap-3 cursor-pointer group" >
             <CoreGraspLogo/>
-          <span className="serif text-2xl font-mono tracking-wide text-white">
-            Core<span className="text-emerald-400">Grasp</span>
+          <span className="font-mono text-2xl  tracking-wide text-white">
+            Core<span className="text-emerald-400 font-mono">Grasp</span>
           </span>
         </div>
         
