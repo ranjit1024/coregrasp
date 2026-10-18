@@ -66,6 +66,12 @@
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
+	 *
+	 * Secrets to configure with `wrangler secret put <NAME>`:
+	 * - WORKER_API_SECRET: HMAC key shared with the web app (must match the
+	 *   WORKER_API_SECRET env var in apps/web); signs the short-lived bearer
+	 *   tokens accepted by requireUser in ./middleware/auth.ts
+	 * - RESEND_API_KEY, GMAIL_CLIENT_ID, GMAIL_REFRESH_TOKEN, GMAIL_CLIENT_SECRET
 	 */
 	// "vars": {  "MY_VARIABLE": "production_value" }
 	/**
