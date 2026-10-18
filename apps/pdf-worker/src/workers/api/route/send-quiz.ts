@@ -37,7 +37,6 @@ export async function send_quiz(c: Context<{ Bindings: Bindings; Variables: ApiV
         }
 
         await sendQuizEmail(c.env, recipientEmail, policyUrl, policy.name ?? policyUrl);
-        console.log(sendQuizEmail)
         await prisma.candidate.upsert({
             where: { email_policyId: { email: recipientEmail, policyId: policy.id } },
             update: { score: 0, attempt: false, userId },
