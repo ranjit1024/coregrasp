@@ -1,6 +1,7 @@
 "use client";
 
 import Quiz from "@/app/components/ui/quiz";
+import { apiUrl } from "@/lib/api";
 import { use, useEffect, useState } from "react";
 
 interface PolicyDetailsProps {
@@ -23,7 +24,7 @@ export default function QuizPage({ params }: PolicyDetailsProps) {
                 setLoading(true);
                 setError(null);
 
-                const response = await fetch(`https://api.ranjitdas2048.workers.dev/ans/${quiz}`);
+                const response = await fetch(apiUrl(`/ans/${quiz}`));
                 console.log(quiz, response)
                 if (!response.ok) {
                     throw new Error(`Failed to fetch policy: ${response.statusText}`);
