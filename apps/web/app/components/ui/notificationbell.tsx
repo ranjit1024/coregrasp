@@ -2,8 +2,6 @@
 
 import { useState, useRef, useEffect, JSX } from "react";
 import { useNotifications } from "../hooks/notification";
-import { getuserId } from "@/lib/userId";
-import { wsUrl } from "@/lib/api";
 
 export interface AppNotification {
   id: string;
@@ -43,21 +41,8 @@ function timeAgo(dateStr: string) {
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [userId, setUserId] = useState<string>();
-  
-      useEffect(() => {
-          async function loadEmail() {
-              try {
-                  const result = await getuserId();
-                  if (result?.id) setUserId(result.id);
-              } catch (error) {
-                  console.error("Failed to fetch user ID:", error);
-              }
-          }
-          loadEmail();
-      }, []);
 
-  const { notifications, unreadCount, markRead } = useNotifications(wsUrl(`/notifications/ws?userId=${userId}`))
+  const { notifications, unreadCount, markRead } = useNotifications()
 
   // Mark all as read handler (mock implementation)
   const handleMarkAllRead = (e: React.MouseEvent) => {
