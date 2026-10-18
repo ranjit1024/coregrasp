@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { apiUrl } from "@/lib/api";
 
 export interface MCQ {
     question: string;
@@ -113,7 +114,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
         if (!email || isSaving) return;
         setIsSaving(true);
         try {
-            const res = await fetch("https://api.ranjitdas2048.workers.dev/update-score", {
+            const res = await fetch(apiUrl("/update-score"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, score: scorePercentage }),
