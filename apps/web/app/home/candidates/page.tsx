@@ -2,7 +2,7 @@
 
 import { useSession } from "@/lib/auth-client";
 import { PolicyDocument } from "@/lib/types";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, authHeaders } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import {
@@ -65,7 +65,8 @@ export default function Candidates() {
 
       try {
         const res = await fetch(
-          apiUrl(`/result?userId=${session.user.id}`)
+          apiUrl("/result"),
+          { headers: await authHeaders() }
         );
 
         if (!res.ok) {
