@@ -2,18 +2,17 @@
 
 import MCQList from "@/app/components/ui/mcq";
 import QuizReviewLayout from "@/app/components/ui/quiz-skeloton";
-import { apiUrl } from "@/lib/api";
+import { fetchMcqQuestions, McqQuestion } from "@/lib/fetchMcq";
 import { use, useEffect, useState } from "react";
 
 interface PolicyDetailsProps {
-    params: Promise<{ policy: string, url: string }>;
+    params: Promise<{ policy: string }>;
 }
 
 export default function PolicyDetails({ params }: PolicyDetailsProps) {
     const { policy } = use(params);
-    const { url } = use(params);
 
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<McqQuestion[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -24,23 +23,9 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
             try {
                 setLoading(true);
                 setError(null);
-
-                const response = await fetch(apiUrl(`/ans/${policy}`));
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch policy: ${response.statusText}`);
-                }
-
-                const json = await response.json();
-                const mcqData = json?.result?.finalResult?.mcq?.questions;
-
-                if (mcqData) {
-                    setData(mcqData);
-                } else {
-                    throw new Error("MCQ data format is missing or invalid.");
-                }
-            } catch (err: any) {
-                setError(err.message || "An unexpected error occurred.");
+                setData(await fetchMcqQuestions(policy));
+            } catch (err) {
+                setError(err instanceof Error ? err.message : "An unexpected error occurred.");
             } finally {
                 setLoading(false);
             }
@@ -49,7 +34,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
         fetchPolicyData();
     }, [policy]);
 
-    if (loading) return <div className="p-6 text-center text-zinc-500"><QuizReviewLayout/></div>;
+    if (loading) return <div className="p-6 text-center text-zinc-500"><QuizReviewLayout /></div>;
     if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
 
     return (
