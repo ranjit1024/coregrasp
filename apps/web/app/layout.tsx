@@ -14,12 +14,12 @@ import { Instrument_Serif, DM_Sans } from 'next/font/google'
 const instrumentSerif = Instrument_Serif({ 
   weight: '400', 
   subsets: ['latin'],
-  variable: '--font-serif'
+  variable: '--font-instrument-serif'
 })
 
 const dmSans = DM_Sans({ 
   subsets: ['latin'],
-  variable: '--font-sans'
+  variable: '--font-dm-sans'
 })
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export default function RootLayout({
     
     <html
       lang="en"
-      className={`${inter.variable} h-full antialiased`}
+      className={`${inter.variable} ${dmSans.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       
       <body className="min-h-full flex flex-col font-sans">
