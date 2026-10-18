@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect, DragEvent, ChangeEvent } from "react";
 import { useSession } from "../../../lib/auth-client"; // adjust import to wherever your better-auth client is exported
-import { apiUrl } from "@/lib/api";
+import { apiUrl, getWorkerToken } from "@/lib/api";
 
 interface SelectedFile {
   file: File;
@@ -95,9 +95,17 @@ const ResponsivePdfUpload: React.FC = () => {
     setUploadState("uploading");
     setProgress(0);
 
+    let token: string;
+    try {
+      token = await getWorkerToken();
+    } catch {
+      setErrorMsg("Could not authenticate the upload. Please sign in again.");
+      setUploadState("error");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", selectedFile.file);
-    formData.append("userId", session.user.id);
 
     await new Promise<void>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -135,6 +143,7 @@ const ResponsivePdfUpload: React.FC = () => {
       });
 
       xhr.open("POST", apiUrl("/uplaod-pdf"));
+      xhr.setRequestHeader("Authorization", `Bearer ${token}`);
       xhr.send(formData);
     });
   };
