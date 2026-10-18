@@ -2,6 +2,7 @@
 
 import MCQList from "@/app/components/ui/mcq";
 import QuizReviewLayout from "@/app/components/ui/quiz-skeloton";
+import { apiUrl } from "@/lib/api";
 import { use, useEffect, useState } from "react";
 
 interface PolicyDetailsProps {
@@ -24,7 +25,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
                 setLoading(true);
                 setError(null);
 
-                const response = await fetch(`https://api.ranjitdas2048.workers.dev/ans/${policy}`);
+                const response = await fetch(apiUrl(`/ans/${policy}`));
 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch policy: ${response.statusText}`);
