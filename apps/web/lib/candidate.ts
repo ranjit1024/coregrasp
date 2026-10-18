@@ -18,7 +18,6 @@ export async function getuserCandidate() {
             user: { email },
         },
     });
-    console.log(candidates)
     return candidates
     
 }

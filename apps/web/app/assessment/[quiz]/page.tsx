@@ -25,7 +25,6 @@ export default function QuizPage({ params }: PolicyDetailsProps) {
                 setError(null);
 
                 const response = await fetch(apiUrl(`/ans/${quiz}`));
-                console.log(quiz, response)
                 if (!response.ok) {
                     throw new Error(`Failed to fetch policy: ${response.statusText}`);
                 }
@@ -47,7 +46,6 @@ export default function QuizPage({ params }: PolicyDetailsProps) {
 
         fetchPolicyData();
     }, []);
-    console.log(quiz)
 
     if (loading) return <div className="p-6 text-center text-zinc-500">Loading policy details...</div>;
     if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;

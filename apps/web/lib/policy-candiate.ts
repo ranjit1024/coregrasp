@@ -29,7 +29,6 @@ export async function getCandidatepolicy({key}: {key:string}) {
             policyId: policy.id
         },
     });
-    console.log(candidates)
     return candidates
     
 }
