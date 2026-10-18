@@ -4,7 +4,7 @@ import { useSession } from "../../../lib/auth-client";
 import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PolicyDocument, PolicyStatus, statusConfig } from "../../../lib/types";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, authHeaders } from "@/lib/api";
 import { PolicyRow } from "@/app/components/ui/policy_row";
 import { FileX2, ServerCrash, ChevronRight, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -90,7 +90,8 @@ export default function PolicyStatusPage() {
 
             try {
                 const res = await fetch(
-                    apiUrl(`/result?userId=${session.user.id}`)
+                    apiUrl("/result"),
+                    { headers: await authHeaders() }
                 );
 
                 if (!res.ok) {
