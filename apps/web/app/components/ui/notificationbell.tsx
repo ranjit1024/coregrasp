@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, JSX } from "react";
 import { useNotifications } from "../hooks/notification";
 import { getuserId } from "@/lib/userId";
+import { wsUrl } from "@/lib/api";
 
 export interface AppNotification {
   id: string;
@@ -56,7 +57,7 @@ export function NotificationBell() {
           loadEmail();
       }, []);
 
-  const { notifications, unreadCount, markRead } = useNotifications(`wss://api.ranjitdas2048.workers.dev/notifications/ws?userId=${userId}`)
+  const { notifications, unreadCount, markRead } = useNotifications(wsUrl(`/notifications/ws?userId=${userId}`))
 
   // Mark all as read handler (mock implementation)
   const handleMarkAllRead = (e: React.MouseEvent) => {
