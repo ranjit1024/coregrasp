@@ -13,15 +13,20 @@ export async function getCandidatepolicy({key}: {key:string}) {
         return null;
     }
     const email = session.user.email;
-    const policyId = await prisma.policy.findFirst({
+    const policy = await prisma.policy.findFirst({
         where: {
             key:key
         }
     })
+
+    if (!policy) {
+        return [];
+    }
+
     const candidates = await prisma.candidate.findMany({
         where: {
             user: { email },
-            policyId: policyId?.id
+            policyId: policy.id
         },
     });
     console.log(candidates)
