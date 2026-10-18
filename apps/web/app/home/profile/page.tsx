@@ -29,6 +29,10 @@ export default function ProfilePage() {
   const user = session?.user;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // The /api/user/* routes don't exist yet; until they ship, profile
+  // mutations are disabled so the UI never silently fails.
+  const PROFILE_MUTATIONS_ENABLED = false;
+
   // Form State
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -77,6 +81,10 @@ export default function ProfilePage() {
 
   // Handle Save
   const handleSave = async () => {
+    if (!PROFILE_MUTATIONS_ENABLED) {
+      addToast("info", "Profile editing is coming soon");
+      return;
+    }
     if (!isValid) {
       addToast("error", "Name must be at least 2 characters");
       return;
@@ -113,6 +121,10 @@ export default function ProfilePage() {
   const handleImageClick = () => fileInputRef.current?.click();
   
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!PROFILE_MUTATIONS_ENABLED) {
+      addToast("info", "Avatar uploads are coming soon");
+      return;
+    }
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -155,6 +167,10 @@ export default function ProfilePage() {
 
   // Handle Delete Account
   const handleDeleteAccount = async () => {
+    if (!PROFILE_MUTATIONS_ENABLED) {
+      addToast("info", "Account deletion is coming soon");
+      return;
+    }
     if (deleteConfirmText !== "DELETE") return;
     
     setIsDeleting(true);
@@ -322,8 +338,9 @@ export default function ProfilePage() {
             <h2 className="text-[15px] font-semibold text-zinc-100 mb-4">Profile Picture</h2>
             <div className="flex items-center gap-6">
               <div 
-                className="relative group cursor-pointer shrink-0"
-                onClick={handleImageClick}
+                className={`relative group shrink-0 ${PROFILE_MUTATIONS_ENABLED ? "cursor-pointer" : "cursor-not-allowed"}`}
+                onClick={PROFILE_MUTATIONS_ENABLED ? handleImageClick : undefined}
+                aria-disabled={!PROFILE_MUTATIONS_ENABLED}
               >
                 {imagePreview ? (
                   <img 
@@ -338,7 +355,7 @@ export default function ProfilePage() {
                 )}
                 
                 {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-200 backdrop-blur-[2px]">
+                <div className={`absolute inset-0 bg-black/60 rounded-full opacity-0 flex items-center justify-center transition-all duration-200 backdrop-blur-[2px] ${PROFILE_MUTATIONS_ENABLED ? "group-hover:opacity-100" : ""}`}>
                   {isUploading ? (
                     <Loader2 className="w-6 h-6 text-white animate-spin" />
                   ) : (
@@ -356,23 +373,27 @@ export default function ProfilePage() {
                 <div className="flex gap-2">
                   <button
                     onClick={handleImageClick}
-                    disabled={isUploading}
-                    className="flex items-center gap-2 px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-900 text-[13px] font-semibold rounded-lg transition-all disabled:opacity-50"
+                    disabled={!PROFILE_MUTATIONS_ENABLED || isUploading}
+                    title={!PROFILE_MUTATIONS_ENABLED ? "Coming soon" : undefined}
+                    className="flex items-center gap-2 px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-900 text-[13px] font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                    {isUploading ? "Uploading..." : "Upload New"}
+                    {!PROFILE_MUTATIONS_ENABLED ? "Coming soon" : isUploading ? "Uploading..." : "Upload New"}
                   </button>
                   {imagePreview && (
                     <button
                       onClick={() => { setImagePreview(null); addToast("info", "Image removed"); }}
-                      className="px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-200 text-[13px] font-medium rounded-lg transition-all border border-white/[0.06]"
+                      disabled={!PROFILE_MUTATIONS_ENABLED}
+                      className="px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-200 text-[13px] font-medium rounded-lg transition-all border border-white/[0.06] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Remove
                     </button>
                   )}
                 </div>
                 <p className="text-[12px] text-zinc-500">
-                  Recommended: 256x256px or larger. Max 2MB. JPG, PNG, or GIF.
+                  {PROFILE_MUTATIONS_ENABLED
+                    ? "Recommended: 256x256px or larger. Max 2MB. JPG, PNG, or GIF."
+                    : "Avatar uploads are coming soon."}
                 </p>
               </div>
 
@@ -391,7 +412,11 @@ export default function ProfilePage() {
             <div className="p-6 border-b border-white/[0.04] flex items-center justify-between">
               <div>
                 <h2 className="text-[15px] font-semibold text-zinc-100 mb-1">Personal Information</h2>
-                <p className="text-[13px] text-zinc-500">Update your primary details and public name.</p>
+                <p className="text-[13px] text-zinc-500">
+                  {PROFILE_MUTATIONS_ENABLED
+                    ? "Update your primary details and public name."
+                    : "Profile editing is coming soon."}
+                </p>
               </div>
               <div className="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center">
                 <User className="w-4 h-4 text-zinc-500" />
@@ -411,7 +436,8 @@ export default function ProfilePage() {
                   type="text" 
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className={`w-full bg-[#09090B] border rounded-lg px-4 py-2.5 text-[14px] text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all shadow-sm ${
+                  disabled={!PROFILE_MUTATIONS_ENABLED}
+                  className={`w-full bg-[#09090B] border rounded-lg px-4 py-2.5 text-[14px] text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed ${
                     formData.name && !isValid 
                       ? "border-rose-500/30 focus:border-rose-500/50 focus:ring-rose-500/50" 
                       : "border-white/[0.08] focus:border-emerald-500/50 focus:ring-emerald-500/50"
@@ -518,9 +544,11 @@ export default function ProfilePage() {
               </div>
               <button 
                 onClick={() => setShowDeleteModal(true)}
-                className="shrink-0 px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[13px] font-semibold rounded-lg transition-colors border border-rose-500/20 flex items-center justify-center gap-2 hover:border-rose-500/40"
+                disabled={!PROFILE_MUTATIONS_ENABLED}
+                title={!PROFILE_MUTATIONS_ENABLED ? "Coming soon" : undefined}
+                className="shrink-0 px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[13px] font-semibold rounded-lg transition-colors border border-rose-500/20 flex items-center justify-center gap-2 hover:border-rose-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Trash2 className="w-4 h-4" /> Delete Account
+                <Trash2 className="w-4 h-4" /> {PROFILE_MUTATIONS_ENABLED ? "Delete Account" : "Coming soon"}
               </button>
             </div>
           </motion.div>
@@ -528,12 +556,14 @@ export default function ProfilePage() {
         </div>
 
         {/* Keyboard hint */}
-        <motion.p 
-          variants={itemVariants}
-          className="text-center text-[11px] text-zinc-600 pt-4"
-        >
-          Pro tip: Press <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-zinc-500 font-mono text-[10px] border border-white/[0.08]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-zinc-500 font-mono text-[10px] border border-white/[0.08]">S</kbd> to save changes
-        </motion.p>
+        {PROFILE_MUTATIONS_ENABLED && (
+          <motion.p 
+            variants={itemVariants}
+            className="text-center text-[11px] text-zinc-600 pt-4"
+          >
+            Pro tip: Press <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-zinc-500 font-mono text-[10px] border border-white/[0.08]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-zinc-500 font-mono text-[10px] border border-white/[0.08]">S</kbd> to save changes
+          </motion.p>
+        )}
       </motion.div>
     </div>
   );
