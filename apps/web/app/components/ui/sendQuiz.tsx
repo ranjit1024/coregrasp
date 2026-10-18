@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Papa from "papaparse";
 import { getuserId } from "@/lib/userId";
+import { apiUrl } from "@/lib/api";
 
 type Row = Record<string, string>;
 
@@ -45,7 +46,7 @@ async function parsePdf(file: File): Promise<string[]> {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("https://api.ranjitdas2048.workers.dev/extract-pdf-emails", {
+    const res = await fetch(apiUrl("/extract-pdf-emails"), {
         method: "POST",
         body: formData,
     });
@@ -92,7 +93,7 @@ export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
         setStatus("sending");
         setErrorMsg("");
         try {
-            const res = await fetch(`https://api.ranjitdas2048.workers.dev/send-quiz`, {
+            const res = await fetch(apiUrl("/send-quiz"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ policyUrl, recipientEmail: email, userId }),
@@ -155,7 +156,7 @@ export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
             while (index < bulkEmails.length) {
                 const current = bulkEmails[index++];
                 try {
-                    const res = await fetch(`https://api.ranjitdas2048.workers.dev/send-quiz`, {
+                    const res = await fetch(apiUrl("/send-quiz"), {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ policyUrl, recipientEmail: current, userId }),
