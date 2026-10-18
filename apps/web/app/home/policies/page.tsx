@@ -4,6 +4,7 @@ import { useSession } from "../../../lib/auth-client";
 import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PolicyDocument, PolicyStatus, statusConfig } from "../../../lib/types";
+import { apiUrl } from "@/lib/api";
 import { PolicyRow } from "@/app/components/ui/policy_row";
 import { FileX2, ServerCrash, ChevronRight, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -89,7 +90,7 @@ export default function PolicyStatusPage() {
 
             try {
                 const res = await fetch(
-                    `https://api.ranjitdas2048.workers.dev/result?userId=${session.user.id}`
+                    apiUrl(`/result?userId=${session.user.id}`)
                 );
 
                 if (!res.ok) {
