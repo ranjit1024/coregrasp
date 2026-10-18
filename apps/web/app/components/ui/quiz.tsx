@@ -116,7 +116,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
             const res = await fetch("https://api.ranjitdas2048.workers.dev/update-score", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, score }),
+                body: JSON.stringify({ email, score: scorePercentage }),
             });
 
             if (res.status === 409) {
@@ -137,7 +137,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
         } finally {
             setIsSaving(false);
         }
-    }, [email, score, isSaving]);
+    }, [email, scorePercentage, isSaving]);
 
     if (!questions?.length) {
         return (
@@ -479,21 +479,11 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                             Cancel
                                         </button>
                                         <button
-                                            onClick={async () => {
-                                                const res = await fetch(`https://api.ranjitdas2048.workers.dev/update-score`, {
-                                                    method: "POST",
-                                                    headers: { "Content-Type": "application/json" },
-                                                    body: JSON.stringify({ email: email, score: (score / 10 * 100) })
-                                                });
-                                                console.log(score)
-                                                console.log(res.json)
-                                            }}
-
-
                                             type="submit"
-                                            className="flex-1 py-4 px-5 rounded-2xl text-[15px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                                            disabled={isSaving}
+                                            className="flex-1 py-4 px-5 rounded-2xl text-[15px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-60 disabled:cursor-not-allowed"
                                         >
-                                            Submit Assessment
+                                            {isSaving ? "Submitting..." : "Submit Assessment"}
                                         </button>
                                     </div>
                                 </form>
