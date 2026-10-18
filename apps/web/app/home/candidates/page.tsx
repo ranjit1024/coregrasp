@@ -247,7 +247,7 @@ export default function Candidates() {
       <div className="fixed top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent z-0 pointer-events-none" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[600px] h-[200px] bg-white/[0.015] blur-[120px] rounded-full pointer-events-none -z-10" />
 
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 md:p-10 w-full flex flex-col gap-6 sm:gap-8 relative z-10">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-10 w-full flex flex-col gap-6 sm:gap-8 relative z-10">
 
         {/* Breadcrumbs */}
         <motion.nav
@@ -417,7 +417,7 @@ export default function Candidates() {
             )}
           </AnimatePresence>
         </motion.div>
-      </main>
+      </div>
     </div>
   );
 }
