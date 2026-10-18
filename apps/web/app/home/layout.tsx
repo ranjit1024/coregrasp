@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 
 import { useSession, authClient } from "@/lib/auth-client"; // Adjust based on your auth client
-import { useNotifications } from "../components/hooks/notification";
 import { NotificationBell } from "../components/ui/notificationbell";
 // import { authClient } from "@/lib/auth-client"; // If you need this for signout
 
@@ -29,10 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   // User & Menu State
   const { data: session, isPending } = useSession();
-  const { notifications, unreadCount } = useNotifications(
-    `wss://api.ranjitdas2048.workers.dev/notifications/ws`
-  );
-
   const user = session?.user;
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Mobile sidebar state
