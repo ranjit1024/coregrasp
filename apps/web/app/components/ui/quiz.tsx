@@ -57,6 +57,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [email, setEmail] = useState("");
     const [isSaving, setIsSaving] = useState(false)
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     const headerRef = useRef<HTMLDivElement>(null);
 
@@ -105,14 +106,28 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
             setTimeout(() => setShowShake(false), 500);
             return;
         }
+        setSubmitError(null);
         setShowEmailModal(true);
     }, [allAnswered]);
+
+    // Close open dialogs with Escape
+    useEffect(() => {
+        if (!showEmailModal && !alreadyAttempted) return;
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key !== "Escape") return;
+            if (showEmailModal && !isSaving) setShowEmailModal(false);
+            if (alreadyAttempted) setAlreadyAttempted(false);
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [showEmailModal, alreadyAttempted, isSaving]);
 
 
     const handleFinalSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email || isSaving) return;
         setIsSaving(true);
+        setSubmitError(null);
         try {
             const res = await fetch(apiUrl("/update-score"), {
                 method: "POST",
@@ -132,9 +147,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
             setIsSubmitted(true);
         } catch (err) {
             console.error(err);
-            // TODO: surface a real error state to the user here too —
-            // right now a network failure silently closes the modal
-            // and does nothing, which looks broken.
+            setSubmitError("Something went wrong while saving your score. Please try again.");
         } finally {
             setIsSaving(false);
         }
@@ -188,14 +201,18 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                                 transition={{ duration: 0.3, type: "spring", bounce: 0.25 }}
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="already-attempted-title"
                                 className="bg-zinc-900 border border-zinc-800/80 rounded-[32px] p-8 w-full max-w-md shadow-2xl text-center"
                             >
-                                <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Already Submitted</h2>
+                                <h2 id="already-attempted-title" className="text-2xl font-bold text-white mb-2 tracking-tight">Already Submitted</h2>
                                 <p className="text-[15px] text-zinc-400 mb-8 leading-relaxed">
                                     This email has already completed the assessment. Each candidate can only submit once.
                                 </p>
                                 <button
                                     onClick={() => setAlreadyAttempted(false)}
+                                    autoFocus
                                     className="w-full py-4 rounded-2xl text-[15px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 transition-all"
                                 >
                                     Close
@@ -439,6 +456,9 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             transition={{ duration: 0.3, type: "spring", bounce: 0.25 }}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="email-modal-title"
                             className="bg-zinc-900 border border-zinc-800/80 rounded-[32px] p-8 w-full max-w-md shadow-2xl relative overflow-hidden"
                         >
                             {/* Decorative background glow */}
@@ -448,7 +468,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                 <div className="w-14 h-14 bg-zinc-800/50 border border-zinc-700/50 rounded-2xl flex items-center justify-center text-white mb-6 shadow-sm">
                                     <MailIcon className="w-6 h-6" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Almost done!</h2>
+                                <h2 id="email-modal-title" className="text-2xl font-bold text-white mb-2 tracking-tight">Almost done!</h2>
                                 <p className="text-[15px] text-zinc-400 mb-8 leading-relaxed">
                                     Please enter your email address to submit your assessment and view your final score.
                                 </p>
@@ -464,6 +484,7 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                                 id="email"
                                                 type="email"
                                                 required
+                                                autoFocus
                                                 placeholder="you@company.com"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
@@ -471,6 +492,11 @@ export default function Quiz({ questions, policyUrl, onComplete }: QuizProps) {
                                             />
                                         </div>
                                     </div>
+                                    {submitError && (
+                                        <p role="alert" className="text-[13px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+                                            {submitError}
+                                        </p>
+                                    )}
                                     <div className="flex gap-3 pt-2">
                                         <button
                                             type="button"

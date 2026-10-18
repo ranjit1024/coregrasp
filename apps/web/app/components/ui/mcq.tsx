@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SendQuizForm } from "@/app/components/ui/sendQuiz"; // Adjust import path as needed
 import {
@@ -26,6 +26,15 @@ interface MCQListProps {
 
 export default function MCQList({ questions, policyUrl }: MCQListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isModalOpen]);
 
   if (!questions || questions.length === 0) {
     return (
@@ -177,11 +186,16 @@ export default function MCQList({ questions, policyUrl }: MCQListProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Send quiz by email"
               className="relative w-full max-w-md bg-[#121214] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden p-5 sm:p-6"
             >
               {/* Close Modal Button */}
               <button
                 onClick={() => setIsModalOpen(false)}
+                aria-label="Close dialog"
+                autoFocus
                 className="absolute top-3 sm:top-4 right-3 sm:right-4 p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors z-10"
               >
                 <X className="w-4 h-4 sm:w-5 sm:h-5" />
