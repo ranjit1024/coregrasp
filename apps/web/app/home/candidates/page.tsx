@@ -2,6 +2,7 @@
 
 import { useSession } from "@/lib/auth-client";
 import { PolicyDocument } from "@/lib/types";
+import { apiUrl } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import {
@@ -64,7 +65,7 @@ export default function Candidates() {
 
       try {
         const res = await fetch(
-          `https://api.ranjitdas2048.workers.dev/result?userId=${session.user.id}`
+          apiUrl(`/result?userId=${session.user.id}`)
         );
 
         if (!res.ok) {
