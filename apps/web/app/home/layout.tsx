@@ -18,7 +18,7 @@ import {
   X
 } from "lucide-react";
 
-import { useSession } from "@/lib/auth-client"; // Adjust based on your auth client
+import { useSession, authClient } from "@/lib/auth-client"; // Adjust based on your auth client
 import { useNotifications } from "../components/hooks/notification";
 import { NotificationBell } from "../components/ui/notificationbell";
 // import { authClient } from "@/lib/auth-client"; // If you need this for signout
@@ -56,8 +56,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const handleSignOut = async () => {
     try {
-      // await authClient.signOut();
+      await authClient.signOut();
       router.push("/signin");
+      router.refresh();
     } catch (error) {
       console.error("Failed to sign out", error);
     }
