@@ -23,8 +23,12 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "CoreGrasp",
-  description: "Clean setup",
+  title: {
+    default: "CoreGrasp — AI Policy Compliance Verification",
+    template: "%s | CoreGrasp",
+  },
+  description:
+    "Upload any internal policy and CoreGrasp generates AI assessments, tracks completion, and verifies employee comprehension across your organization.",
 };
 
 export default function RootLayout({
