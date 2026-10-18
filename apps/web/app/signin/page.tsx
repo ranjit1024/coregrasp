@@ -115,13 +115,6 @@ export default function AuthPage() {
         .font-body {
           font-family: 'Inter', system-ui, sans-serif;
         }
-
-        html { scroll-behavior: smooth; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
       `}</style>
       
       {/* ── AMBIENT BACKGROUND ── */}

@@ -194,13 +194,6 @@ const features = [
             </div>
           </div>
         </div>
-
-        <style jsx>{`
-          @keyframes scan {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(400%); }
-          }
-        `}</style>
       </div>
     )
   },
