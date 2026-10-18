@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Papa from "papaparse";
-import { getuserId } from "@/lib/userId";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, authHeaders } from "@/lib/api";
 
 type Row = Record<string, string>;
 
@@ -58,7 +57,6 @@ async function parsePdf(file: File): Promise<string[]> {
 
 export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
     const [mode, setMode] = useState<"single" | "bulk">("single");
-    const [userId, setUserId] = useState<string>();
 
     // Single-send state
     const [email, setEmail] = useState("");
@@ -74,18 +72,6 @@ export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
     const [bulkFailed, setBulkFailed] = useState<string[]>([]);
     const [isDragging, setIsDragging] = useState(false);
 
-    useEffect(() => {
-        async function loadEmail() {
-            try {
-                const result = await getuserId();
-                if (result?.id) setUserId(result.id);
-            } catch (error) {
-                console.error("Failed to fetch user ID:", error);
-            }
-        }
-        loadEmail();
-    }, []);
-
     async function handleSend(e?: React.FormEvent) {
         if (e) e.preventDefault();
         if (!email || status === "sending") return;
@@ -95,8 +81,8 @@ export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
         try {
             const res = await fetch(apiUrl("/send-quiz"), {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ policyUrl, recipientEmail: email, userId }),
+                headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+                body: JSON.stringify({ policyUrl, recipientEmail: email }),
             });
 
             const data = await res.json();
@@ -158,8 +144,8 @@ export function SendQuizForm({ policyUrl }: { policyUrl: string }) {
                 try {
                     const res = await fetch(apiUrl("/send-quiz"), {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ policyUrl, recipientEmail: current, userId }),
+                        headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+                        body: JSON.stringify({ policyUrl, recipientEmail: current }),
                     });
                     if (!res.ok) throw new Error();
                 } catch {
