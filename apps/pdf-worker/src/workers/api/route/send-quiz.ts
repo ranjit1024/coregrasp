@@ -2,14 +2,16 @@ import { Context } from "hono";
 import { createPrismaClient } from "../lib/db";
 import { sendQuizEmail } from "../lib/email";
 import { Bindings } from "../../../shared/types";
+import { ApiVariables } from "../middleware/auth";
 import { pushNotification } from "../../../lib/notification";
 
-export async function send_quiz(c: Context<{ Bindings: Bindings }>) {
-    const { userId, policyUrl, recipientEmail } = await c.req.json<{
-        userId: string;
+export async function send_quiz(c: Context<{ Bindings: Bindings; Variables: ApiVariables }>) {
+    const { policyUrl, recipientEmail } = await c.req.json<{
         policyUrl: string;
         recipientEmail: string;
     }>();
+
+    const userId = c.get("userId");
 
     if (!policyUrl || !recipientEmail) {
         return c.json({ error: "policyUrl and recipientEmail required" }, 400);

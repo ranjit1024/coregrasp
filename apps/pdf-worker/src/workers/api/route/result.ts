@@ -1,12 +1,10 @@
 import { Context } from "hono";
 import { createPrismaClient } from "@revisly/db";
+import { Bindings } from "../../../shared/types";
+import { ApiVariables } from "../middleware/auth";
 
-export const result_Route = async (c: Context) => {
-  const userId = c.req.query("userId");
-
-  if (!userId) {
-    return c.json({ error: "userId is required" }, 400);
-  }
+export const result_Route = async (c: Context<{ Bindings: Bindings; Variables: ApiVariables }>) => {
+  const userId = c.get("userId");
 
   const prisma = createPrismaClient(c.env.HYPERDRIVE.connectionString);
 

@@ -2,12 +2,13 @@ import { createPrismaClient } from "@revisly/db";
 import { MAX_FILE_SIZE } from "../../../shared/constants";
 import { Context } from "hono";
 import { Bindings } from "../../../shared/types";
+import { ApiVariables } from "../middleware/auth";
 import { pushNotification } from "../../../lib/notification";
 
-export const uplaod_Route = async (c: Context<{ Bindings: Bindings }>) => {
+export const uplaod_Route = async (c: Context<{ Bindings: Bindings; Variables: ApiVariables }>) => {
   const formData = await c.req.formData();
   const file = formData.get('file') as File | null;
-  const userId = formData.get('userId') as string;
+  const userId = c.get("userId");
 
   if (!file) return c.text('No file', 400);
   if (file.size > MAX_FILE_SIZE) {
