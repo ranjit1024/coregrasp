@@ -44,10 +44,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
+  // Close mobile menu on route change (state adjusted during render, per
+  // https://react.dev/reference/react/useState#storing-information-from-previous-renders)
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setIsMobileMenuOpen(false);
-  }, [pathname]);
+  }
 
   const handleSignOut = async () => {
     try {

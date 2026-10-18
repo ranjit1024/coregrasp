@@ -101,7 +101,7 @@ export default function PolicyStatusPage() {
                         const errData = await res.json();
                         if (errData.error) errorMessage = errData.error;
                         else if (errData.message) errorMessage = errData.message;
-                    } catch (e) {
+                    } catch {
                         // Not JSON, fallback to default message
                     }
 

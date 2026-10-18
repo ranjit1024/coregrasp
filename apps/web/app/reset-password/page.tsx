@@ -59,8 +59,8 @@ function ResetPasswordForm() {
         router.push("/signin") // Adjust this to your auth page route
       }, 2000)
 
-    } catch (err: any) {
-      setError(err?.message || "An unexpected error occurred.")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred.")
       setIsLoading(false)
     }
   }

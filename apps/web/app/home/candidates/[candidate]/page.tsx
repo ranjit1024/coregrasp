@@ -137,7 +137,7 @@ export default function PolicyDetails({ params }: PolicyDetailsProps) {
                     </div>
                     <h3 className="text-[14px] sm:text-[15px] text-zinc-200 font-medium mb-1">No records found</h3>
                     <p className="text-[13px] sm:text-sm text-zinc-500 max-w-sm leading-relaxed">
-                        This candidate doesn't have any policy attempts tracked in the system yet.
+                        This candidate doesn&apos;t have any policy attempts tracked in the system yet.
                     </p>
                 </div>
 

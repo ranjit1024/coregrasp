@@ -43,7 +43,7 @@ export default function AuthPage() {
       // 👆 END OF MISSING PART
 
       if (view === "login") {
-        const { data, error } = await authClient.signIn.email({
+        const { error } = await authClient.signIn.email({
           email: formData.email,
           password: formData.password,
         })
@@ -65,7 +65,7 @@ export default function AuthPage() {
           return
         }
 
-        const { data, error } = await authClient.signUp.email({
+        const { error } = await authClient.signUp.email({
           email: formData.email,
           password: formData.password,
           name: formData.name,
@@ -82,8 +82,8 @@ export default function AuthPage() {
         setFormData({ name: "", email: "", password: "" })
         setIsLoading(false)
       }
-    } catch (err: any) {
-      setError(err?.message || "An unexpected error occurred.")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred.")
       setIsLoading(false)
     }
   }

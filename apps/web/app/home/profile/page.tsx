@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Loader2,
-  X,
   Upload,
   User,
   Save,
@@ -24,14 +23,14 @@ interface Toast {
   message: string;
 }
 
+// The /api/user/* routes don't exist yet; until they ship, profile
+// mutations are disabled so the UI never silently fails.
+const PROFILE_MUTATIONS_ENABLED = false;
+
 export default function ProfilePage() {
   const { data: session, isPending } = useSession();
   const user = session?.user;
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // The /api/user/* routes don't exist yet; until they ship, profile
-  // mutations are disabled so the UI never silently fails.
-  const PROFILE_MUTATIONS_ENABLED = false;
 
   // Form State
   const [isSaving, setIsSaving] = useState(false);
@@ -48,27 +47,22 @@ export default function ProfilePage() {
   const hasChanges = formData.name !== originalData.name;
   const isValid = formData.name.trim().length >= 2;
 
-  // Populate form when user data loads
-  useEffect(() => {
+  // Populate the form when the signed-in user loads. Adjusted during render
+  // (https://react.dev/reference/react/useState#storing-information-from-previous-renders)
+  // instead of in an effect to avoid a cascading render.
+  const userSnapshot = user
+    ? `${user.id}|${user.name ?? ""}|${user.email ?? ""}|${user.image ?? ""}`
+    : null;
+  const [prevUserSnapshot, setPrevUserSnapshot] = useState<string | null>(null);
+  if (userSnapshot !== prevUserSnapshot) {
+    setPrevUserSnapshot(userSnapshot);
     if (user) {
       const data = { name: user.name || "", email: user.email || "" };
       setFormData(data);
       setOriginalData(data);
-      if (user.image) setImagePreview(user.image);
+      setImagePreview(user.image ?? null);
     }
-  }, [user]);
-
-  // Keyboard shortcut: Ctrl+S to save
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "s" && hasChanges && isValid) {
-        e.preventDefault();
-        handleSave();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [hasChanges, isValid, formData]);
+  }
 
   // Toast helper
   const addToast = useCallback((type: Toast["type"], message: string) => {
@@ -80,7 +74,7 @@ export default function ProfilePage() {
   }, []);
 
   // Handle Save
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!PROFILE_MUTATIONS_ENABLED) {
       addToast("info", "Profile editing is coming soon");
       return;
@@ -104,12 +98,24 @@ export default function ProfilePage() {
       setOriginalData({ ...formData });
       setLastSaved(new Date());
       addToast("success", "Profile updated successfully");
-    } catch (error) {
+    } catch {
       addToast("error", "Failed to save changes. Please try again.");
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [addToast, formData, isValid]);
+
+  // Keyboard shortcut: Ctrl+S to save
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s" && hasChanges && isValid) {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [hasChanges, isValid, handleSave]);
 
   // Handle Reset
   const handleReset = () => {
@@ -156,7 +162,7 @@ export default function ProfilePage() {
       
       if (!response.ok) throw new Error("Upload failed");
       addToast("success", "Profile picture updated");
-    } catch (error) {
+    } catch {
       addToast("error", "Failed to upload image");
       // Revert preview on error
       setImagePreview(user?.image || null);
@@ -180,7 +186,7 @@ export default function ProfilePage() {
       
       addToast("success", "Account deleted. Redirecting...");
       setTimeout(() => window.location.href = "/", 2000);
-    } catch (error) {
+    } catch {
       addToast("error", "Failed to delete account");
       setIsDeleting(false);
     }

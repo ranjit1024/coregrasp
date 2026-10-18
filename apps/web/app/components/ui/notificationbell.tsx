@@ -117,7 +117,7 @@ export function NotificationBell() {
                 <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900/50 ring-1 ring-white/5">
                   <BellIcon className="h-6 w-6 text-zinc-600" />
                 </div>
-                <p className="text-sm font-medium text-zinc-200">You're all caught up</p>
+                <p className="text-sm font-medium text-zinc-200">You&apos;re all caught up</p>
                 <p className="mt-1 text-xs text-zinc-500">No new notifications right now.</p>
               </div>
             ) : (

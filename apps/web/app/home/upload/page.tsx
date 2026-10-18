@@ -33,7 +33,8 @@ const ResponsivePdfUpload: React.FC = () => {
 
   useEffect(() => {
     return () => {
-      if (progressRef.current) clearInterval(progressRef.current);
+      const interval = progressRef.current;
+      if (interval) clearInterval(interval);
     };
   }, []);
 
