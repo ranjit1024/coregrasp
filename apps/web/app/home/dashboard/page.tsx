@@ -16,7 +16,7 @@ export default function DashboardPage() {
       <div className="fixed top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent z-0 pointer-events-none" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[300px] bg-white/[0.015] blur-[120px] rounded-full pointer-events-none -z-10" />
 
-      <main className="max-w-8xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 w-full flex flex-col gap-6 sm:gap-8 relative z-10">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 w-full flex flex-col gap-6 sm:gap-8 relative z-10">
 
         {/* Page Header */}
         <div className="flex flex-col gap-1.5">

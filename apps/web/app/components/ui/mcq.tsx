@@ -43,7 +43,7 @@ export default function MCQList({ questions, policyUrl }: MCQListProps) {
   }
 
   return (
-    <div className="max-w-8xl mx-auto space-y-6 sm:space-y-8 p-4 sm:p-6 lg:p-8 w-full font-sans text-zinc-100 bg-[#09090B] min-h-screen">
+    <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 p-4 sm:p-6 lg:p-8 w-full font-sans text-zinc-100 bg-[#09090B] min-h-screen">
 
       {/* Elegant Header Block */}
       <motion.div

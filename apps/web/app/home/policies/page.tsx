@@ -186,7 +186,7 @@ export default function PolicyStatusPage() {
             {/* Subtle Top Glow */}
             <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-            <div className="max-w-8xl mx-auto p-6 md:p-10 w-full flex flex-col gap-6">
+            <div className="max-w-7xl mx-auto p-6 md:p-10 w-full flex flex-col gap-6">
                 
                 {/* Breadcrumbs */}
                 <motion.nav 

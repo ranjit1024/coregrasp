@@ -196,7 +196,7 @@ export default function Candidates() {
   if (isLoading || isSessionPending) {
     return (
       <div className="min-h-screen bg-[#09090B] p-4 sm:p-6 md:p-10 w-full flex flex-col">
-        <div className="max-w-8xl mx-auto w-full space-y-6 sm:space-y-8">
+        <div className="max-w-7xl mx-auto w-full space-y-6 sm:space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-28 bg-white/[0.02] border border-white/[0.04] rounded-xl animate-pulse" />
@@ -245,7 +245,7 @@ export default function Candidates() {
       <div className="fixed top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent z-0 pointer-events-none" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[600px] h-[200px] bg-white/[0.015] blur-[120px] rounded-full pointer-events-none -z-10" />
 
-      <main className="max-w-8xl mx-auto p-4 sm:p-6 md:p-10 w-full flex flex-col gap-6 sm:gap-8 relative z-10">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 md:p-10 w-full flex flex-col gap-6 sm:gap-8 relative z-10">
 
         {/* Breadcrumbs */}
         <motion.nav
