@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect, DragEvent, ChangeEvent } from "react";
 import { useSession } from "../../../lib/auth-client"; // adjust import to wherever your better-auth client is exported
+import { apiUrl } from "@/lib/api";
 
 interface SelectedFile {
   file: File;
@@ -133,7 +134,7 @@ const ResponsivePdfUpload: React.FC = () => {
         reject();
       });
 
-      xhr.open("POST", "https://api.ranjitdas2048.workers.dev/uplaod-pdf");
+      xhr.open("POST", apiUrl("/uplaod-pdf"));
       xhr.send(formData);
     });
   };
