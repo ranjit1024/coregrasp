@@ -8,6 +8,7 @@ export type Bindings = {
   GMAIL_REFRESH_TOKEN: string;
 	GMAIL_CLIENT_SECRET: string;
 	NOTIF_HUB: DurableObjectNamespace;
+	WORKER_API_SECRET: string;
 };
 
 export type PdfJob = {
